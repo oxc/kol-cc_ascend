@@ -2365,6 +2365,8 @@ boolean isFreeMonster(monster mon)
 
 	boolean[monster] neverland = $monsters[biker, burnout, jock, party girl, "plain" girl];
 
+	boolean[monster] voting = $monsters[Angry Ghost, Annoyed Snake, Government Bureaucrat, Slime Blob, Terrible Mutant];
+
 	boolean[monster] other = $monsters[giant rubber spider, God Lobster, lynyrd, time-spinner prank, Travoltron];
 
 	//boolean[monster] protonGhosts: See isProtonGhost, we want to detect these separately as well so we\'ll functionalize it here.
@@ -2408,6 +2410,14 @@ boolean isFreeMonster(monster mon)
 	if(isProtonGhost(mon))
 	{
 		return true;
+	}
+
+	if(voting contains mon)
+	{
+		if(get_property("_voteFreeFights").to_int() < 3)
+		{
+			return true;
+		}
 	}
 
 	if(neverland contains mon)
@@ -4863,4 +4873,32 @@ boolean buffMaintain(effect buff, int mp_min, int casts, int turns)
 		return buffMaintain(useSkill, buff, mp_min, casts, turns);
 	}
 	return true;
+}
+
+location solveDelayZone()
+{
+	int[location] delayableZones = zone_delayable();
+	int amt = count(delayableZones);
+	location burnZone = $location[Noob Cave];
+	if(zone_isAvailable($location[Barf Mountain]))
+	{
+		burnZone = $location[Barf Mountain];
+	}
+	if(amt != 0)
+	{
+		int index = 0;
+		if(amt > 1)
+		{
+			index = random(amt);
+		}
+		foreach idx in delayableZones
+		{
+			if(index == 0)
+			{
+				burnZone = idx;
+			}
+			index--;
+		}
+	}
+	return burnZone;
 }

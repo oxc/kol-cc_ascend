@@ -545,6 +545,7 @@ string findBanisher(int round, string opp, string text);	//Defined in cc_ascend/
 void florist_initializeSettings();							//Defined in cc_ascend/cc_floristfriar.ash
 boolean forceEquip(slot sl, item it);						//Defined in cc_ascend/cc_util.ash
 int fullness_left();										//Defined in cc_ascend/cc_util.ash
+location solveDelayZone();									//Defined in cc_ascend/cc_util.ash
 item getAvailablePerfectBooze();							//Defined in cc_ascend/cc_cooking.ash
 item[element] getCharterIndexable();						//Defined in cc_ascend/cc_elementalPlanes.ash
 boolean getDiscoStyle();									//Defined in cc_ascend/cc_elementalPlanes.ash
@@ -567,6 +568,14 @@ boolean neverendingPartyCombat(effect eff, boolean hardmode);//Defined in cc_asc
 boolean neverendingPartyCombat(stat st);					//Defined in cc_ascend/cc_mr2018.ash
 boolean neverendingPartyCombat(effect eff);					//Defined in cc_ascend/cc_mr2018.ash
 boolean neverendingPartyCombat();							//Defined in cc_ascend/cc_mr2018.ash
+boolean neverendingPartyAvailable();						//Defined in cc_ascend/cc_mr2018.ash
+boolean cc_voteSetup();										//Defined in cc_ascend/cc_mr2018.ash
+boolean cc_voteSetup(int candidate);						//Defined in cc_ascend/cc_mr2018.ash
+boolean cc_voteSetup(int candidate, int first, int second);	//Defined in cc_ascend/cc_mr2018.ash
+boolean cc_voteMonster();									//Defined in cc_ascend/cc_mr2018.ash
+boolean cc_voteMonster(boolean freeMon);					//Defined in cc_ascend/cc_mr2018.ash
+boolean cc_voteMonster(boolean freeMon, location loc);		//Defined in cc_ascend/cc_mr2018.ash
+boolean cc_voteMonster(boolean freeMon, location loc, string option);//Defined in cc_ascend/cc_mr2018.ash
 boolean getSpaceJelly();									//Defined in cc_ascend/cc_mr2017.ash
 int horseCost();											//Defined in cc_ascend/cc_mr2017.ash
 boolean getHorse(string type);								//Defined in cc_ascend/cc_mr2017.ash

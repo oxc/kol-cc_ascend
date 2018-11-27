@@ -915,6 +915,7 @@ boolean cc_cheesePostCS(int leave)
 		songboomSetting($item[Gathered Meat-Clip]);
 	}
 	getHorse("meat");
+	dailyEvents();
 
 	if(((my_daycount() == 2) && isOverdueDigitize()) || get_property("_cc_specialAftercore").to_boolean())
 	{
@@ -1149,9 +1150,13 @@ boolean cc_cheesePostCS(int leave)
 	}
 
 	while(lx_witchess());
+	if(possessEquipment($item[PARTY HARD T-Shirt]))
+	{
+		put_closet(item_amount($item[PARTY HARD T-Shirt]), $item[PARTY HARD T-Shirt]);
+	}
 	while(lx_freecombats());
 
-    if(!get_property("_pottedTeaTreeUsed").to_boolean() && (get_campground() contains $item[Potted Tea Tree]))
+	if(!get_property("_pottedTeaTreeUsed").to_boolean() && (get_campground() contains $item[Potted Tea Tree]))
 	{
 		cli_execute("teatree cuppa royal tea");
 		put_closet(item_amount($item[Cuppa Royal Tea]), $item[Cuppa Royal Tea]);
@@ -1170,13 +1175,13 @@ boolean cc_cheesePostCS(int leave)
 	while((fullness_left() >= 5) && (item_amount($item[Cold Hi Mein]) > 0) && (my_level() >= 13))
 	{
 		buffMaintain($effect[Got Milk], 0, 1, 5);
-		eat(1, $item[Cold Hi Mein]);
+		ccEat(1, $item[Cold Hi Mein]);
 	}
 
 	while((inebriety_left() >= 1) && (item_amount($item[Astral Pilsner]) > 0))
 	{
 		buffMaintain($effect[Ode to Booze], 50, 1, 1);
-		drink(1, $item[Astral Pilsner]);
+		ccDrink(1, $item[Astral Pilsner]);
 	}
 
 	if(!get_property("_mimeArmyShotglassUsed").to_boolean() && (item_amount($item[Mime Army Shotglass]) > 0))
@@ -1207,7 +1212,7 @@ boolean cc_cheesePostCS(int leave)
 			equip($slot[Acc3], $item[Mafia Pinky Ring]);
 		}
 		buffMaintain($effect[Ode to Booze], 50, 1, 1);
-		drink(1, $item[Sacramento Wine]);
+		ccDrink(1, $item[Sacramento Wine]);
 		if(equipped_item($slot[Acc3]) != it)
 		{
 			equip($slot[Acc3], it);
@@ -1477,15 +1482,14 @@ boolean cc_cheesePostCS(int leave)
 			}
 		}
 
-#		boolean restoreEquip = false;
 		item acc1 = equipped_item($slot[acc1]);
 		item acc2 = equipped_item($slot[acc2]);
 		item acc3 = equipped_item($slot[acc3]);
 		item back = equipped_item($slot[back]);
+		item weapon = equipped_item($slot[weapon]);
 		/*
 		if(get_property("dinseyRollercoasterNext").to_boolean())
 		{
-			restoreEquip = true;
 			if(item_amount($item[Lucky Crimbo Tiki Necklace]) > 0)
 			{
 				equip($slot[acc1], $item[Lucky Crimbo Tiki Necklace]);
@@ -1522,6 +1526,18 @@ boolean cc_cheesePostCS(int leave)
 			#buffMaintain($effect[Eldritch Alignment], 0, 1, 1);
 		}
 
+		if(item_amount($item[&quot;I voted!&quot; sticker]) > 0)
+		{
+			int votingTurn = get_property("lastVoteMonsterTurn").to_int();
+			if(((total_turns_played() % 11) == 1) && (votingTurn < total_turns_played()))
+			{
+				equip($slot[acc3], $item[&quot;I voted!&quot; sticker]);
+				if((get_property("_voteMonster") == $monster[Terrible Mutant]) && (item_amount($item[Mutant Arm]) > 0))
+				{
+					equip($slot[weapon], $item[Mutant Arm]);
+				}
+			}
+		}
 
 		if((loc == $location[Barf Mountain]) && ((get_property("sourceTerminalEducate1") == "extract.edu") || (get_property("sourceTerminalEducate2")  == "extract.edu")) && have_skill($skill[Curse Of Weaksauce]) && have_skill($skill[Meteor Lore]) && have_equipped($item[Pantsgiving]) && (item_amount($item[Rain-Doh Indigo Cup]) > 0) && get_property("lovebugsUnlocked").to_boolean() && (item_amount($item[Time-Spinner]) > 0) && have_skill($skill[Candyblast]) && have_skill($skill[Stuffed Mortar Shell]) && (get_property("_shatteringPunchUsed").to_int() >= 3) && get_property("_gingerbreadMobHitUsed").to_boolean() && (get_property("_usedReplicaBatoomerang").to_int() >= 3) && (my_mp() >= 40))
 		{
@@ -1533,28 +1549,35 @@ boolean cc_cheesePostCS(int leave)
 		}
 		LX_ghostBusting();
 
-		if((back != $item[Protonic Accelerator Pack]) && (equipped_item($slot[back]) == $item[Protonic Accelerator Pack]))
-		{
-			equip($slot[back], back);
-		}
+#		if(have_equipped($item[&quot;I voted!&quot; sticker]))
+#		{
+#			abort("beep");
+#		}
 
-		/*
-		if(restoreEquip)
+		if(true)
 		{
-			if(equipped_item($slot[acc1]) == $item[Lucky Crimbo Tiki Necklace])
+			if(equipped_item($slot[back]) != back)
+			{
+				equip($slot[back], back);
+			}
+			if(equipped_item($slot[weapon]) != weapon)
+			{
+				equip($slot[weapon], weapon);
+			}
+			if(equipped_item($slot[acc1]) != acc1)
 			{
 				equip($slot[acc1], acc1);
 			}
-			if(equipped_item($slot[acc2]) == $item[Lucky Crimbo Tiki Necklace])
+			if(equipped_item($slot[acc2]) != acc2)
 			{
 				equip($slot[acc2], acc2);
 			}
-			if(equipped_item($slot[acc3]) == $item[Lucky Crimbo Tiki Necklace])
+			if(equipped_item($slot[acc3]) != acc3)
 			{
 				equip($slot[acc3], acc3);
 			}
 		}
-		*/
+		
 		doNumberology("fites3");
 
 		if(have_effect($effect[How to Scam Tourists]) == 2)
@@ -1748,13 +1771,23 @@ boolean cc_cheesePostCS(int leave)
 	{
 		if((item_amount($item[5-hour acrimony]) > 0) && (my_inebriety() <= inebriety_limit()))
 		{
-			cli_execute("drink 5-hour acrimony");
+			overdrink(1, $item[5-hour acrimony]);
 		}
 		if(get_property("cc_pvpOutfit") != "")
 		{
+			cli_execute("pull outfit pvp");
+			cli_execute("pull kiwi beak");
+			cli_execute("pull jam band");
+			cli_execute("pull pail");
 			cli_execute("/outfit " + get_property("cc_pvpOutfit"));
+			cli_execute(get_property("cc_pvpCommands"));
 		}
-		cli_execute("pvp loot 6");
+		int stance = 6;
+		if(get_property("cc_pvpStance") != "")
+		{
+			stance = get_property("cc_pvpStance").to_int();
+		}
+		cli_execute("pvp loot " + stance);
 	}
 	int endMeat = my_meat();
 	int gainedMeat = endMeat - startMeat;

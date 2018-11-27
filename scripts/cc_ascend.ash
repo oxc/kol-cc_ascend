@@ -7255,6 +7255,11 @@ boolean L12_gremlins()
 		abort("We don't have the molybdenum magnet but should... please get it and rerun the script");
 	}
 
+	if(cc_my_path() == "Disguises Delimit")
+	{
+		abort("Do gremlins manually, sorry. Or set cc_gremlins=finished and we will just skip them");
+	}
+
 	#Put a different shield in here.
 	print("Doing them gremlins", "blue");
 	if(item_amount($item[Ouija Board\, Ouija Board]) > 0)
@@ -7357,6 +7362,21 @@ boolean L12_sonofaBeach()
 		{
 			handleFamiliar("item");
 			return true;
+		}
+	}
+
+	if(possessEquipment($item[&quot;I voted!&quot; sticker]) && (my_adventures() > 15))
+	{
+		if(have_skill($skill[Meteor Lore]) && (get_property("_macrometeoriteUses").to_int() < 10))
+		{
+			boolean retval = false;
+			if(cc_voteMonster())
+			{
+				set_property("cc_combatDirective", "start;skill macrometeorite");
+				retval = cc_voteMonster(true, $location[Sonofa Beach], "");
+				set_property("cc_combatDirective", "");
+			}
+			return retval;
 		}
 	}
 
@@ -7552,8 +7572,25 @@ boolean L12_sonofaPrefix()
 		return false;
 	}
 
+	if(possessEquipment($item[&quot;I voted!&quot; sticker]) && (my_adventures() > 15))
+	{
+		if(have_skill($skill[Meteor Lore]) && (get_property("_macrometeoriteUses").to_int() < 10))
+		{
+			if(cc_voteMonster(true))
+			{
+				set_property("cc_combatDirective", "start;skill macrometeorite");
+			}
+			else
+			{
+				return false;
+			}
+		}
+	}
+
 	cc_sourceTerminalEducate($skill[Extract], $skill[Digitize]);
+
 	ccAdv(1, $location[Sonofa Beach]);
+	set_property("cc_combatDirective", "");
 	set_property("cc_doCombatCopy", "no");
 	handleFamiliar("item");
 
@@ -12656,34 +12693,27 @@ boolean L11_shenCopperhead()
 
 	if((internalQuestStatus("questL11Shen") == 1) || (internalQuestStatus("questL11Shen") == 3) || (internalQuestStatus("questL11Shen") == 5))
 	{
-		string page = visit_url("charpane.php");
-		matcher myShen = create_matcher("<tr rel=\"copperhead\">(?:.*?)<b>(.*?)</b>", page);
-		if(myShen.find())
+		item it = to_item(get_property("shenQuestItem"));
+		location goal = $location[none];
+		switch(it)
 		{
-			string locStr = myShen.group(1);
-			location goal = to_location(locStr);
-			if(goal == $location[none])
-			{
-				if(locStr == "The Lair of the Ninja Snowmen")
-				{
-					goal = $location[Lair of the Ninja Snowmen];
-				}
-				else if(locStr == "The Ratbat and Batrat Burrow")
-				{
-					goal = $location[The Batrat and Ratbat Burrow];
-				}
-			}
-			if(goal == $location[none])
-			{
-				abort("Could not parse Shen event");
-			}
-			return ccAdv(goal);
+		case $item[The Stankara Stone]:					goal = $location[The Batrat and Ratbat Burrow];						break;
+		case $item[The First Pizza]:					goal = $location[Lair of the Ninja Snowmen];						break;
+		case $item[Murphy\'s Rancid Black Flag]:		goal = $location[The Castle in the Clouds in the Sky (Top Floor)];	break;
+		case $item[The Eye of the Stars]:				goal = $location[The Hole in the Sky];								break;
+		case $item[The Lacrosse Stick of Lacoronado]:	goal = $location[Orcish Frat House];								break;
+		case $item[The Shield of Brook]:				goal = $location[The VERY Unquiet Garves];							break;
 		}
+		if(goal == $location[none])
+		{
+			abort("Could not parse Shen event");
+		}
+		return ccAdv(goal);
 	}
 
 	if(get_property("questL11Shen") != "finished")
 	{
-		abort("Shen should be done with but tracking is not complete!");
+		abort("Shen should be done with but tracking is not complete! Status: " + get_property("questL11Shen"));
 	}
 
 	//Now have a Copperhead Charm
@@ -14246,7 +14276,7 @@ boolean LX_setBallroomSong()
 
 boolean autosellCrap()
 {
-	if(item_amount($item[dense meat stack]) > 1)
+	if((item_amount($item[dense meat stack]) > 1) && (item_amount($item[dense meat stack]) <= 10))
 	{
 		cc_autosell(1, $item[dense meat stack]);
 	}
@@ -14453,6 +14483,8 @@ boolean doTasks()
 		abort("Should not have gotten here, aborted LA_cs_communityService method allowed return to caller. Uh oh.");
 	}
 
+	cc_voteSetup(0,0,0);
+
 	if(get_property("cc_beatenUpCount").to_int() > 5)
 	{
 		songboomSetting(3);
@@ -14474,7 +14506,7 @@ boolean doTasks()
 				songboomSetting(1);
 			}
 			else
-			{ 
+			{
 				songboomSetting(5);
 			}
 		}
@@ -14535,6 +14567,25 @@ boolean doTasks()
 	if(LX_dictionary())					return true;
 	if(L5_findKnob())					return true;
 	if(LM_edTheUndying())				return true;
+
+	location burnZone = solveDelayZone();
+
+	if(cc_voteMonster(true))
+	{
+		print("Burn some delay somewhere (voting), if we found a place!", "green");
+		if(cc_voteMonster(true, burnZone, ""))
+		{
+			return true;
+		}
+	}
+	if(isOverdueDigitize())
+	{
+		print("Burn some delay somewhere (digitize), if we found a place!", "green");
+		if(ccAdv(burnZone))
+		{
+			return true;
+		}
+	}
 
 	if((my_class() != $class[Ed]) && (my_level() >= 9) && (my_daycount() == 1))
 	{

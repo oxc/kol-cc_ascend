@@ -609,6 +609,40 @@ boolean neverendingPartyCombat(stat st, boolean hardmode, string option)
 	return neverendingPartyCombat($effect[none], hardmode, option);
 }
 
+boolean neverendingPartyAvailable()
+{
+	if(!get_property("neverendingPartyAlways").to_boolean() && !get_property("_neverendingPartyToday").to_boolean())
+	{
+		return false;
+	}
+	if(get_property("_neverendingPartyFreeTurns").to_int() >= 10)
+	{
+		if(get_property("_neverendingNotEarly").to_boolean())
+		{
+			return false;
+		}
+		string page = visit_url("place.php?whichplace=town_wrong", false);
+		if(!contains_text(page, "The Neverending Party (Early)"))
+		{
+			set_property("_neverendingNotEarly", true);
+			return false;
+		}
+	}
+	if(get_property("_neverendingPartyOver").to_boolean())
+	{
+		return false;
+	}
+	if(!is_unrestricted($item[Neverending Party invitation envelope]))
+	{
+		return false;
+	}
+	if(inebriety_left() < 0)
+	{
+		return false;
+	}
+	return true;
+}
+
 
 boolean neverendingPartyCombat(effect eff, boolean hardmode, string option)
 {
@@ -718,5 +752,133 @@ boolean neverendingPartyCombat(effect eff, boolean hardmode, string option)
 		set_property("_neverendingPartyOver", true);
 		return false;
 	}
+	if(get_property("lastEncounter") == "All Done!")
+	{
+		set_property("_neverendingPartyOver", true);
+		return false;
+	}
 	return retval;
+}
+
+boolean cc_voteSetup()
+{
+	return cc_voteSetup(0,0,0);
+}
+
+boolean cc_voteSetup(int candidate)
+{
+	return cc_voteSetup(candidate,0,0);
+}
+
+boolean cc_voteSetup(int candidate, int first, int second)
+{
+	if((candidate < 0) || (candidate > 2))
+	{
+		return false;
+	}
+	if((first < 0) || (first > 4))
+	{
+		return false;
+	}
+	if((second < 0) || (second > 4))
+	{
+		return false;
+	}
+	if(first == second)
+	{
+		return false;
+	}
+	if(!get_property("_voteToday").to_boolean() && !get_property("voteAlways").to_boolean())
+	{
+		return false;
+	}
+	if(get_property("_voteModifier") != "")
+	{
+		return false;
+	}
+	if(possessEquipment($item[&quot;I voted!&quot; sticker]))
+	{
+		return false;
+	}
+
+	if(candidate == 0)
+	{
+		candidate = 1 + random(2);
+	}
+	while((first == 0) || (first == second))
+	{
+		first = 1 + random(4);
+	}
+	while((second == 0) || (first == second))
+	{
+		second = 1 + random(4);
+	}
+
+	//When using random, should we check for negative initiatives?
+
+	string temp = visit_url("place.php?whichplace=town_right&action=townright_vote", false);
+	temp = visit_url("choice.php?whichchoice=1331&pwd=&option=1&g=" + candidate + "&local[]=" + first + "&local[]=" + second);
+	return true;
+}
+
+boolean cc_voteMonster()
+{
+	return cc_voteMonster(false);
+}
+
+boolean cc_voteMonster(boolean freeMon)
+{
+	return cc_voteMonster(freeMon, $location[none], "");
+}
+
+boolean cc_voteMonster(boolean freeMon, location loc)
+{
+	return cc_voteMonster(freeMon, loc, "");
+}
+
+boolean cc_voteMonster(boolean freeMon, location loc, string option)
+{
+	if(!get_property("_voteToday").to_boolean() && !get_property("voteAlways").to_boolean())
+	{
+		return false;
+	}
+	if(get_property("_voteModifier") == "")
+	{
+		return false;
+	}
+
+	//Some things override this, like a semi-rare?
+
+	if(get_property("lastVoteMonsterTurn").to_int() >= total_turns_played())
+	{
+		return false;
+	}
+	if((total_turns_played() % 11) != 1)
+	{
+		return false;
+	}
+	if(!possessEquipment($item[&quot;I voted!&quot; sticker]))
+	{
+		return false;
+	}
+
+	if(freeMon && (get_property("_voteFreeFights").to_int() >= 3))
+	{
+		return false;
+	}
+
+	if(loc == $location[none])
+	{
+		return true;
+	}
+
+	if(!have_equipped($item[&quot;I voted!&quot; sticker]))
+	{
+		if(item_amount($item[&quot;I voted!&quot; sticker]) == 0)
+		{
+			return false;
+		}
+		equip($slot[acc3], $item[&quot;I voted!&quot; sticker]);
+	}
+	return ccAdv(1, loc, option);
 }

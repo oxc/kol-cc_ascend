@@ -40,6 +40,11 @@ boolean LA_cs_communityService()
 
 	cs_eat_spleen();
 
+	if(cc_voteMonster(true, $location[Barf Mountain], "cs_combatNormal"))
+	{
+		return true;
+	}
+
 	boolean [familiar] useFam;
 	if(((curQuest == 11) || (curQuest == 6) || (curQuest == 9)) && (my_spleen_use() < 12))
 	{
@@ -1147,13 +1152,10 @@ boolean LA_cs_communityService()
 
 			if(!get_property("cc_hccsNoConcludeDay").to_boolean())
 			{
+				uneffect($effect[Ode To Booze]);
 				zataraSeaside(my_primestat());
 				buffMaintain($effect[Polka Of Plenty], 30, 1, 10 - get_property("_neverendingPartyFreeTurns").to_int());
 				songboomSetting($item[Gathered Meat-Clip]);
-				if(neverendingPartyCombat())
-				{
-					return true;
-				}
 				if(snojoFightAvailable() && (my_adventures() > 0))
 				{
 					familiar oldFam = my_familiar();
@@ -1165,7 +1167,37 @@ boolean LA_cs_communityService()
 					{
 						handleFamiliar($familiar[Garbage Fire]);
 					}
+					else if(have_familiar($familiar[Optimistic Candle]) && (item_amount($item[Glob Of Melted Wax]) == 0))
+					{
+						handleFamiliar($familiar[Optimistic Candle]);
+					}
 					ccAdv(1, $location[The X-32-F Combat Training Snowman]);
+					handleFamiliar(oldFam);
+					return true;
+				}
+
+				//Consider checking for all Snojo debuffs.
+				if(have_effect($effect[Hypnotized]) > 0)
+				{
+					doHottub();
+				}
+
+				if(neverendingPartyAvailable() && (my_adventures() > 0))
+				{
+					familiar oldFam = my_familiar();
+					if(have_familiar($familiar[Rockin\' Robin]) && (item_amount($item[Robin\'s Egg]) == 0))
+					{
+						handleFamiliar($familiar[Rockin\' Robin]);
+					}
+					else if(have_familiar($familiar[Garbage Fire]) && (item_amount($item[Burning Newspaper]) == 0))
+					{
+						handleFamiliar($familiar[Garbage Fire]);
+					}
+					else if(have_familiar($familiar[Optimistic Candle]) && (item_amount($item[Glob Of Melted Wax]) == 0))
+					{
+						handleFamiliar($familiar[Optimistic Candle]);
+					}
+					neverendingPartyCombat();
 					handleFamiliar(oldFam);
 					return true;
 				}
@@ -1193,7 +1225,7 @@ boolean LA_cs_communityService()
 					drink(min(inebriety_left(), item_amount($item[Astral Pilsner])), $item[Astral Pilsner]);
 				}
 
-				if((item_amount($item[CSA fire-starting kit]) > 0) && !get_property("_fireStartingKitUsed").to_boolean() && (get_property("choiceAdventure595").to_int() == 1))
+				if((item_amount($item[CSA fire-starting kit]) > 0) && !get_property("_fireStartingKitUsed").to_boolean() && (get_property("choiceAdventure595").to_int() == 1) && hippy_stone_broken())
 				{
 					use(1, $item[CSA Fire-Starting Kit]);
 				}
@@ -1306,6 +1338,7 @@ boolean LA_cs_communityService()
 					}
 				}
 
+				set_property("cc_familiarChoice", "");
 				abort("Saving Emergency Margarita, forcing abort, done with day. Overdrink, cast simmer,  and run again.");
 			}
 
@@ -4847,8 +4880,9 @@ boolean cs_preTurnStuff(int curQuest)
 	use_barrels();
 	cs_make_stuff(curQuest);
 	cc_mayoItems();
+	cc_voteSetup(0, 1, 3);
 
-	if(item_amount($item[Gold Nuggets]) > 0)
+	if((item_amount($item[Gold Nuggets]) > 0) && (item_amount($item[Gold Nuggets]) <= 3))
 	{
 		autosell(item_amount($item[Gold Nuggets]), $item[Gold Nuggets]);
 	}
