@@ -861,7 +861,7 @@ boolean isOverdueDigitize()
 	{
 		return true;
 	}
-	return true;
+	return false;
 }
 boolean isOverdueArrow()
 {
