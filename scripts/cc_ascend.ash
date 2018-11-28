@@ -3447,11 +3447,11 @@ boolean L11_aridDesert()
 			return false;
 		}
 	}
-#	Mafia probably handles this correctly (and probably has done so for a while).
-#	if(cc_my_path() == "Pocket Familiars")
-#	{
-#		string temp = visit_url("place.php?whichplace=desertbeach", false);
-#	}
+#	Mafia probably handles this correctly (and probably has done so for a while). (failing again as of r19010)
+	if(cc_my_path() == "Pocket Familiars")
+	{
+		string temp = visit_url("place.php?whichplace=desertbeach", false);
+	}
 
 	if(get_property("desertExploration").to_int() >= 100)
 	{
@@ -12701,7 +12701,7 @@ boolean L11_shenCopperhead()
 		case $item[The First Pizza]:					goal = $location[Lair of the Ninja Snowmen];						break;
 		case $item[Murphy\'s Rancid Black Flag]:		goal = $location[The Castle in the Clouds in the Sky (Top Floor)];	break;
 		case $item[The Eye of the Stars]:				goal = $location[The Hole in the Sky];								break;
-		case $item[The Lacrosse Stick of Lacoronado]:	goal = $location[Orcish Frat House];								break;
+//		case $item[The Lacrosse Stick of Lacoronado]:	goal = $location[Orcish Frat House];								break;
 		case $item[The Shield of Brook]:				goal = $location[The VERY Unquiet Garves];							break;
 		}
 		if(goal == $location[none])
