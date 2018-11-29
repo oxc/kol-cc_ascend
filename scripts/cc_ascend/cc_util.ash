@@ -3446,12 +3446,16 @@ void pullAndUse(item it, int uses)
 
 int cc_mall_price(item it)
 {
-	int retval = mall_price(it);
-	if(retval == -1)
+	if(is_tradeable(it))
 	{
-		abort("Failed getting mall price, aborting to prevent problems");
+		int retval = mall_price(it);
+		if(retval == -1)
+		{
+			abort("Failed getting mall price, aborting to prevent problems");
+		}
+		return retval;
 	}
-	return retval;
+	return -1;
 }
 
 boolean pullXWhenHaveY(item it, int howMany, int whenHave)
