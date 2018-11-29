@@ -3451,7 +3451,7 @@ int cc_mall_price(item it)
 		int retval = mall_price(it);
 		if(retval == -1)
 		{
-			abort("Failed getting mall price, aborting to prevent problems");
+			abort("Failed getting mall price for " + it + ", aborting to prevent problems");
 		}
 		return retval;
 	}
