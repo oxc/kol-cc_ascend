@@ -435,7 +435,7 @@ boolean cheeseWarMachine(int stats, int it, int eff, int potion)
 	{
 		return false;
 	}
-	if(get_property("_cheeseWarMachine").to_boolean())
+	if(get_property("_bastilleGames").to_int() != 0)
 	{
 		return false;
 	}
@@ -568,7 +568,6 @@ boolean cheeseWarMachine(int stats, int it, int eff, int potion)
 	}
 
 	visit_url("choice.php?whichchoice=1316&option=3&pwd=" + my_hash());
-	set_property("_cheeseWarMachine", true);
 	return true;
 }
 
@@ -881,4 +880,110 @@ boolean cc_voteMonster(boolean freeMon, location loc, string option)
 		equip($slot[acc3], $item[&quot;I voted!&quot; sticker]);
 	}
 	return ccAdv(1, loc, option);
+}
+
+boolean fightClubNap()
+{
+    if(!is_unrestricted($item[Boxing Day care package]))
+    {
+		return false;
+	}
+	if(!get_property("daycareOpen").to_boolean())
+	{
+		return false;
+	}
+	if(get_property("_daycareNap").to_boolean())
+	{
+		return false;
+	}
+
+	string page = visit_url("place.php?whichplace=town_wrong&action=townwrong_boxingdaycare", false);
+	page = visit_url("choice.php?pwd=&whichchoice=1334&option=1");
+
+	if(!get_property("_daycareNap").to_boolean())
+	{
+		abort("fightClubtracking failed");
+	}
+
+
+	//Do I need to leave as well, I think I do...
+	page = visit_url("choice.php?pwd=&whichchoice=1334&option=4");
+
+
+	return true;
+}
+
+
+
+boolean fightClubSpa()
+{
+	int option = 4;
+	switch(my_primestat())
+	{
+	case $stat[Muscle]:			option = 1;		break;
+	case $stat[Mysticality]:	option = 3;		break;
+	case $stat[Moxie]:			option = 2;		break;
+	}
+	return fightClubSpa(option);
+}
+
+
+boolean fightClubSpa(effect eff)
+{
+	int option = 0;
+
+	switch(eff)
+	{
+	case $effect[Muddled]:					option = 1;		break;
+	case $effect[Ten out of Ten]:			option = 2;		break;
+	case $effect[Uncucumbered]:				option = 3;		break;
+	case $effect[Flagrantly Fragrant]:		option = 4;		break;
+	}
+
+	if(option == 0)
+	{
+		return false;
+	}
+	return fightClubSpa(option);
+}
+
+
+boolean fightClubSpa(int option)
+{
+    if(!is_unrestricted($item[Boxing Day care package]))
+    {
+		return false;
+	}
+	if(!get_property("daycareOpen").to_boolean())
+	{
+		return false;
+	}
+	if(get_property("_daycareSpa").to_boolean())
+	{
+		return false;
+	}
+	if(option == 0)
+	{
+		option = 1 + random(4);
+	}
+	if((option < 1) || (option > 4))
+	{
+		return false;
+	}
+
+	string page = visit_url("place.php?whichplace=town_wrong&action=townwrong_boxingdaycare", false);
+	page = visit_url("choice.php?pwd=&whichchoice=1334&option=2");
+	page = visit_url("choice.php?pwd=&whichchoice=1335&option=" + option);
+
+	if(!get_property("_daycareSpa").to_boolean())
+	{
+		abort("fightClubtracking failed");
+	}
+
+
+	//Do I need to leave as well, I think I do...
+	page = visit_url("choice.php?pwd=&whichchoice=1334&option=4");
+
+
+	return true;
 }

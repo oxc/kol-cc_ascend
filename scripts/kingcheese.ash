@@ -79,7 +79,7 @@ void handleKingLiberation()
 			{
 				cli_execute("make borrowed time");
 			}
-			if(item_amount($item[Borrowed Time]) > 0)
+			if((item_amount($item[Borrowed Time]) > 0) && (my_daycount() > 1))
 			{
 				use(1, $item[borrowed time]);
 			}

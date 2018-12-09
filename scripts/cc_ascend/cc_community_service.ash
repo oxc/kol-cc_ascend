@@ -1590,6 +1590,11 @@ boolean LA_cs_communityService()
 				}
 			}
 
+			if((get_cs_questCost(curQuest) > 7) && (have_effect($effect[Muddled]) == 0))
+			{
+				fightClubSpa($effect[Muddled]);
+			}
+
 			if(get_cs_questCost(curQuest) > 1)
 			{
 				if(cc_csHandleGrapes())
@@ -1894,7 +1899,11 @@ boolean LA_cs_communityService()
 				}
 			}
 
-			buffMaintain($effect[Amazing], 0, 1, 1);
+			if((get_cs_questCost(curQuest) > 7) && (have_effect($effect[Ten out of Ten]) == 0))
+			{
+				fightClubSpa($effect[Ten out of Ten]);
+			}
+
 			handleFamiliar($familiar[Machine Elf]);
 			cs_giant_growth();
 
@@ -1902,6 +1911,12 @@ boolean LA_cs_communityService()
 			{
 				chew(1, $item[Abstraction: Sensation]);
 			}
+
+			if(get_cs_questCost(curQuest) > 5)
+			{
+				buffMaintain($effect[Amazing], 0, 1, 1);
+			}
+
 
 			if((inebriety_left() >= 12) && (item_amount($item[Clan VIP Lounge Key]) > 0) && (cc_get_clan_lounge() contains $item[Clan Speakeasy]) && (have_effect($effect[On The Trolley]) == 0) && (estimate_cs_questCost(curQuest) > 1))
 			{
@@ -2644,6 +2659,11 @@ boolean LA_cs_communityService()
 			buffMaintain($effect[One Very Clear Eye], 0, 1, 1);
 			buffMaintain($effect[Sour Softshoe], 0, 1, 1);
 			buffMaintain($effect[Serendipi Tea], 0, 1, 1);
+
+			if(have_effect($effect[Uncucumbered]) == 0)
+			{
+				fightClubSpa($effect[Uncucumbered]);
+			}
 			if(is_unrestricted($item[Clan Pool Table]) && (have_effect($effect[Hustlin\']) == 0))
 			{
 				visit_url("clan_viplounge.php?preaction=poolgame&stance=3");
@@ -2865,6 +2885,7 @@ boolean LA_cs_communityService()
 			buffMaintain($effect[Human-Machine Hybrid], 0, 1, 1);
 			buffMaintain($effect[Frost Tea], 0, 1, 1);
 			buffMaintain($effect[Berry Elemental], 0, 1, 1);
+			buffMaintain($effect[Amazing], 0, 1, 1);
 
 			if(get_property("spacegateVaccine1").to_boolean() && !get_property("_spacegateVaccine").to_boolean() && (have_effect($effect[Rainbow Vaccine]) == 0) && get_property("spacegateAlways").to_boolean())
 			{

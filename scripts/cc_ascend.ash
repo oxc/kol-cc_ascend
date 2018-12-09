@@ -1,6 +1,6 @@
 script "cc_ascend.ash";
 notify cheesecookie;
-since r19010;
+since r19023;
 /***
 	svn checkout https://svn.code.sf.net/p/ccascend/code/cc_ascend
 	Killing is wrong, and bad. There should be a new, stronger word for killing like badwrong or badong. YES, killing is badong. From this moment, I will stand for the opposite of killing, gnodab.
@@ -2161,6 +2161,7 @@ boolean dailyEvents()
 	handleBarrelFullOfBarrels(true);
 
 	kgb_getMartini();
+	fightClubNap();
 
 	chateaumantegna_useDesk();
 
@@ -3637,7 +3638,7 @@ boolean L11_aridDesert()
 		print("Need for desert: " + need, "blue");
 		print("Worm riding: " + item_amount($item[Worm-Riding Manual Page]), "blue");
 
-		if(!get_property("cc_gnasirUnlocked").to_boolean() && ($location[The Arid\, Extra-Dry Desert].turns_spent > 10))
+		if(!get_property("cc_gnasirUnlocked").to_boolean() && ($location[The Arid\, Extra-Dry Desert].turns_spent > 10) && (get_property("desertExploration").to_int() > 10))
 		{
 			print("Did not appear to notice that Gnasir unlocked, assuming so at this point.", "green");
 			set_property("cc_gnasirUnlocked", true);
@@ -4840,6 +4841,10 @@ boolean L13_towerNSContests()
 				buffMaintain($effect[Disco Smirk], 10, 1, 1);
 				buffMaintain($effect[Song of Bravado], 100, 1, 1);
 				buffMaintain($effect[Stevedave\'s Shanty of Superiority], 30, 1, 1);
+				if(have_effect($effect[Ten out of Ten]) == 0)
+				{
+					fightClubSpa($effect[Ten out of Ten]);
+				}
 				ccMaximize("moxie -equip snow suit", 1500, 0, false);
 				break;
 			case $stat[muscle]:
@@ -4851,6 +4856,10 @@ boolean L13_towerNSContests()
 				buffMaintain($effect[Power Ballad of the Arrowsmith], 10, 1, 1);
 				buffMaintain($effect[Song of Bravado], 100, 1, 1);
 				buffMaintain($effect[Stevedave\'s Shanty of Superiority], 30, 1, 1);
+				if(have_effect($effect[Muddled]) == 0)
+				{
+					fightClubSpa($effect[Muddled]);
+				}
 				ccMaximize("muscle -equip snow suit", 1500, 0, false);
 				break;
 			case $stat[mysticality]:
@@ -4865,6 +4874,10 @@ boolean L13_towerNSContests()
 				buffMaintain($effect[Pasta Oneness], 1, 1, 1);
 				buffMaintain($effect[Saucemastery], 1, 1, 1);
 				buffMaintain($effect[Stevedave\'s Shanty of Superiority], 30, 1, 1);
+				if(have_effect($effect[Uncucumbered]) == 0)
+				{
+					fightClubSpa($effect[Uncucumbered]);
+				}
 				ccMaximize("myst -equip snow suit", 1500, 0, false);
 				break;
 			}
@@ -14460,6 +14473,7 @@ boolean doTasks()
 		}
 	}
 
+
 	if(fortuneCookieEvent())			return true;
 	if(theSource_oracle())				return true;
 	if(LX_theSource())					return true;
@@ -14471,7 +14485,7 @@ boolean doTasks()
 	if(my_daycount() != 2)				doNumberology("adventures3");
 
 	//
-	//Adventuring actualy starts here.
+	//Adventuring actually starts here.
 	//
 
 	if(LA_cs_communityService())
@@ -14569,21 +14583,23 @@ boolean doTasks()
 	if(LM_edTheUndying())				return true;
 
 	location burnZone = solveDelayZone();
-
-	if(cc_voteMonster(true))
+	if(burnZone != $location[Barf Mountain])
 	{
-		print("Burn some delay somewhere (voting), if we found a place!", "green");
-		if(cc_voteMonster(true, burnZone, ""))
+		if(cc_voteMonster(true))
 		{
-			return true;
+			print("Burn some delay somewhere (voting), if we found a place!", "green");
+			if(cc_voteMonster(true, burnZone, ""))
+			{
+				return true;
+			}
 		}
-	}
-	if(isOverdueDigitize())
-	{
-		print("Burn some delay somewhere (digitize), if we found a place!", "green");
-		if(ccAdv(burnZone))
+		if(isOverdueDigitize())
 		{
-			return true;
+			print("Burn some delay somewhere (digitize), if we found a place!", "green");
+			if(ccAdv(burnZone))
+			{
+				return true;
+			}
 		}
 	}
 
