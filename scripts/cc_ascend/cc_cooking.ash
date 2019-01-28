@@ -1249,7 +1249,7 @@ void consumeStuff()
 			}
 		}
 
-		if((get_property("cc_nunsTrick") == "got") && (get_property("currentNunneryMeat").to_int() < 100000) && is_unrestricted($item[Fist Turkey Outline]))
+		if((my_location() == $location[The Themthar Hills]) && (get_property("currentNunneryMeat").to_int() < 100000) && is_unrestricted($item[Fist Turkey Outline]))
 		{
 			if((get_property("cc_mcmuffin") == "ed") || (get_property("cc_mcmuffin") == "finished"))
 			{

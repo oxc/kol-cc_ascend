@@ -2189,6 +2189,7 @@ boolean LA_cs_communityService()
 
 			buffMaintain($effect[Song of the North], 100, 1, 1);
 			buffMaintain($effect[Bow-Legged Swagger], 100, 1, 1);
+			buffMaintain($effect[Carol Of The Bulls], 30, 1, 1);
 			buffMaintain($effect[Jackasses\' Symphony of Destruction], 9, 1, 1);
 			buffMaintain($effect[Rage of the Reindeer], 10, 1, 1);
 			buffMaintain($effect[Scowl of the Auk], 10, 1, 1);
@@ -2381,6 +2382,7 @@ boolean LA_cs_communityService()
 				}
 				buffMaintain($effect[Song of Sauce], 100, 1, 1);
 				buffMaintain($effect[Bendin\' Hell], 100, 1, 1);
+				buffMaintain($effect[Carol Of The Hells], 30, 1, 1);
 				buffMaintain($effect[Arched Eyebrow of the Archmage], 10, 1, 1);
 				buffMaintain($effect[Jackasses\' Symphony of Destruction], 8, 1, 1);
 				buffMaintain($effect[Puzzle Fury], 0, 1, 1);

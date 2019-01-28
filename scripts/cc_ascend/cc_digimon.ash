@@ -20,8 +20,6 @@ void digimon_initializeSettings()
 		set_property("cc_hippyInstead", true);
 		set_property("cc_holeinthesky", true);
 		set_property("cc_ignoreFlyer", true);
-		set_property("cc_shenCopperhead", true);
-		set_property("cc_swordfish", "finished");
 		set_property("cc_useCubeling", false);
 		set_property("cc_wandOfNagamar", false);
 	}

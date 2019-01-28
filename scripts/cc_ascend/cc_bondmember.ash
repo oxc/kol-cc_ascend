@@ -603,18 +603,15 @@ boolean LM_bond()
 		}
 		if(get_property("questM20Necklace") == "finished")
 		{
-			if(get_property("_sourceTerminalDigitizeMonster") == $monster[Writing Desk])
+			if((get_property("_sourceTerminalDigitizeUses").to_int() == 0) && (item_amount($item[White Pixel]) < 30) && (item_amount($item[Richard\'s Star Key]) == 0) && !contains_text(get_property("nsTowerDoorKeysUsed"), $item[Richard\'s Star Key]))
 			{
-				if((get_property("_sourceTerminalDigitizeUses").to_int() == 1) && (item_amount($item[White Pixel]) < 30) && (item_amount($item[Richard\'s Star Key]) == 0) && !contains_text(get_property("nsTowerDoorKeysUsed"), $item[Richard\'s Star Key]))
-				{
-					woods_questStart();
-					equip($slot[acc2], $item[Continuum Transfunctioner]);
-					cc_sourceTerminalEducate($skill[Extract], $skill[Digitize]);
-					set_property("cc_digitizeDirective", $monster[Blooper]);
-					ccAdv(1, $location[8-bit Realm]);
-					set_property("cc_digitizeDirective", "");
-					return true;
-				}
+				woods_questStart();
+				equip($slot[acc2], $item[Continuum Transfunctioner]);
+				cc_sourceTerminalEducate($skill[Extract], $skill[Digitize]);
+				set_property("cc_digitizeDirective", $monster[Blooper]);
+				ccAdv(1, $location[8-bit Realm]);
+				set_property("cc_digitizeDirective", "");
+				return true;
 			}
 		}
 
@@ -717,7 +714,7 @@ boolean LM_bond()
 
 		if(internalQuestStatus("questM21Dance") >= 4)
 		{
-			if((get_property("cc_swordfish") != "finished") && (item_amount($item[Disposable Instant Camera]) == 0))
+			if((item_amount($item[Talisman O\' Namsilat]) == 0) && (item_amount($item[Disposable Instant Camera]) == 0))
 			{
 				if(contains_text($location[The Haunted Bedroom], $monster[Animated Ornate Nightstand]))
 				{

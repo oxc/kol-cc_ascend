@@ -23,15 +23,7 @@ boolean LX_phatLootToken();
 boolean LX_islandAccess();
 boolean LX_fancyOilPainting();
 boolean LX_setBallroomSong();
-boolean LX_pirateOutfit();
-boolean LX_pirateInsults();
-boolean LX_pirateBlueprint();
-boolean LX_pirateBeerPong();
-boolean LX_fcle();
 boolean LX_ornateDowsingRod();
-boolean LX_getDictionary();
-boolean LX_dictionary();
-boolean LX_nastyBooty();
 boolean LX_spookyravenSecond();
 boolean LX_spookyBedroomCombat();
 boolean LX_getDigitalKey();
@@ -83,7 +75,6 @@ boolean L5_goblinKing();
 boolean L5_getEncryptionKey();
 boolean L6_dakotaFanning();
 boolean L6_friarsGetParts();
-boolean L6_friarsHotWing();
 boolean L8_trapperStart();
 boolean L7_crypt();
 boolean L8_trapperGround();
@@ -140,7 +131,7 @@ boolean L12_gremlinStart();
 boolean L12_orchardFinalize();
 boolean L12_orchardStart();
 boolean L12_finalizeWar();
-boolean L12_nunsTrickGlandGet();
+boolean L12_filthwormGlandGet();
 boolean L13_sorceressDoor();
 boolean L13_towerNSEntrance();
 boolean L13_towerNSContests();
@@ -359,7 +350,6 @@ effect awol_walkBuff();										//Defined in cc_ascend/cc_awol.ash
 boolean backupSetting(string setting, string newValue);		//Defined in cc_ascend/cc_util.ash
 int[monster] banishedMonsters();							//Defined in cc_ascend/cc_util.ash
 boolean beehiveConsider();									//Defined in cc_ascend/cc_util.ash
-string beerPong(string page);								//Defined in cc_ascend/cc_util.ash
 int estimatedTurnsLeft();									//Defined in cc_ascend/cc_util.ash
 boolean summonMonster();									//Defined in cc_ascend/cc_util.ash
 boolean summonMonster(string option);						//Defined in cc_ascend/cc_util.ash
@@ -782,7 +772,6 @@ boolean tophatMaker();										//Defined in cc_ascend.ash
 boolean trackingSplitterFixer(string oldSetting, int day, string newSetting);//Defined in cc_ascend/cc_deprecation.ash
 void trickMafiaAboutFlorist();								//Defined in cc_ascend/cc_floristfriar.ash
 string trim(string input);									//Defined in cc_ascend/cc_util.ash
-string tryBeerPong();										//Defined in cc_ascend/cc_util.ash
 boolean tryCookies();										//Defined in cc_ascend/cc_cooking.ash
 boolean tryPantsEat();										//Defined in cc_ascend/cc_cooking.ash
 int turkeyBooze();											//Defined in cc_ascend/cc_util.ash

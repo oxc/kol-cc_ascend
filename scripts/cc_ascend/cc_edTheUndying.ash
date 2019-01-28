@@ -1867,10 +1867,6 @@ boolean LM_edTheUndying()
 		{
 			return true;
 		}
-		if(LX_pirateOutfit() || LX_pirateInsults() || LX_pirateBlueprint() || LX_pirateBeerPong() || LX_fcle())
-		{
-			return true;
-		}
 		if(LX_dinseylandfillFunbucks())
 		{
 			return true;
@@ -1906,10 +1902,6 @@ boolean LM_edTheUndying()
 	}
 
 
-	if(LX_pirateOutfit() || LX_pirateInsults() || LX_pirateBlueprint() || LX_pirateBeerPong() || LX_fcle())
-	{
-		return true;
-	}
 	if(L2_mosquito() || L2_treeCoin() || L2_spookyMap() || L2_spookyFertilizer() || L2_spookySapling())
 	{
 		return true;
@@ -1939,7 +1931,7 @@ boolean LM_edTheUndying()
 		return true;
 	}
 
-	if(L6_friarsGetParts() || L6_friarsHotWing())
+	if(L6_friarsGetParts())
 	{
 		return true;
 	}

@@ -270,6 +270,21 @@ string cc_combatHandler(int round, string opp, string text)
 		return "runaway";
 	}
 
+/*
+	if(enemy == $monster[Wild Reindeer])
+	{
+		if(!contains_text(combatState, "(olfaction)") && (have_effect($effect[On The Trail]) == 0) && cc_have_skill($skill[Transcendent Olfaction]) && (my_mp() >= mp_cost($skill[Transcendent Olfaction])))
+		{
+			set_property("cc_combatHandler", combatState + "(olfaction)");
+			handleTracker(enemy, $skill[Transcendent Olfaction], "cc_sniffs");
+			return "skill " + $skill[Transcendent Olfaction];
+		}
+		if(item_amount($item[Braindeer]) > 0)
+		{
+			return "item " + $item[Braindeer];
+		}
+	}
+*/
 	if((enemy == $monster[Your Shadow]) || (opp == "shadow cow puncher") || (opp == "shadow snake oiler") || (opp == "shadow beanslinger") || (opp == "shadow gelatinous noob"))
 	{
 		if(cc_have_skill($skill[Ambidextrous Funkslinging]))
@@ -378,14 +393,6 @@ string cc_combatHandler(int round, string opp, string text)
 
 	if(!contains_text(combatState, "blackbox") && (my_path() != "Heavy Rains") && (get_property("_raindohCopiesMade").to_int() < 5))
 	{
-		if((enemy == $monster[Writing Desk]) && (get_property("writingDesksDefeated").to_int() < 4) && (get_property("lastSecondFloorUnlock").to_int() < my_ascensions()))
-		{
-			set_property("cc_doCombatCopy", "yes");
-		}
-		if((enemy == $monster[Gaudy Pirate]) && (get_property("cc_gaudypiratecount").to_int() < 1) && !possessEquipment($item[Talisman O\' Namsilat]) && (item_amount($item[Gaudy Key]) < 2))
-		{
-			set_property("cc_doCombatCopy", "yes");
-		}
 		if((enemy == $monster[Modern Zmobie]) && (get_property("cc_modernzmobiecount").to_int() < 3))
 		{
 			set_property("cc_doCombatCopy", "yes");
@@ -566,15 +573,6 @@ string cc_combatHandler(int round, string opp, string text)
 		}
 	}
 
-	if((enemy == $monster[dirty thieving brigand]) && !contains_text(combatState, "makeitrain") && (get_property("cc_nunsTrickReady") == "yes"))
-	{
-		if((my_rain() > rain_cost($skill[Make It Rain])) && cc_have_skill($skill[Make It Rain]))
-		{
-			set_property("cc_combatHandler", combatState + "(makeitrain)");
-			return "skill " + $skill[Make It Rain];
-		}
-	}
-
 	if((enemy == $monster[dirty thieving brigand]) && !contains_text(combatState, "makeitrain") && (my_rain() > 60))
 	{
 		if((my_rain() > rain_cost($skill[Make It Rain])) && cc_have_skill($skill[Make It Rain]))
@@ -640,7 +638,7 @@ string cc_combatHandler(int round, string opp, string text)
 
 	if(!contains_text(combatState, "winkat") && (my_familiar() == $familiar[Reanimated Reanimator]))
 	{
-		if($monsters[Lobsterfrogman, Modern Zmobie, Ninja Snowman Assassin, Writing Desk] contains enemy)
+		if($monsters[Lobsterfrogman, Modern Zmobie, Ninja Snowman Assassin] contains enemy)
 		{
 			set_property("cc_combatHandler", combatState + "(winkat)");
 			if((get_property("_badlyRomanticArrows").to_int() == 1) && (round <= 1) && (get_property("romanticTarget") != enemy))
@@ -726,15 +724,6 @@ string cc_combatHandler(int round, string opp, string text)
 				set_property("cc_combatHandler", combatState + "(mayfly)");
 				return "skill " + $skill[Summon Mayfly Swarm];
 			}
-		}
-	}
-
-	if((item_amount($item[The Big Book of Pirate Insults]) > 0) && !contains_text(combatState, "insults") && (numPirateInsults() < 8) && (internalQuestStatus("questM12Pirate") < 5))
-	{
-		if(($locations[Barrrney\'s Barrr, The Obligatory Pirate\'s Cove] contains my_location()) || ((enemy == $monster[Gaudy Pirate]) && (my_location() != $location[Belowdecks])))
-		{
-			set_property("cc_combatHandler", combatState + "(insults)");
-			return "item " + $item[The Big Book Of Pirate Insults];
 		}
 	}
 
@@ -867,7 +856,7 @@ string cc_combatHandler(int round, string opp, string text)
 	}
 	if(!contains_text(get_property("longConMonster"),enemy) && cc_have_skill($skill[Long Con]) && (my_mp() >= mp_cost($skill[Long Con])) && (get_property("_longConUsed").to_int() < 5))
 	{
-		if($monsters[Blooper, cabinet of Dr. Limpieza, Dairy Goat, Dirty Old Lihc, Gaudy Pirate, Morbid Skull, Pygmy Bowler, Pygmy Witch Surgeon, Quiet Healer, Tomb Rat, Writing Desk] contains enemy)
+		if($monsters[Blooper, cabinet of Dr. Limpieza, Dairy Goat, Dirty Old Lihc, Morbid Skull, Pygmy Bowler, Pygmy Witch Surgeon, Quiet Healer, Tomb Rat, Writing Desk] contains enemy)
 		{
 			set_property("cc_combatHandler", combatState + "(longcon)");
 			handleTracker(enemy, $skill[Long Con], "cc_sniffs");
@@ -968,12 +957,6 @@ string cc_combatHandler(int round, string opp, string text)
 		}
 	}
 
-	if((enemy == $monster[dirty thieving brigand]) && !contains_text(combatState, "4dcamera") && (get_property("cc_nunsTrickActive") == "yes") && (item_amount($item[4-d Camera]) == 1) && (get_property("_cameraUsed").to_boolean() != true))
-	{
-		set_property("cc_combatHandler", combatState + "(4dcamera)");
-		return "item " + $item[4-d camera];
-	}
-
 	if(item_amount($item[Cocktail Napkin]) > 0)
 	{
 		if($monsters[Clingy Pirate (Female), Clingy Pirate (Male)] contains enemy)
@@ -1002,7 +985,7 @@ string cc_combatHandler(int round, string opp, string text)
 		{
 			doYellow = true;
 		}
-		if((get_property("cc_nunsTrickGland") == "start") && (enemy == $monster[larval filthworm]))
+		if((get_property("cc_filthwormGland") == "start") && (enemy == $monster[larval filthworm]))
 		{
 			doYellow = true;
 		}
@@ -1270,7 +1253,7 @@ string cc_combatHandler(int round, string opp, string text)
 
 	# Instakill handler
 	boolean doInstaKill = true;
-	if($monsters[Lobsterfrogman, Ninja Snowman Assassin, Writing Desk] contains enemy)
+	if($monsters[Lobsterfrogman, Ninja Snowman Assassin] contains enemy)
 	{
 		if(cc_have_skill($skill[Digitize]) && (get_property("_sourceTerminalDigitizeMonster") != enemy))
 		{
@@ -1298,7 +1281,7 @@ string cc_combatHandler(int round, string opp, string text)
 				return "skill " + $skill[shattering punch];
 			}
 		}
-		if(!contains_text(combatState, "gingerbread mob hit") && cc_have_skill($skill[Gingerbread Mob Hit]) && ((my_mp() / 2) > mp_cost($skill[Gingerbread Mob Hit])) && !get_property("_gingerbreadMobHitUsed").to_boolean())
+		if(!contains_text(combatState, "gingerbread mob hit") && cc_have_skill($skill[Gingerbread Mob Hit]) && is_unrestricted($item[My Life of Crime\, a Memoir]) && ((my_mp() / 2) > mp_cost($skill[Gingerbread Mob Hit])) && !get_property("_gingerbreadMobHitUsed").to_boolean())
 		{
 			if((my_adventures() < 20) || get_property("kingLiberated").to_boolean() || (my_daycount() >= 3))
 			{
@@ -1608,7 +1591,7 @@ string cc_combatHandler(int round, string opp, string text)
 
 	if(!contains_text(combatState, "duplicate") && cc_have_skill($skill[Duplicate]) && (my_mp() > mp_cost($skill[Duplicate])) && (get_property("_sourceTerminalDuplicateUses").to_int() == 0) && !get_property("kingLiberated").to_boolean() && (cc_my_path() != "Nuclear Autumn"))
 	{
-		if($monsters[Dairy Goat, Gaudy Pirate] contains enemy)
+		if($monsters[Dairy Goat] contains enemy)
 		{
 			set_property("cc_combatHandler", combatState + "(duplicate)");
 			return "skill " + $skill[Duplicate];
@@ -1623,7 +1606,7 @@ string cc_combatHandler(int round, string opp, string text)
 
 	if(contains_text(combatState, "duplicate") && cc_have_skill($skill[Gelatinous Kick]) && (my_mp() > mp_cost($skill[Gelatinous Kick])))
 	{
-		if($monsters[Dairy Goat, Gaudy Pirate] contains enemy)
+		if($monsters[Dairy Goat] contains enemy)
 		{
 			return "skill " + $skill[Gelatinous Kick];
 		}
@@ -1643,7 +1626,7 @@ string cc_combatHandler(int round, string opp, string text)
 
 	if(!contains_text(combatState, "digitize") && cc_have_skill($skill[Digitize]) && (my_mp() > mp_cost($skill[Digitize])) && (get_property("_sourceTerminalDigitizeUses").to_int() == 0) && !get_property("kingLiberated").to_boolean())
 	{
-		if($monsters[Ninja Snowman Assassin, Lobsterfrogman, Writing Desk] contains enemy)
+		if($monsters[Ninja Snowman Assassin, Lobsterfrogman] contains enemy)
 		{
 			if(get_property("_sourceTerminalDigitizeMonster") != enemy)
 			{
@@ -2647,7 +2630,7 @@ string cc_edCombatHandler(int round, string opp, string text)
 
 	# Instakill handler
 	boolean doInstaKill = true;
-	if($monsters[Lobsterfrogman, Ninja Snowman Assassin, Writing Desk] contains enemy)
+	if($monsters[Lobsterfrogman, Ninja Snowman Assassin] contains enemy)
 	{
 		if(cc_have_skill($skill[Digitize]) && (get_property("_sourceTerminalDigitizeMonster") != enemy))
 		{
@@ -2764,27 +2747,6 @@ string cc_edCombatHandler(int round, string opp, string text)
 			set_property("cc_edCombatHandler", edCombatState + "(curse of fortune)");
 			set_property("cc_edStatus", "dying");
 			return "skill " + $skill[Curse Of Fortune];
-		}
-	}
-
-	if((item_amount($item[The Big Book of Pirate Insults]) > 0) && !contains_text(combatState, "insults") && (numPirateInsults() < 8) && (get_property("cc_edCombatStage").to_int() < 3) && (get_property("cc_edStatus") != "dying"))
-	{
-		if(!contains_text(combatState, "beanscreen") && cc_have_skill($skill[Beanscreen]) && (my_mp() >= mp_cost($skill[Beanscreen])))
-		{
-			set_property("cc_combatHandler", combatState + "(beanscreen)");
-			return "skill " + $skill[Beanscreen];
-		}
-
-		if(!contains_text(combatState, to_string($skill[Snap Fingers])) && cc_have_skill($skill[Snap Fingers]) && (my_mp() >= mp_cost($skill[Snap Fingers])))
-		{
-			set_property("cc_combatHandler", combatState + "(" + $skill[Snap Fingers] + ")");
-			return "skill " + $skill[Snap Fingers];
-		}
-
-		if((my_location() == $location[The Obligatory Pirate\'s Cove]) || (my_location() == $location[barrrney\'s barrr]) || (enemy == $monster[gaudy pirate]))
-		{
-			set_property("cc_combatHandler", combatState + "(insults)");
-			return "item " + $item[The Big Book Of Pirate Insults];
 		}
 	}
 

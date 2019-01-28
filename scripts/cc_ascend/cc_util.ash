@@ -66,7 +66,6 @@ int internalQuestStatus(string prop);
 string runChoice(string page_text);
 int turkeyBooze();
 int amountTurkeyBooze();
-int numPirateInsults();
 int fastenerCount();
 int lumberCount();
 skill preferredLibram();
@@ -88,7 +87,6 @@ item bangPotionNeeded(effect need);
 boolean solveBangPotion(effect need);
 boolean pulverizeThing(item it);
 boolean buy_item(item it, int quantity, int maxprice);
-string tryBeerPong();
 boolean useCocoon();
 boolean hasShieldEquipped();
 void shrugAT();
@@ -148,7 +146,6 @@ boolean basicAdjustML();
 // Private Prototypes
 boolean buffMaintain(item source, effect buff, int uses, int turns);
 boolean buffMaintain(skill source, effect buff, int mp_min, int casts, int turns);
-string beerPong(string page);
 boolean beehiveConsider();
 string safeString(string input);
 string safeString(skill input);
@@ -1216,14 +1213,14 @@ boolean summonMonster(string option)
 		}
 	}
 
-	if(get_property("lastSecondFloorUnlock").to_int() < my_ascensions())
-	{
-		int need = 5 - get_property("writingDesksDefeated").to_int();
-		targets[count(targets)].target = $monster[Writing Desk];
-		targets[count(targets)].amt = need;
-	}
+//	if(get_property("lastSecondFloorUnlock").to_int() < my_ascensions())
+//	{
+//		int need = 5 - get_property("writingDesksDefeated").to_int();
+//		targets[count(targets)].target = $monster[Writing Desk];
+//		targets[count(targets)].amt = need;
+//	}
 
-	//	Racecar Bob 5, Gaudy Pirate 2* (Special Case when we have extra)
+	//	Racecar Bob 5
 	//	Pygmy Bowler 5+, Mountain Man 2+ (Special Case, when we have extra)
 	//	Frat Warrior for Outfit 1+ (Numberology)
 
@@ -1231,7 +1228,7 @@ boolean summonMonster(string option)
 	//Should we do a zero check on amt just in case, probably.
 
 	//	Targets (all)
-	//	Lobsterfrogman 5, Ninja Snowman Assassin 3, Writing Desk 5, Racecar Bob 5, Gaudy Pirate 2*
+	//	Lobsterfrogman 5, Ninja Snowman Assassin 3, Racecar Bob 5
 	//	Ghost 6+, Pygmy Bowler 5+, Mountain Man 2+, Skin Flute 4+, Astronomer 1+
 	//	Frat Warrior for Outfit 1+
 
@@ -3230,22 +3227,6 @@ int amountTurkeyBooze()
 	return 0;
 }
 
-int numPirateInsults()
-{
-	int retval = 0;
-	int i = 1;
-	while(i <= 8)
-	{
-		if(get_property("lastPirateInsult"+i) == "true")
-		{
-			retval = retval + 1;
-		}
-		i = i + 1;
-	}
-	return retval;
-}
-
-
 int fastenerCount()
 {
 	int base = get_property("chasmBridgeProgress").to_int();
@@ -3628,82 +3609,6 @@ boolean buy_item(item it, int quantity, int maxprice)
 	return true;
 }
 
-//Thanks, Rinn!
-string beerPong(string page)
-{
-	record r {
-		string insult;
-		string retort;
-	};
-
-	r [int] insults;
-	insults[1].insult="Arrr, the power of me serve'll flay the skin from yer bones!";
-	insults[1].retort="Obviously neither your tongue nor your wit is sharp enough for the job.";
-	insults[2].insult="Do ye hear that, ye craven blackguard?  It be the sound of yer doom!";
-	insults[2].retort="It can't be any worse than the smell of your breath!";
-	insults[3].insult="Suck on <i>this</i>, ye miserable, pestilent wretch!";
-	insults[3].retort="That reminds me, tell your wife and sister I had a lovely time last night.";
-	insults[4].insult="The streets will run red with yer blood when I'm through with ye!";
-	insults[4].retort="I'd've thought yellow would be more your color.";
-	insults[5].insult="Yer face is as foul as that of a drowned goat!";
-	insults[5].retort="I'm not really comfortable being compared to your girlfriend that way.";
-	insults[6].insult="When I'm through with ye, ye'll be crying like a little girl!";
-	insults[6].retort="It's an honor to learn from such an expert in the field.";
-	insults[7].insult="In all my years I've not seen a more loathsome worm than yerself!";
-	insults[7].retort="Amazing!  How do you manage to shave without using a mirror?";
-	insults[8].insult="Not a single man has faced me and lived to tell the tale!";
-	insults[8].retort="It only seems that way because you haven't learned to count to one.";
-
-	while(!page.contains_text("victory laps"))
-	{
-		string old_page = page;
-
-		if(!page.contains_text("Insult Beer Pong"))
-		{
-			abort("You don't seem to be playing Insult Beer Pong.");
-		}
-
-		if(page.contains_text("Phooey"))
-		{
-			print("Looks like something went wrong and you lost.", "lime");
-			return page;
-		}
-
-		foreach i in insults
-		{
-			if(page.contains_text(insults[i].insult))
-			{
-				if(page.contains_text(insults[i].retort))
-				{
-					print("Found appropriate retort for insult.", "lime");
-					print("Insult: " + insults[i].insult, "lime");
-					print("Retort: " + insults[i].retort, "lime");
-					page = visit_url("beerpong.php?value=Retort!&response=" + i);
-					break;
-				}
-				else
-				{
-					print("Looks like you needed a retort you haven't learned.", "red");
-					print("Insult: " + insults[i].insult, "lime");
-					print("Retort: " + insults[i].retort, "lime");
-
-					// Give a bad retort
-					page = visit_url("beerpong.php?value=Retort!&response=9");
-					return page;
-				}
-			}
-		}
-
-		if(page == old_page)
-		{
-			abort("String not found. There may be an error with one of the insult or retort strings.");
-		}
-	}
-
-	print("You won a thrilling game of Insult Beer Pong!", "lime");
-	return page;
-}
-
 boolean useCocoon()
 {
 	int mpCost = 0;
@@ -3862,20 +3767,7 @@ banshee librarian
 knob Goblin Harem Girl
 spiny skelelton
 toothy sklelton
-sassy pirate
-smarmy pirate
-swarthy pirate
-tetchy pirate
-toothy pirate 
-tipsy pirate
-chatty pirate
-cleanly pirate
-clingy pirate
-creamy pirate
-crusty pirate
-curmudgeonly pirate
 dairy goat
-gaudy pirate 
 ninja snowman assassin
 smut orc jacker
 smut orc nailer
@@ -4155,17 +4047,6 @@ int [item] cc_get_campground()
 	return campItems;
 }
 
-//Thanks, Rinn!
-string tryBeerPong()
-{
-	string page = visit_url("adventure.php?snarfblat=157");
-	if(contains_text(page, "Arrr You Man Enough?"))
-	{
-		page = beerPong(visit_url("choice.php?pwd&whichchoice=187&option=1"));
-	}
-	return page;
-}
-
 boolean buyUpTo(int num, item it)
 {
 	return buyUpTo(num, it, 20000);
@@ -4347,6 +4228,9 @@ boolean buffMaintain(effect buff, int mp_min, int casts, int turns)
 	case $effect[Busy Bein\' Delicious]:		useItem = $item[Crimbo fudge];					break;
 	case $effect[Butt-Rock Hair]:				useItem = $item[Hair Spray];					break;
 	case $effect[Carlweather\'s Cantata of Confrontation]:useSkill = $skill[Carlweather\'s Cantata of Confrontation];break;
+	case $effect[Carol Of The Bulls]:			useSkill = $skill[Carol Of The Bulls];			break;
+	case $effect[Carol Of The Hells]:			useSkill = $skill[Carol Of The Hells];			break;
+	case $effect[Carol Of The Thrills]:			useSkill = $skill[Carol Of The Thrills];		break;
 	case $effect[Cautious Prowl]:				useSkill = $skill[Walk: Cautious Prowl];		break;
 	case $effect[Celestial Camouflage]:			useItem = $item[Celestial Squid Ink];			break;
 	case $effect[Celestial Saltiness]:			useItem = $item[Celestial Au Jus];				break;
@@ -4446,7 +4330,7 @@ boolean buffMaintain(effect buff, int mp_min, int casts, int turns)
 	case $effect[Hardened Sweatshirt]:			useSkill = $skill[Magic Sweat];					break;
 	case $effect[Hardly Poisoned At All]:		useSkill = $skill[Disco Nap];					break;
 	case $effect[Healthy Blue Glow]:			useItem = $item[gold star];						break;
-	case $effect[Heavy Petting]:				useItem = $item[Knob Goblin Pet-Buffing Spray];	break;
+//	case $effect[Heavy Petting]:				useItem = $item[Knob Goblin Pet-Buffing Spray];	break;
 	case $effect[Heightened Senses]:			useItem = $item[airborne mutagen];				break;
 	case $effect[Hide of Sobek]:				useSkill = $skill[Hide of Sobek];				break;
 	case $effect[High Colognic]:				useItem = $item[Musk Turtle];					break;
@@ -4549,7 +4433,7 @@ boolean buffMaintain(effect buff, int mp_min, int casts, int turns)
 	case $effect[Patent Sallowness]:			useItem = $item[Patent Sallowness Tonic];		break;
 	case $effect[Patience of the Tortoise]:		useSkill = $skill[Patience of the Tortoise];	break;
 	case $effect[Patient Smile]:				useSkill = $skill[Patient Smile];				break;
-	case $effect[Peeled Eyeballs]:				useItem = $item[Knob Goblin Eyedrops];			break;
+//	case $effect[Peeled Eyeballs]:				useItem = $item[Knob Goblin Eyedrops];			break;
 	case $effect[Penne Fedora]:					useSkill = $skill[none];						break;
 	case $effect[Peppermint Bite]:				useItem = $item[Crimbo Peppermint Bark];		break;
 	case $effect[Peppermint Twisted]:			useItem = $item[Peppermint Twist];				break;
@@ -4721,7 +4605,7 @@ boolean buffMaintain(effect buff, int mp_min, int casts, int turns)
 	case $effect[Vitali Tea]:					useItem = $item[cuppa Vitali tea];				break;
 	case $effect[Walberg\'s Dim Bulb]:			useSkill = $skill[Walberg\'s Dim Bulb];			break;
 	case $effect[WAKKA WAKKA WAKKA]:			useItem = $item[Yellow Pixel Potion];			break;
-	case $effect[Wasabi Sinuses]:				useItem = $item[Knob Goblin Nasal Spray];		break;
+#	case $effect[Wasabi Sinuses]:				useItem = $item[Knob Goblin Nasal Spray];		break;
 	case $effect[Wasabi With You]:				useItem = $item[Wasabi Marble Soda];			break;
 	case $effect[Well-Oiled]:					useItem = $item[Oil of Parrrlay];				break;
 	case $effect[Well-Swabbed Ear]:				useItem = $item[Swabbie&trade; Swab];			break;

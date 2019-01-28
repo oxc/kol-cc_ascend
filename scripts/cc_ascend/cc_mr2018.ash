@@ -458,7 +458,6 @@ boolean cheeseWarMachine(int stats, int it, int eff, int potion)
 		case $stat[Moxie]:			it = 3;			break;
 		}
 	}
-
 	if(eff == 0)
 	{
 		switch(my_primestat())
@@ -468,7 +467,6 @@ boolean cheeseWarMachine(int stats, int it, int eff, int potion)
 		case $stat[Moxie]:			eff = 3;			break;
 		}
 	}
-
 	if(potion == 0)
 	{
 		potion = 1 + random(3);

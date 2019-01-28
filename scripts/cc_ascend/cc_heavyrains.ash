@@ -7,7 +7,6 @@ void hr_initializeSettings()
 	if(my_path() == "Heavy Rains")
 	{
 		#Rain Man (Heavy Rains) Related settings
-		set_property("cc_gaudypirate", "");
 		set_property("cc_holeinthesky", false);
 		set_property("cc_mountainmen", "");
 		set_property("cc_ninjasnowmanassassin", "");
@@ -41,18 +40,12 @@ boolean routineRainManHandler()
 		return false;
 	}
 #	if(my_rain() > (92 - (12 * my_daycount())))
-	if((my_rain() > (92 - (7 * (my_daycount() - 1)))) && (have_effect($effect[ultrahydrated]) == 0) && (get_property("cc_nunsTrickReady") != "yes") && (get_property("cc_nunsTrickActive") != "yes"))
+	if((my_rain() > (92 - (7 * (my_daycount() - 1)))) && (have_effect($effect[ultrahydrated]) == 0))
 	{
 		if(get_property("cc_mountainmen") == "")
 		{
 			set_property("cc_mountainmen", "1");
 			return rainManSummon("mountain man", true, false);
-		}
-
-		if(get_property("cc_gaudypirate") == "")
-		{
-			set_property("cc_gaudypirate", "1");
-			return rainManSummon("gaudy pirate", true, false);
 		}
 
 		if(get_property("cc_trapper") == "start")
@@ -393,10 +386,6 @@ boolean rainManSummon(string monsterName, boolean copy, boolean wink, string opt
 	{
 		mId = 529;
 	}
-	if(monsterName == "gaudy pirate")
-	{
-		mId = 633;
-	}
 	if(monsterName == "ghost")
 	{
 		mId = 950;
@@ -415,28 +404,12 @@ boolean rainManSummon(string monsterName, boolean copy, boolean wink, string opt
 		return false;
 	}
 
-	if((item_amount($item[ghost of a necklace]) == 1) && (monsterName == "writing desk"))
+	if((item_amount($item[ghost of a necklace]) == 1) && (monsterName == $monster[writing desk]))
 	{
 		#No more writing desks please.
 		return false;
 	}
-	if((item_amount($item[Talisman O\' Namsilat]) == 1) && (monsterName == "gaudy pirate"))
-	{
-		#already have the goal, don't summon
-		return false;
-	}
-	if((item_amount($item[gaudy key]) >= 2) && (monsterName == "gaudy pirate"))
-	{
-		#already have the subgoal, don't summon
-		return false;
-	}
-	if((item_amount($item[gaudy key]) == 1) && (monsterName == "gaudy pirate"))
-	{
-		#stops copying me!!
-		copy = false;
-		wink = false;
-	}
-	if((item_amount($item[richard\'s star key]) == 1) && (monsterName == "skinflute"))
+	if((item_amount($item[richard\'s star key]) == 1) && (monsterName == $monster[skinflute]))
 	{
 		#already have the goal, don't summon
 		return false;

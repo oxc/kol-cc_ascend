@@ -7,7 +7,6 @@ void picky_initializeSettings()
 	{
 		set_property("cc_getStarKey", true);
 		set_property("cc_holeinthesky", true);
-		set_property("cc_nunsTrick", false);
 		set_property("cc_wandOfNagamar", true);
 	}
 }
