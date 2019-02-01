@@ -739,7 +739,7 @@ string cc_combatHandler(int round, string opp, string text)
 
 	if(!contains_text(combatSTate, "(matingcall)") && cc_have_skill($skill[Gallapagosian Mating Call]) && (my_mp() >= mp_cost($skill[Gallapagosian Mating Call])))
 	{
-		if((enemy == $monster[pygmy shaman]) && (my_location() == $location[The Hidden Apartment Building]) && (have_effect($effect[Thrice-Cursed]) == 0) && (get_property("gallapagosMonster") != enemy))
+		if((enemy == $monster[pygmy shaman]) && (my_location() == $location[The Hidden Apartment Building]) && (have_effect($effect[Thrice-Cursed]) == 0) && (get_property("_gallapagosMonster") != enemy))
 		{
 			set_property("cc_combatHandler", combatState + "(matingcall)");
 			handleTracker(enemy, $skill[Gallapagosian Mating Call], "cc_sniffs");
@@ -779,7 +779,7 @@ string cc_combatHandler(int round, string opp, string text)
 
 	if(!contains_text(combatState, "(matingcall)") && cc_have_skill($skill[Gallapagosian Mating Call]) && (my_mp() >= mp_cost($skill[Gallapagosian Mating Call])) && (!cc_have_skill($skill[Rain Man]) || is100FamiliarRun()))
 	{
-		if((enemy == $monster[Writing Desk]) && (my_location() == $location[The Haunted Library]) && (get_property("writingDesksDefeated").to_int() < 5) && (get_property("gallapagosMonster") != enemy))
+		if((enemy == $monster[Writing Desk]) && (my_location() == $location[The Haunted Library]) && (get_property("writingDesksDefeated").to_int() < 5) && (get_property("_gallapagosMonster") != enemy))
 		{
 			set_property("cc_combatHandler", combatState + "(matingcall)");
 			handleTracker(enemy, $skill[Gallapagosian Mating Call], "cc_sniffs");
@@ -822,13 +822,13 @@ string cc_combatHandler(int round, string opp, string text)
 
 	if(!contains_text(combatState, "(matingcall)") && cc_have_skill($skill[Gallapagosian Mating Call]) && (my_mp() >= mp_cost($skill[Gallapagosian Mating Call])))
 	{
-		if(($monsters[cabinet of Dr. Limpieza, Dairy Goat, Morbid Skull, Pygmy Bowler, Pygmy Witch Surgeon, Quiet Healer, Tomb Rat] contains enemy) && (get_property("gallapagosMonster") != enemy))
+		if(($monsters[cabinet of Dr. Limpieza, Dairy Goat, Morbid Skull, Pygmy Bowler, Pygmy Witch Surgeon, Quiet Healer, Tomb Rat] contains enemy) && (get_property("_gallapagosMonster") != enemy))
 		{
 			set_property("cc_combatHandler", combatState + "(matingcall)");
 			handleTracker(enemy, $skill[Gallapagosian Mating Call], "cc_sniffs");
 			return "skill " + $skill[Gallapagosian Mating Call];
 		}
-		if(($monsters[Blooper] contains enemy) && (my_location() == $location[8-Bit Realm]) && (get_property("gallapagosMonster") != enemy))
+		if(($monsters[Blooper] contains enemy) && (my_location() == $location[8-Bit Realm]) && (get_property("_gallapagosMonster") != enemy))
 		{
 			set_property("cc_combatHandler", combatState + "(matingcall)");
 			handleTracker(enemy, $skill[Gallapagosian Mating Call], "cc_sniffs");
@@ -836,7 +836,7 @@ string cc_combatHandler(int round, string opp, string text)
 		}
 		if($monsters[Bob Racecar, Racecar Bob] contains enemy)
 		{
-			if((get_property("gallapagosMonster") != $monster[Bob Racecar]) && (get_property("gallapagosMonster") != $monster[Racecar Bob]))
+			if((get_property("_gallapagosMonster") != $monster[Bob Racecar]) && (get_property("_gallapagosMonster") != $monster[Racecar Bob]))
 			{
 				set_property("cc_combatHandler", combatState + "(matingcall)");
 				handleTracker(enemy, $skill[Gallapagosian Mating Call], "cc_sniffs");
@@ -1034,6 +1034,11 @@ string cc_combatHandler(int round, string opp, string text)
 		}
 	}
 
+	if(contains_text(combatState, "yellowray"))
+	{
+		abort("Ugh, where is my damn yellowray!!!");
+	}
+
 	if(!contains_text(combatState, "hugpocket") && (my_familiar() == $familiar[XO Skeleton]) && (get_property("_xoHugsUsed").to_int() <= 10))
 	{
 		if($monsters[Filthworm Drone, Filthworm Royal Guard, Larval Filthworm] contains enemy)
@@ -1041,11 +1046,71 @@ string cc_combatHandler(int round, string opp, string text)
 			set_property("cc_combatHandler", combatState + "(hugpocket)");
 			return "skill " + $skill[Hugs and Kisses!];
 		}
-	}
 
-	if(contains_text(combatState, "yellowray"))
-	{
-		abort("Ugh, where is my damn yellowray!!!");
+		if((internalQuestStatus("questL04Bat") < 3) && (item_drop_modifier() < 300.0))
+		{
+			if($monsters[Baseball Bat, Beanbat, Doughbat] contains enemy)
+			{
+				set_property("cc_combatHandler", combatState + "(hugpocket)");
+				return "skill " + $skill[Hugs and Kisses!];
+			}
+		}
+
+		if((item_amount($item[Killing Jar]) == 0) && (item_drop_modifier() < 800.0))
+		{
+			if($monsters[Banshee Librarian] contains enemy)
+			{
+				set_property("cc_combatHandler", combatState + "(hugpocket)");
+				return "skill " + $skill[Hugs and Kisses!];
+			}
+		}
+
+		if((item_amount($item[Knob Goblin Perfume]) == 0) && (item_drop_modifier() < 300.0) && (have_effect($effect[Knob Goblin Perfume]) == 0))
+		{
+			if($monsters[Knob Goblin Madam] contains enemy)
+			{
+				set_property("cc_combatHandler", combatState + "(hugpocket)");
+				return "skill " + $skill[Hugs and Kisses!];
+			}
+		}
+
+		if(get_property("_xoHugsUsed").to_int() <= 7)
+		{
+			if($monsters[Bearpig Topiary Animal, Eagle, Elephant (Meatcar?) Topiary Animal, Fleet Woodsman, Spider (Duck?) Topiary Animal] contains enemy)
+			{
+				set_property("cc_combatHandler", combatState + "(hugpocket)");
+				return "skill " + $skill[Hugs and Kisses!];
+			}
+			if(!possessEquipment($item[Knob Goblin Harem Veil]) && !possessEquipment($item[Knob Goblin Harem Pants]))
+			{
+				if($monsters[Knob Goblin Harem Girl] contains enemy)
+				{
+					set_property("cc_combatHandler", combatState + "(hugpocket)");
+					return "skill " + $skill[Hugs and Kisses!];
+				}
+			}
+		}
+
+		if(get_property("_xoHugsUsed").to_int() <= 4)
+		{
+			if($monsters[Bookbat, Gaunt Ghuol] contains enemy)
+			{
+				set_property("cc_combatHandler", combatState + "(hugpocket)");
+				return "skill " + $skill[Hugs and Kisses!];
+			}
+
+			if(!possessEquipment($item[Mohawk Wig]))
+			{
+				if($monsters[Burly Sidekick] contains enemy)
+				{
+					set_property("cc_combatHandler", combatState + "(hugpocket)");
+					return "skill " + $skill[Hugs and Kisses!];
+				}
+			}
+		}
+
+		//Hellion Cubes?
+
 	}
 
 	if(item_amount($item[Green Smoke Bomb]) > 0)

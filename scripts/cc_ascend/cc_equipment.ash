@@ -517,7 +517,7 @@ void equipBaselineBack()
 {
 	item toEquip = $item[none];
 
-	item[int] poss = List($items[Whatsit-Covered Turtle Shell, Black Cloak, Pillow Shell, Oil Shell, Gabardine Gunnysack, Fiberglass Frock, Giant Gym Membership Card, Frozen Turtle Shell, Misty Cloak, Misty Cape, Misty Robe, Makeshift Cape, Polyester Parachute, Buddy Bjorn, Camp Scout Backpack, Protonic Accelerator Pack]);
+	item[int] poss = List($items[Whatsit-Covered Turtle Shell, Black Cloak, Pillow Shell, Oil Shell, Gabardine Gunnysack, Fiberglass Frock, Giant Gym Membership Card, Frozen Turtle Shell, Spant Backplate, Misty Cloak, Misty Cape, Misty Robe, Makeshift Cape, Chalk Chlamys, Polyester Parachute, Buddy Bjorn, Camp Scout Backpack, Protonic Accelerator Pack]);
 
 	switch(my_primestat())
 	{
@@ -596,7 +596,7 @@ void equipBaselineWeapon()
 		poss = $items[Seal-Clubbing Club, Gnollish Flyswatter, Club of Corruption, Remaindered Axe, Skeleton Bone, Corrupt Club of Corruption, Flaming Crutch, Homoerotic Frat-Paddle, Kneecapping Stick, Corrupt Club of Corrupt Corruption, Spiked Femur, Severed Flipper, Gnawed-Up Dog Bone, Mannequin Leg, Infernal Toilet Brush, Hilarious Comedy Prop, Giant Foam Finger, Red Hot Poker, Maxwell\'s Silver Hammer, Elegant Nightstick, Curmudgel, Giant Foam Finger, Oversized Pipe, Ghast Iron Cleaver, Frozen Seal Spine, Stainless Steel Shillelagh, Porcelain Police Baton, Bass Clarinet, Fish Hatchet, Lead Pipe, Meat Tenderizer Is Murder, Dented Scepter];
 		break;
 	case $class[Turtle Tamer]:
-		poss = $items[Turtle Totem, Knob Goblin Tongs, Knob Goblin Scimitar, Skeleton Bone, Corn Holder, Eggbeater, Elegant Nightstick, Law-Abiding Citizen Cane, Mace of the Tortoise, Oversized Pizza Cutter, Maxwell\'s Silver Hammer, Witty Rapier, Ancient Ice Cream Scoop, Antique Machete, Spectral Axe, Short-Handled Mop, Ghast Iron Cleaver, Oversized Pipe, Octopus\'s Spade, Rusty Piece Of Rebar, Thor\'s Pliers, Rope, Lead Pipe, Work Is A Four Letter Sword, Bass Clarinet, Fish Hatchet, Garbage Sticker, Dented Scepter];
+		poss = $items[Turtle Totem, Knob Goblin Tongs, Knob Goblin Scimitar, Skeleton Bone, Corn Holder, Eggbeater, Elegant Nightstick, Law-Abiding Citizen Cane, Red-Hot Sausage Fork, Mace of the Tortoise, Oversized Pizza Cutter, Maxwell\'s Silver Hammer, Witty Rapier, Ancient Ice Cream Scoop, Antique Machete, Spectral Axe, Short-Handled Mop, Fiberglass Foil, Ghast Iron Cleaver, Oversized Pipe, Octopus\'s Spade, Rusty Piece Of Rebar, Thor\'s Pliers, Rope, Lead Pipe, Work Is A Four Letter Sword, Bass Clarinet, Fish Hatchet, Garbage Sticker, Dented Scepter];
 		break;
 	case $class[Sauceror]:
 		poss = $items[Saucepan, Dishrag, Corn Holder, Eggbeater, Cardboard Wakizashi, Witty Rapier, Oversized Pizza Cutter, Titanium Assault Umbrella, Thor\'s Pliers, Candlestick, Fish Hatchet, Bass Clarinet, Saucepanic];
@@ -963,7 +963,7 @@ void equipRollover()
 	}
 
 	toEquip = $item[none];
-	poss = List($items[Time Bandit Time Towel, Auxiliary Backbone, Gabardine Gunnysack, Burning Cape, First Post Shirt - Cir Senam, Octolus-Skin Cloak]);
+	poss = List($items[Time Bandit Time Towel, Chalk Chlamys, Auxiliary Backbone, Gabardine Gunnysack, Burning Cape, First Post Shirt - Cir Senam, Octolus-Skin Cloak]);
 
 	toEquip = handleSolveThing(poss, $slot[back]);
 	if((toEquip != $item[none]) && (toEquip != equipped_item($slot[back])))

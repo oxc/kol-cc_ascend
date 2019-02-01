@@ -740,6 +740,7 @@ void handlePostAdventure()
 		buffMaintain($effect[Blubbered Up], 200, 1, 10);
 		if(my_level() < 13)
 		{
+			buffMaintain($effect[Carol Of The Thrills], 150, 1, 10);
 			buffMaintain($effect[Aloysius\' Antiphon of Aptitude], 150, 1, 10);
 		}
 		buffMaintain($effect[Tenacity of the Snapper], 200, 1, 10);

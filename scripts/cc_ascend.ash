@@ -4580,7 +4580,7 @@ boolean L13_towerNSContests()
 			switch(ns_crowd2())
 			{
 			case $stat[moxie]:
-				foreach eff in $effects[Almost Cool, Busy Bein\' Delicious, Butt-Rock Hair, Funky Coal Patina, Impeccable Coiffure, Liquidy Smoky, Locks Like the Raven, Lycanthropy\, Eh?, Memories of Puppy Love, Newt Gets In Your Eyes, Notably Lovely, Oiled Skin, Pill Power, Radiating Black Body&trade;, Seriously Mutated,  Spiky Hair, Sugar Rush, Standard Issue Bravery, Superhuman Sarcasm, Tomato Power, Vital]
+				foreach eff in $effects[Almost Cool, Busy Bein\' Delicious, Butt-Rock Hair, Funky Coal Patina, Impeccable Coiffure, Liquidy Smoky, Locks Like the Raven, Lycanthropy\, Eh?, Memories of Puppy Love, Newt Gets In Your Eyes, Notably Lovely, Oiled Skin, Pill Power, Radiating Black Body&trade;, Seriously Mutated,  Spiky Hair, Sugar Rush, Standard Issue Bravery, Superhuman Sarcasm, Tomato Power, Unrunnable Face, Vital]
 				{
 					buffMaintain(eff, 0, 1, 1);
 				}
@@ -12389,6 +12389,10 @@ boolean L11_shenCopperhead()
 		if(goal == $location[none])
 		{
 			abort("Could not parse Shen event");
+		}
+		if(!zone_isAvailable(goal))
+		{
+			return false;
 		}
 		return ccAdv(goal);
 	}
