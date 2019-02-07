@@ -1166,18 +1166,24 @@ boolean doThemtharHills(boolean trickMode)
 	buffMaintain($effect[Purr of the Feline], 10, 1, 1);
 	float meatDropHave = meat_drop_modifier();
 
-/*
+	string wearing = "Frat Warrior Fatigues";
+	if(get_property("cc_hippyInstead").to_boolean())
+	{
+		wearing = "War Hippy Fatigues";
+	}
+
+
 	if(is100FamiliarRun())
 	{
-		ccMaximize("meat drop, -equip snow suit", 1500, 0, false);
+		ccMaximize("meat drop, outfit " + wearing + ", -equip snow suit", 1500, 0, false);
 	}
 	else
 	{
-		ccMaximize("meat drop, -equip snow suit, switch Hobo Monkey, switch rockin' robin, switch adventurous spelunker, switch Grimstone Golem, switch Fist Turkey, switch Unconscious Collective, switch Golden Monkey, switch Angry Jung Man, switch Leprechaun", 1500, 0, false);
+		ccMaximize("meat drop, outfit " + wearing + ", -equip snow suit, switch Hobo Monkey, switch rockin' robin, switch adventurous spelunker, switch Grimstone Golem, switch Fist Turkey, switch Unconscious Collective, switch Golden Monkey, switch Angry Jung Man, switch Leprechaun", 1500, 0, false);
 		handleFamiliar(my_familiar());
 	}
-	int expectedMeat = numeric_modifier("Generated:_spec", "meat drop");
-*/
+//	int expectedMeat = numeric_modifier("Generated:_spec", "meat drop");
+
 
 	buffMaintain($effect[Greedy Resolve], 0, 1, 1);
 	buffMaintain($effect[Disco Leer], 10, 1, 1);
@@ -7132,8 +7138,15 @@ boolean L12_sonofaBeach()
 				set_property("cc_combatDirective", "start;skill macrometeorite");
 				retval = cc_voteMonster(true, $location[Sonofa Beach], "");
 				set_property("cc_combatDirective", "");
+				if(retval)
+				{
+					return retval;
+				}
 			}
-			return retval;
+			if(get_property("cc_gremlins") != "finished")
+			{
+				return retval;
+			}
 		}
 	}
 
