@@ -20,8 +20,14 @@ void standard_pulls()
 		{
 			#pullXWhenHaveY($item[Wand of Nagamar], 1, 0);		//Pull made obsolete by Questificaton
 			#pullXWhenHaveY($item[Star Key Lime Pie], 3, 0);
-			pullXWhenHaveY($item[Boris\'s Key Lime Pie], 1, 0);
-			pullXWhenHaveY($item[Cold Hi Mein], 2, 0);
+			if((towerkeycount() < 3) && (fullness_left() >= 4))
+			{
+				pullXWhenHaveY($item[Boris\'s Key Lime Pie], 1, 0);
+			}
+			if(fullness_left() >= 5)
+			{
+				pullXWhenHaveY($item[Cold Hi Mein], fullness_left() / 5, 0);
+			}
 		}
 
 	}

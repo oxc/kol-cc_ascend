@@ -605,7 +605,7 @@ void equipBaselineWeapon()
 		poss = $items[Pasta Spoon, Knob Goblin Tongs, Dishrag, Corn Holder, Eggbeater, Cardboard Wakizashi, Witty Rapier, Thor\'s Pliers, Wrench, Fish Hatchet, Bass Clarinet, Hand That Rocks The Ladle];
 		break;
 	case $class[Disco Bandit]:
-		poss = $items[Dented Harmonica, Frigid Derringer, The Jokester\'s Gun, Fish Hatchet, Knife, Bass Clarinet, Frankly Mr. Shank];
+		poss = $items[Dented Harmonica, Foam Pistol, Frigid Derringer, The Nuge\'s Favorite Crossbow, The Jokester\'s Gun, Fish Hatchet, Knife, Bass Clarinet, Frankly Mr. Shank];
 		break;
 	case $class[Accordion Thief]:
 		poss = $items[Dented Harmonica, Frigid Derringer, The Jokester\'s Gun, Fish Hatchet, Revolver, accord ion, Bass Clarinet, Shakespeare\'s Sister\'s Accordion];
@@ -856,7 +856,7 @@ void equipBaselineAcc2()
 		}
 		else
 		{
-			poss = $items[Shiny Ring, Torquoise Ring, Jaunty Feather, Vampire Collar, Stuffed Shoulder Parrot, Genie\'s Bracers, Silent Nightlight, imp unity ring, garish pinky ring, batskin belt, Jolly Roger Charrrm Bracelet, Glowing Red Eye, Jangly Bracelet, Pirate Fledges, glow-in-the-dark necklace, Compression Stocking, Wicker Kickers, Iron Beta of Industry, Sphygmayomanometer, perfume-soaked bandana, your cowboy boots, World\'s Best Adventurer Sash, Hand In Glove, barrel hoop earring, Gumshoes, Caveman Dan\'s Favorite Rock, Battle Broom];
+			poss = $items[Shiny Ring, Torquoise Ring, Jaunty Feather, Vampire Collar, Stuffed Shoulder Parrot, Genie\'s Bracers, Silent Nightlight, imp unity ring, garish pinky ring, batskin belt, Jolly Roger Charrrm Bracelet, Glowing Red Eye, Jangly Bracelet, Pirate Fledges, glow-in-the-dark necklace, Compression Stocking, Wicker Kickers, Iron Beta of Industry, Sphygmayomanometer, perfume-soaked bandana, your cowboy boots, World\'s Best Adventurer Sash, Hand In Glove, barrel hoop earring, Gumshoes, Caveman Dan\'s Favorite Rock, Brutal Brogues, Draftsman\'s Driving Gloves, Nouveau Nosering, Battle Broom];
 		}
 	}
 	toEquip = handleSolveThing(poss, $slot[acc2]);
@@ -975,7 +975,7 @@ void equipRollover()
 	if(hasTorso())
 	{
 		toEquip = $item[none];
-		poss = List($items[General Sage\'s Lonely Diamonds Club Jacket, Makeshift Garbage Shirt, Glass Casserole Dish, Sneaky Pete\'s Leather Jacket, Sneaky Pete\'s Leather Jacket (Collar Popped)]);
+		poss = List($items[General Sage\'s Lonely Diamonds Club Jacket, Makeshift Garbage Shirt, Glass Casserole Dish, Shoe Ad T-Shirt, Sneaky Pete\'s Leather Jacket, Sneaky Pete\'s Leather Jacket (Collar Popped)]);
 
 		toEquip = handleSolveThing(poss, $slot[shirt]);
 		if((toEquip != $item[none]) && (toEquip != equipped_item($slot[shirt])))

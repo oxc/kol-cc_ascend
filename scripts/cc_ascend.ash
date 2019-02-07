@@ -1460,7 +1460,7 @@ int handlePulls(int day)
 			}
 		}
 
-		if(((cc_my_path() == "Picky") || is100FamiliarRun()) && (item_amount($item[Deck of Every Card]) == 0) && (fullness_left() >= 4))
+		if(((cc_my_path() == "Picky") || is100FamiliarRun()) && (item_amount($item[Deck of Every Card]) == 0) && (fullness_left() >= 4) && (towerkeycount() < 3))
 		{
 			if((item_amount($item[Boris\'s Key]) == 0) && canEat($item[Boris\'s Key Lime Pie]) && !contains_text(get_property("nsTowerDoorKeysUsed"), $item[Boris\'s Key]))
 			{
@@ -7897,14 +7897,6 @@ boolean L12_orchardStart()
 	if((get_property("hippiesDefeated").to_int() < 64) && !get_property("cc_hippyInstead").to_boolean())
 	{
 		return false;
-	}
-
-	if(!get_property("cc_hippyInstead").to_boolean())
-	{
-		if(get_property("fratboysDefeated").to_int() < 64)
-		{
-			return false;
-		}
 	}
 
 	if(!warOutfit())
