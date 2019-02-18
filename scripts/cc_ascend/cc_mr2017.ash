@@ -401,7 +401,12 @@ boolean kgbWasteClicks()
 	{
 		return false;
 	}
-	if(get_property("_kgbClicksUsed").to_int() >= 22)
+	int clickLimit = 22;
+	if(my_daycount() == 1)
+	{
+		clickLimit = 24;
+	}
+	if(get_property("_kgbClicksUsed").to_int() >= clickLimit)
 	{
 		return false;
 	}
@@ -413,7 +418,7 @@ boolean kgbWasteClicks()
 	}
 
 	# Yes, this will not be pleasant if we matched our number and each page click changes the buttons.
-	while((get_property("_kgbClicksUsed").to_int() < 22) && (clicked < 9))
+	while((get_property("_kgbClicksUsed").to_int() < clickLimit) && (clicked < 9))
 	{
 		foreach ef in $effects[Items Are Forever, A View To Some Meat, Light!, The Spy Who Loved XP, Initiative And Let Die, The Living Hitpoints, License To Punch, Goldentongue, Thunderspell]
 		{
@@ -1406,7 +1411,7 @@ boolean getHorse(string type)
 		}
 		choice = 2;
 	}
-	else if((type == "random") || (type == "hookah"))
+	else if((type == "random") || (type == "hookah") || (type == "crazy"))
 	{
 		if(contains_text(get_property("_horsery"), "crazy horse"))
 		{

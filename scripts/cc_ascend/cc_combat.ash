@@ -1559,13 +1559,13 @@ string cc_combatHandler(int round, string opp, string text)
 			return "item " + $item[Time-Spinner];
 		}
 
-		if(!contains_text(combatState, "(sing along)") && cc_have_skill($skill[Sing Along]) && (my_mp() > (mp_cost($skill[Sing Along]))) && (get_property("_boomBoxSong") == "Remainin\' Alive"))
+		if(!contains_text(combatState, "(sing along)") && cc_have_skill($skill[Sing Along]) && (my_mp() > (mp_cost($skill[Sing Along]))) && (get_property("boomBoxSong") == "Remainin\' Alive"))
 		{
 			set_property("cc_combatHandler", combatState + "(sing along)");
 			return "skill " + $skill[Sing Along];
 		}
 
-		if(!contains_text(combatState, "(sing along)") && cc_have_skill($skill[Sing Along]) && (my_mp() > (mp_cost($skill[Sing Along]))) && canSurvive(2.5) && (get_property("_boomBoxSong") == "Total Eclipse of Your Meat"))
+		if(!contains_text(combatState, "(sing along)") && cc_have_skill($skill[Sing Along]) && (my_mp() > (mp_cost($skill[Sing Along]))) && canSurvive(2.5) && (get_property("boomBoxSong") == "Total Eclipse of Your Meat"))
 		{
 			set_property("cc_combatHandler", combatState + "(sing along)");
 			return "skill " + $skill[Sing Along];
@@ -1595,7 +1595,7 @@ string cc_combatHandler(int round, string opp, string text)
 
 		if(!contains_text(combatState, "(sing along)") && cc_have_skill($skill[Sing Along]) && (my_mp() > (mp_cost($skill[Sing Along]))))
 		{
-			if((get_property("_boomBoxSong") == "Remainin\' Alive") || (get_property("_boomBoxSong") == "Total Eclipse of Your Meat"))
+			if((get_property("boomBoxSong") == "Remainin\' Alive") || (get_property("boomBoxSong") == "Total Eclipse of Your Meat"))
 			{
 				set_property("cc_combatHandler", combatState + "(sing along)");
 				return "skill " + $skill[Sing Along];
@@ -1866,6 +1866,11 @@ string cc_combatHandler(int round, string opp, string text)
 		if(!contains_text(combatState, "delaymortarshell") && contains_text(combatState, "stuffedmortarshell") && (my_class() == $class[Sauceror]) && canSurvive(2.0) && cc_have_skill($skill[Stuffed Mortar Shell]) && cc_have_skill($skill[Salsaball]) && (my_mp() > mp_cost($skill[Salsaball])))
 		{
 			set_property("cc_combatHandler", combatState + "(delaymortarshell)");
+			if(!contains_text(combatState, "candyblast") && cc_have_skill($skill[Candyblast]) && (my_mp() > mp_cost($skill[Candyblast])))
+			{
+				set_property("cc_combatHandler", combatState + "(candyblast)");
+				return "skill " + $skill[Candyblast];
+			}
 			return "skill salsaball";
 		}
 
@@ -2630,7 +2635,7 @@ string cc_edCombatHandler(int round, string opp, string text)
 
 	if(!contains_text(combatState, "(sing along)") && cc_have_skill($skill[Sing Along]) && (my_mp() > (mp_cost($skill[Sing Along]))))
 	{
-		if((get_property("_boomBoxSong") == "Remainin\' Alive") || ((get_property("_boomBoxSong") == "Total Eclipse of Your Meat") && canSurvive(2.0)))
+		if((get_property("boomBoxSong") == "Remainin\' Alive") || ((get_property("boomBoxSong") == "Total Eclipse of Your Meat") && canSurvive(2.0)))
 		{
 			set_property("cc_combatHandler", combatState + "(sing along)");
 			return "skill " + $skill[Sing Along];

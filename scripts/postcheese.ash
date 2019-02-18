@@ -65,6 +65,22 @@ void handlePostAdventure()
 		return;
 	}
 
+	if(choice_follows_fight())
+	{
+		//The initial handler is unaware that something comes after this (or this is not reset after resolution, damned if I know).
+
+		//Force mafia to update the results of last_choice() to the choice the follows.
+		string temp = visit_url("main.php");
+
+		print("Choice follows that was not prehandled: " + last_choice());
+		//Is There A Doctor In The House?
+		if(last_choice() == 1340)
+		{
+			//Is there a penalty to accepting the quest and ignoring it?
+			string temp = visit_url("choice.php?whichchoice=1340&option=1");
+		}
+	}
+
 	if(!get_property("_ballInACupUsed").to_boolean() && (item_amount($item[Ball-In-A-Cup]) > 0))
 	{
 		use(1, $item[Ball-In-A-Cup]);
@@ -285,13 +301,25 @@ void handlePostAdventure()
 
 	if(my_path() == "Community Service")
 	{
+		int blueSwayed = have_effect($effect[Blue Swayed]) + (10 * item_amount($item[Pulled Blue Taffy]));
+
 		if(cc_have_skill($skill[Summon BRICKOs]) && (get_property("_brickoEyeSummons").to_int() < 3))
 		{
 			libram = $skill[Summon BRICKOs];
 		}
-		else if(cc_have_skill($skill[Summon Taffy]))
+		else if(cc_have_skill($skill[Summon Taffy]) && (blueSwayed < 56))
 		{
 			libram = $skill[Summon Taffy];
+		}
+		else if(cc_have_skill($skill[Summon Candy Heart]))
+		{
+			libram = $skill[Summon Candy Heart];
+		}
+
+		lovePotion_t lovePotion = lovePotionBuffs();
+		if((have_effect($effect[Tainted Love Potion]) == 0) && (my_mp() > 200) && !lovePotion.valid)
+		{
+			use_skill(1, $skill[Love Mixology]);
 		}
 
 		int missing = (my_maxmp() - my_mp()) / 15;

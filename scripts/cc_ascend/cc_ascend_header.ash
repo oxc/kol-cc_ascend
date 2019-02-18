@@ -442,14 +442,18 @@ boolean cs_spendRests();									//Defined in cc_ascend/cc_community_service.ash
 boolean cs_witchess();										//Defined in cc_ascend/cc_community_service.ash
 int estimate_cs_questCost(int quest);						//Defined in cc_ascend/cc_community_service.ash
 int [int] get_cs_questList();								//Defined in cc_ascend/cc_community_service.ash
+int[int] get_cs_questListFast();							//Defined in cc_ascend/cc_community_service.ash
 boolean cc_csHandleGrapes();								//Defined in cc_ascend/cc_community_service.ash
+boolean cc_csSmashStuff();									//Defined in cc_ascend/cc_community_service.ash
+boolean cc_csNormalDayOne();								//Defined in cc_ascend/cc_community_service.ash
+int cc_csSpecialDayOne();									//Defined in cc_ascend/cc_community_service.ash
 string what_cs_quest(int quest);							//Defined in cc_ascend/cc_community_service.ash
 int get_cs_questCost(int quest);							//Defined in cc_ascend/cc_community_service.ash
 int get_cs_questCost(string input);							//Defined in cc_ascend/cc_community_service.ash
 int get_cs_questNum(string input);							//Defined in cc_ascend/cc_community_service.ash
 int expected_next_cs_quest();								//Defined in cc_ascend/cc_community_service.ash
 int expected_next_cs_quest_internal();						//Defined in cc_ascend/cc_community_service.ash
-boolean do_chateauGoat();									//Defined in cc_ascend/cc_community_service.ash
+boolean cs_doGoat();										//Defined in cc_ascend/cc_community_service.ash
 boolean do_cs_quest(int quest);								//Defined in cc_ascend/cc_community_service.ash
 boolean do_cs_quest(string quest);							//Defined in cc_ascend/cc_community_service.ash
 boolean cs_preTurnStuff(int curQuest);						//Defined in cc_ascend/cc_community_service.ash
@@ -550,10 +554,13 @@ boolean godLobsterCombat(item it, int goal, string option);	//Defined in cc_asce
 boolean fantasyRealmToken();								//Defined in cc_ascend/cc_mr2018.ash
 boolean songboomSetting(string goal);						//Defined in cc_ascend/cc_mr2018.ash
 boolean songboomSetting(int choice);						//Defined in cc_ascend/cc_mr2018.ash
+boolean fightClubScavenge();								//Defined in cc_ascend/cc_mr2018.ash
 boolean fightClubNap();										//Defined in cc_ascend/cc_mr2018.ash
 boolean fightClubSpa();										//Defined in cc_ascend/cc_mr2018.ash
 boolean fightClubSpa(int option);							//Defined in cc_ascend/cc_mr2018.ash
 boolean fightClubSpa(effect eff);							//Defined in cc_ascend/cc_mr2018.ash
+boolean fightClubRecruit(int limit);						//Defined in cc_ascend/cc_mr2018.ash
+boolean fightClubSpar(int limit);							//Defined in cc_ascend/cc_mr2018.ash
 boolean cheeseWarMachine(int stats, int it, int buff, int potion);//Defined in cc_ascend/cc_mr2018.ash
 boolean neverendingPartyCombat(stat st, boolean hardmode, string option);//Defined in cc_ascend/cc_mr2018.ash
 boolean neverendingPartyCombat(effect eff, boolean hardmode, string option);//Defined in cc_ascend/cc_mr2018.ash
@@ -766,6 +773,7 @@ boolean timeSpinnerAdventure(string option);				//Defined in cc_ascend/cc_mr2016
 boolean timeSpinnerCombat(monster goal);					//Defined in cc_ascend/cc_mr2016.ash
 boolean timeSpinnerCombat(monster goal, string option);		//Defined in cc_ascend/cc_mr2016.ash
 boolean timeSpinnerConsume(item goal);						//Defined in cc_ascend/cc_mr2016.ash
+boolean timeSpinnerAvailable(item it);						//Defined in cc_ascend/cc_mr2016.ash
 boolean timeSpinnerGet(string goal);						//Defined in cc_ascend/cc_mr2016.ash
 void tootGetMeat();											//Defined in cc_ascend/cc_util.ash
 boolean tophatMaker();										//Defined in cc_ascend.ash
@@ -793,6 +801,11 @@ void woods_questStart();									//Defined in cc_ascend/cc_util.ash
 boolean xiblaxian_makeStuff();								//Defined in cc_ascend/cc_mr2014.ash
 string yellowRayCombatString();								//Defined in cc_ascend/cc_util.ash
 string banisherCombatString(monster enemy, location loc);	//Defined in cc_ascend/cc_util.ash
+boolean[string] getBanisherInfo(location loc);				//Defined in cc_ascend/cc_util.ash
+string getBanisherName(item it);							//Defined in cc_ascend/cc_util.ash
+string getBanisherName(skill sk);							//Defined in cc_ascend/cc_util.ash
+boolean didUseBanisherHere(skill banisher, location loc);	//Defined in cc_ascend/cc_util.ash
+boolean didUseBanisherHere(item banisher, location loc);	//Defined in cc_ascend/cc_util.ash
 boolean zoneCombat(location loc);							//Defined in cc_ascend/cc_util.ash
 boolean zoneItem(location loc);								//Defined in cc_ascend/cc_util.ash
 boolean zoneMeat(location loc);								//Defined in cc_ascend/cc_util.ash
@@ -867,6 +880,13 @@ void majora_initializeSettings();							//Defined in cc_ascend/cc_majora.ash
 void majora_initializeDay(int day);							//Defined in cc_ascend/cc_majora.ash
 boolean LM_majora();										//Defined in cc_ascend/cc_majora.ash
 
+boolean twilight_buySkills(string page);					//Defined in cc_ascend/cc_twilight.ash
+boolean twilight_buySkills();								//Defined in cc_ascend/cc_twilight.ash
+void twilight_startAscension(string page);					//Defined in cc_ascend/cc_twilight.ash
+void twilight_initializeSettings();							//Defined in cc_ascend/cc_twilight.ash
+void twilight_initializeDay(int day);						//Defined in cc_ascend/cc_twilight.ash
+boolean LM_twilight();										//Defined in cc_ascend/cc_twilight.ash
+
 void digimon_initializeSettings();							//Defined in cc_ascend/cc_digimon.ash
 void digimon_initializeDay(int day);						//Defined in cc_ascend/cc_digimon.ash
 boolean digimon_makeTeam();									//Defined in cc_ascend/cc_digimon.ash
@@ -883,6 +903,18 @@ void groundhog_initializeSettings();						//Defined in cc_ascend/cc_groundhog.as
 boolean canGroundhog(location loc);							//Defined in cc_ascend/cc_groundhog.ash
 boolean groundhogAbort(location loc);						//Defined in cc_ascend/cc_groundhog.ash
 boolean LM_groundhog();										//Defined in cc_ascend/cc_groundhog.ash
+
+record lovePotion_t
+{
+	boolean valid;
+	int muscle;
+	int mysticality;
+	int moxie;
+	int hp;
+	int mp;
+};
+
+lovePotion_t lovePotionBuffs();								//Defined in cc_ascend/cc_mr2018.ash
 
 //Record from cc_ascend/cc_zone.ash
 record generic_t

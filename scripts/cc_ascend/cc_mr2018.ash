@@ -685,7 +685,10 @@ boolean neverendingPartyCombat(effect eff, boolean hardmode, string option)
 	}
 	//May need to actually have 1 adventure left.
 
-	backupSetting("choiceAdventure1322", 1);
+	if((get_property("choiceAdventure1322").to_int() == 0) || (get_property("choiceAdventure1322").to_int() == 6))
+	{
+		backupSetting("choiceAdventure1322", 1);
+	}
 
 	switch(eff)
 	{
@@ -723,7 +726,8 @@ boolean neverendingPartyCombat(effect eff, boolean hardmode, string option)
 	if(get_property("choiceAdventure1324").to_int() == 5)
 	{
 		string[int] pages;
-		pages[0] = "choice.php?pwd&whichchoice=1324&option=" + get_property("choiceAdventure1324");
+		pages[0] = to_url($location[The Neverending Party]);
+		pages[1] = "choice.php?pwd&whichchoice=1324&option=" + get_property("choiceAdventure1324");
 		retval = ccAdvBypass(0, pages, $location[The Neverending Party], option);
 	}
 	else
@@ -925,7 +929,6 @@ boolean fightClubSpa()
 	return fightClubSpa(option);
 }
 
-
 boolean fightClubSpa(effect eff)
 {
 	int option = 0;
@@ -984,4 +987,65 @@ boolean fightClubSpa(int option)
 
 
 	return true;
+}
+
+boolean fightClubScavenge()
+{
+	if((get_property("_daycareGymScavenges").to_int() == 0) && get_property("daycareOpen").to_boolean())
+	{
+		string temp = visit_url("place.php?whichplace=town_wrong&action=townwrong_boxingdaycare");
+		temp = visit_url("choice.php?pwd=&whichchoice=1334&option=3");
+		temp = visit_url("choice.php?pwd=&whichchoice=1336&option=2");
+		return true;
+	}
+	return false;
+}
+
+
+boolean fightClubRecruit(int limit)
+{
+	if((get_property("_daycareRecruits").to_int() < limit) && get_property("daycareOpen").to_boolean())
+	{
+		string temp = visit_url("place.php?whichplace=town_wrong&action=townwrong_boxingdaycare");
+		temp = visit_url("choice.php?pwd=&whichchoice=1334&option=3");
+		temp = visit_url("choice.php?pwd=&whichchoice=1336&option=1");
+		return true;
+	}
+	return false;
+}
+
+boolean fightClubSpar(int limit)
+{
+	if((get_property("_daycareGymSpar").to_int() < limit) && get_property("daycareOpen").to_boolean())
+	{
+		string temp = visit_url("place.php?whichplace=town_wrong&action=townwrong_boxingdaycare");
+		temp = visit_url("choice.php?pwd=&whichchoice=1334&option=3");
+		temp = visit_url("choice.php?pwd=&whichchoice=1336&option=4");
+		set_property("_daycareGymSpar", 1 + get_property("_daycareGymSpar").to_int());
+		return true;
+	}
+	return false;
+}
+
+lovePotion_t lovePotionBuffs()
+{
+	int number = get_property("lovePotion").to_int();
+	lovePotion_t retval;
+	if(number == 0)
+	{
+		retval.valid = false;
+		return retval;
+	}
+	if(item_amount($item[Love Potion #XYZ]) == 0)
+	{
+		retval.valid = false;
+		return retval;
+	}
+	retval.muscle = 105 - (7 * (number % 30));
+	retval.mysticality = 102 - (6 * (number % 35));
+	retval.moxie = 105 - (5 * (number % 42));
+	retval.hp = 40 - (10 * (number % 8));
+	retval.mp = 30 - (10 * (number % 5));
+
+	return retval;
 }

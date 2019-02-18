@@ -1308,6 +1308,99 @@ boolean canYellowRay()
 	return false;
 }
 
+boolean[string] getBanisherInfo(location loc)
+{
+	string banished = get_property("banishedMonsters");
+	string[int] banishList = split_string(banished, ":");
+	monster[int] atLoc = get_monsters(loc);
+
+	//src/net/sourceforge/kolmafia/session/BanishManager.java
+	boolean[string] used;
+	for(int i=0; (i+1)<count(banishList); i = i + 3)
+	{
+		monster curMon = to_monster(banishList[i]);
+		string curUsed = banishList[i+1];
+
+		for(int j=0; j<count(atLoc); j++)
+		{
+			if(atLoc[j] == curMon)
+			{
+				used[curUsed] = true;
+			}
+		}
+	}
+	return used;
+}
+
+boolean didUseBanisherHere(skill banisher, location loc)
+{
+	return getBanisherInfo(loc) contains getBanisherName(banisher);
+}
+
+boolean didUseBanisherHere(item banisher, location loc)
+{
+	return getBanisherInfo(loc) contains getBanisherName(banisher);
+}
+
+string getBanisherName(skill sk)
+{
+	//Unresolvable: "chatterboxing"
+	//	new Banisher( "staff of the standalone cheese", -1, 5, false, Reset.AVATAR_RESET ),
+	switch(sk)
+	{
+	case $skill[Asdon Martin: Spring-Loaded Front Bumper]:	return "Spring-Loaded Front Bumper";
+	case $skill[Banishing Shout]:							return "banishing shout";
+	case $skill[Batter Up!]:								return "batter up!";
+	case $skill[Beancannon]:								return "beancannon";
+	case $skill[Breathe Out]:								return "breathe out";
+	case $skill[Creepy Grin]:								return "v for vivala mask";
+	case $skill[Curse Of Vacation]:							return "curse of vacation";
+	case $skill[Give Your Opponent The Stinkeye]:			return "stinky cheese eye";
+	case $skill[Howl Of The Alpha]:							return "howl of the alpha";
+	case $skill[KGB Tranquilizer Dart]:						return "KGB tranquilizer dart";
+	case $skill[Licorice Rope]:								return "licorice rope";
+	case $skill[Peel Out]:									return "peel out";
+	case $skill[Reflex Hammer]:								return "Reflex Hammer";
+	case $skill[Show Them Your Ring]:						return "mafia middle finger ring";
+	case $skill[Snokebomb]:									return "snokebomb";
+	case $skill[Talk About Politics]:						return "pantsgiving";
+	case $skill[Throw Latte On Opponent]:					return "Throw Latte on Opponent";
+	case $skill[Thunder Clap]:								return "thunder clap";
+	case $skill[Unleash Nanites]:							return "nanorhino";
+	case $skill[Walk Away From Explosion]:					return "walk away from explosion";
+	}
+	abort("Not a valid banisher skill: " + sk);
+	return "";
+}
+string getBanisherName(item it)
+{
+	switch(it)
+	{
+	case $item[Bundle of &quot;fragrant&quot; herbs]:	return "bundle of &quot;fragrant&quot; herbs";
+	case $item[Classy Monkey]:							return "classy monkey";
+	case $item[Cocktail Napkin]:						return "cocktail napkin";
+	case $item[Crystal Skull]:							return "crystal skull";
+	case $item[Daily Affirmation: Be A Mind Master]:	return "Be a Mind Master";
+	case $item[Deathchucks]:							return "deathchucks";
+	case $item[Dirty Stinkbomb]:						return "dirty stinkbomb";
+	case $item[Divine Champagne Popper]:				return "divine champagne popper";
+	case $item[Harold\'s Bell]:							return "harold\'s bell";
+	case $item[Gingerbread Restraining Order]:			return "gingerbread restraining order";
+	case $item[Ice Hotel Bell]:							return "ice hotel bell";
+	case $item[Ice House]:								return "ice house";
+	case $item[Latte Lovers Member\'s Mug]:				return "Throw Latte on Opponent";
+	case $item[Lil\' Doctor&trade; Bag]:				return "Reflex Hammer";
+	case $item[Louder Than Bomb]:						return "louder than bomb";
+	case $item[Pulled Indigo Taffy]:					return "pulled indigo taffy";
+	case $item[Smoke Grenade]:							return "smoke grenade";
+	case $item[Spooky Music Box Mechanism]:				return "spooky music box mechanism";
+	case $item[Tennis Ball]:							return "tennis ball";
+	case $item[Tryptophan Dart]:						return "tryptophan dart";
+	}
+	abort("Not a valid banisher item: " + it);
+	return "";
+}
+
 string banisherCombatString(monster enemy, location loc)
 {
 	if(get_property("kingLiberated").to_boolean())
@@ -1338,26 +1431,6 @@ string banisherCombatString(monster enemy, location loc)
 		return "";
 	}
 
-	string banished = get_property("banishedMonsters");
-	string[int] banishList = split_string(banished, ":");
-	monster[int] atLoc = get_monsters(loc);
-
-	//src/net/sourceforge/kolmafia/session/BanishManager.java
-	boolean[string] used;
-	for(int i=0; (i+1)<count(banishList); i = i + 3)
-	{
-		monster curMon = to_monster(banishList[i]);
-		string curUsed = banishList[i+1];
-
-		for(int j=0; j<count(atLoc); j++)
-		{
-			if(atLoc[j] == curMon)
-			{
-				used[curUsed] = true;
-			}
-		}
-	}
-
 	/*	If we have banished anything else in this zone, make sure we do not undo the banishing.
 		mad wino:batter up!:378:skeletal sommelier:KGB tranquilizer dart:381
 		We are not going to worry about turn costs, it probably only matters for older paths anyway.
@@ -1378,7 +1451,10 @@ string banisherCombatString(monster enemy, location loc)
 		Tennis Ball: item, no turn limit
 
 		Breathe Out: per hot jelly usage
+		Reflex Hammer: ???
+		Throw Latte At Opponent: ???
 	*/
+	boolean[string] used = getBanisherInfo(loc);
 
 	//Peel out with Extra-Smelly Muffler, note 10 limit, increased to 30 with Racing Slicks
 
@@ -1446,6 +1522,19 @@ string banisherCombatString(monster enemy, location loc)
 		if(useIt)
 		{
 			return "skill " + $skill[KGB Tranquilizer Dart];
+		}
+	}
+	if(cc_have_skill($skill[Reflex Hammer]) && (get_property("_reflexHammerUsed").to_int() < 3) && (my_mp() >= mp_cost($skill[Reflex Hammer])) && (!(used contains "Reflex Hammer")))
+	{
+		boolean useIt = true;
+		if((get_property("cc_gremlins") == "finished") && (my_daycount() >= 2) && (get_property("_reflexHammerUsed").to_int() >= 2))
+		{
+			useIt = false;
+		}
+
+		if(useIt)
+		{
+			return "skill " + $skill[Reflex Hammer];
 		}
 	}
 	if(cc_have_skill($skill[Snokebomb]) && (get_property("_snokebombUsed").to_int() < 3) && ((my_mp() - 20) >= mp_cost($skill[Snokebomb])) && (!(used contains "snokebomb")))
@@ -2364,7 +2453,7 @@ boolean isFreeMonster(monster mon)
 
 	boolean[monster] voting = $monsters[Angry Ghost, Annoyed Snake, Government Bureaucrat, Slime Blob, Terrible Mutant];
 
-	boolean[monster] other = $monsters[giant rubber spider, God Lobster, lynyrd, time-spinner prank, Travoltron];
+	boolean[monster] other = $monsters[giant rubber spider, God Lobster, lynyrd, Sausage Goblin, time-spinner prank, Travoltron];
 
 	//boolean[monster] protonGhosts: See isProtonGhost, we want to detect these separately as well so we\'ll functionalize it here.
 
@@ -4332,6 +4421,12 @@ boolean buffMaintain(effect buff, int mp_min, int casts, int turns)
 	case $effect[Hardened Sweatshirt]:			useSkill = $skill[Magic Sweat];					break;
 	case $effect[Hardly Poisoned At All]:		useSkill = $skill[Disco Nap];					break;
 	case $effect[Healthy Blue Glow]:			useItem = $item[gold star];						break;
+	case $effect[Heart Of Green]:				useItem = $item[Green Candy Heart];				break;
+	case $effect[Heart Of Lavender]:			useItem = $item[Lavender Candy Heart];			break;
+	case $effect[Heart Of Orange]:				useItem = $item[Orange Candy Heart];			break;
+	case $effect[Heart Of Pink]:				useItem = $item[Pink Candy Heart];				break;
+	case $effect[Heart Of Yellow]:				useItem = $item[Yellow Candy Heart];			break;
+	case $effect[Heart Of White]:				useItem = $item[White Candy Heart];				break;
 //	case $effect[Heavy Petting]:				useItem = $item[Knob Goblin Pet-Buffing Spray];	break;
 	case $effect[Heightened Senses]:			useItem = $item[airborne mutagen];				break;
 	case $effect[Hide of Sobek]:				useSkill = $skill[Hide of Sobek];				break;
@@ -4634,6 +4729,12 @@ boolean buffMaintain(effect buff, int mp_min, int casts, int turns)
 		case $effect[Slinking Noodle Glob]:		useSkill = $skill[Bind Vermincelli];			break;
 		case $effect[Spice Haze]:				useSkill = $skill[Bind Spice Ghost];			break;
 		case $effect[Whispering Strands]:		useSkill = $skill[Bind Angel Hair Wisp];		break;
+		case $effect[Shield Of The Pastalord]:
+			if(have_effect($effect[Flimsy Shield Of The Pastalord]) > 0)
+			{
+				useSkill = $skill[none];
+			}
+			break;
 		}
 	}
 

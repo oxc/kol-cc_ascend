@@ -605,10 +605,10 @@ void equipBaselineWeapon()
 		poss = $items[Pasta Spoon, Knob Goblin Tongs, Dishrag, Corn Holder, Eggbeater, Cardboard Wakizashi, Witty Rapier, Thor\'s Pliers, Wrench, Fish Hatchet, Bass Clarinet, Hand That Rocks The Ladle];
 		break;
 	case $class[Disco Bandit]:
-		poss = $items[Dented Harmonica, Foam Pistol, Frigid Derringer, The Nuge\'s Favorite Crossbow, The Jokester\'s Gun, Fish Hatchet, Knife, Bass Clarinet, Frankly Mr. Shank];
+		poss = $items[Boot Knife, Dented Harmonica, Foam Pistol, Frigid Derringer, The Nuge\'s Favorite Crossbow, The Jokester\'s Gun, Fish Hatchet, Knife, Bass Clarinet, Frankly Mr. Shank];
 		break;
 	case $class[Accordion Thief]:
-		poss = $items[Dented Harmonica, Frigid Derringer, The Jokester\'s Gun, Fish Hatchet, Revolver, accord ion, Bass Clarinet, Shakespeare\'s Sister\'s Accordion];
+		poss = $items[Boot Knife, Dented Harmonica, Frigid Derringer, The Jokester\'s Gun, Fish Hatchet, Revolver, accord ion, The Nuge\'s Favorite Crossbow, Bass Clarinet, Shakespeare\'s Sister\'s Accordion];
 		break;
 	case $class[Avatar of Boris]:
 		poss = $items[Trusty];

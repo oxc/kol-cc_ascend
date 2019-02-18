@@ -490,7 +490,7 @@ boolean cc_doWalford()
 		{
 			abort("Could not adventure in the Ice Hole, aborting");
 		}
-		if(!didWePlantHere($location[The Ice Hole]) && florist_available())
+		if(!didWePlantHere($location[The Ice Hole]) && florist_available() && (my_location() == $location[The Ice Hole]))
 		{
 			cli_execute("florist plant snori");
 			cli_execute("florist plant kelptomaniac");
@@ -996,7 +996,7 @@ boolean cc_cheesePostCS(int leave)
 			}
 
 			setAdvPHPFlag();
-			if(!didWePlantHere($location[Barf Mountain]) && florist_available() && (my_adventures() > 0) && (inebriety_left() >= 0) && ($location[Barf Mountain].turns_spent == 0))
+			if(!didWePlantHere($location[Barf Mountain]) && florist_available() && (my_adventures() > 0) && (my_location() == $location[Barf Mountain]) && (inebriety_left() >= 0) && ($location[Barf Mountain].turns_spent == 0))
 			{
 				ccAdv(1, $location[Barf Mountain]);
 				cli_execute("florist plant stealing magnolia");
@@ -1109,7 +1109,7 @@ boolean cc_cheesePostCS(int leave)
 	}
 
 
-	if(!didWePlantHere($location[Barf Mountain]) && florist_available() && (my_adventures() > 0) && (inebriety_left() >= 0))
+	if(!didWePlantHere($location[Barf Mountain]) && florist_available() && (my_adventures() > 0) && (my_location() == $location[Barf Mountain]) && (inebriety_left() >= 0) && (my_daycount() > 1))
 	{
 		ccAdv(1, $location[Barf Mountain]);
 		cli_execute("florist plant stealing magnolia");
@@ -1142,11 +1142,6 @@ boolean cc_cheesePostCS(int leave)
 		{
 			cli_execute("FarFuture booze");
 		}
-
-		while(get_property("_timeSpinnerMinutesUsed").to_int() <= 8)
-		{
-			cli_execute("FarFuture none");
-		}
 	}
 
 	while(lx_witchess());
@@ -1172,11 +1167,23 @@ boolean cc_cheesePostCS(int leave)
 	}
 
 	take_storage(storage_amount($item[Cold Hi Mein]), $item[Cold Hi Mein]);
-	while((fullness_left() >= 5) && (item_amount($item[Cold Hi Mein]) > 0) && (my_level() >= 13))
+	while((fullness_left() >= 5) && (item_amount($item[Cold Hi Mein]) > 0) && (my_level() >= $item[Cold Hi Mein].levelreq))
 	{
 		buffMaintain($effect[Got Milk], 0, 1, 5);
-		ccEat(1, $item[Cold Hi Mein]);
+		if(!timeSpinnerConsume($item[Cold Hi Mein]))
+		{
+			ccEat(1, $item[Cold Hi Mein]);
+		}
 	}
+
+	if(item_amount($item[Time-Spinner]) > 0)
+	{
+		while(get_property("_timeSpinnerMinutesUsed").to_int() <= 8)
+		{
+			cli_execute("FarFuture none");
+		}
+	}
+
 
 	while((inebriety_left() >= 1) && (item_amount($item[Astral Pilsner]) > 0))
 	{
@@ -1265,7 +1272,10 @@ boolean cc_cheesePostCS(int leave)
 	change_mcd(0);
 
 	cc_sourceTerminalEducate($skill[Extract], $skill[Turbo]);
-
+	fightClubSpa($effect[Uncucumbered]);
+	fightClubScavenge();
+	fightClubRecruit(1);
+	fightClubSpar(1);
 	if((item_amount($item[Confusing LED Clock]) > 0) && hippy_stone_broken() && (my_adventures() >= 6) && !get_property("_confusingLEDClockUsed").to_boolean())
 	{
 		use(1, $item[Confusing LED Clock]);
@@ -1331,6 +1341,7 @@ boolean cc_cheesePostCS(int leave)
 	{
 		equip($item[Silver Cow Creamer]);
 	}
+
 	if(item_amount($item[Pantsgiving]) > 0)
 	{
 		equip($item[Pantsgiving]);
@@ -1360,12 +1371,22 @@ boolean cc_cheesePostCS(int leave)
 		equip($slot[acc3], $item[Mr. Cheeng\'s Spectacles]);
 	}
 
+	if((get_property("doctorBagQuestLights").to_int() < 5) && (item_amount($item[Lil\' Doctor&trade; bag]) > 0) && (get_property("doctorBagUpgrades").to_int() < 0))
+	{
+		set_property("choiceAdventure1340", 1);
+		equip($slot[acc3], $item[Lil\' Doctor&trade; bag]);
+	}
+
+	set_property("choiceAdventure1106", 3);
+
+	loveTunnelAcquire(true, $stat[Moxie], true, 3, true, 3);
 	while((my_adventures() > leave) && (inebriety_left() >= 0))
 	{
 		print("Have " + my_adventures() + " with target of " + leave + " adventures.", "orange");
 		buffMaintain($effect[Polka of Plenty], 10, 1, 1);
 		buffMaintain($effect[Leisurely Amblin\'], 50, 1, 1);
 		buffMaintain($effect[How to Scam Tourists], 0, 1, 1);
+		asdonAutoFeed(37);
 		asdonBuff($effect[Driving Observantly]);
 		if(have_effect($effect[meat.enh]) == 0)
 		{
@@ -1433,13 +1454,17 @@ boolean cc_cheesePostCS(int leave)
 		{
 			handleFamiliar($familiar[Intergnat]);
 		}
-		if(item_amount($item[Snow Suit]) > 0)
+		if((item_amount($item[Snow Suit]) > 0) && (get_property("_snowSuitCount").to_int() < 50))
 		{
 			equip($item[Snow Suit]);
 			if(get_property("snowsuit") != "nose")
 			{
 				cli_execute("snowsuit nose");
 			}
+		}
+		else if(item_amount($item[Astral Pet Sweater]) > 0)
+		{
+			equip($item[Astral Pet Sweater]);
 		}
 		foreach fam in $familiars[Garbage Fire, Unconscious Collective, Li\'l Xenomorph, Bloovian Groose, Golden Monkey, Rogue Program, Space Jellyfish, Grim Brother, Fist Turkey, Rockin\' Robin, Optimistic Candle, Intergnat]
 		{
@@ -1526,7 +1551,7 @@ boolean cc_cheesePostCS(int leave)
 			#buffMaintain($effect[Eldritch Alignment], 0, 1, 1);
 		}
 
-		if(item_amount($item[&quot;I voted!&quot; sticker]) > 0)
+		if((item_amount($item[&quot;I voted!&quot; sticker]) > 0) && (get_property("_voteFreeFights").to_int() < 3))
 		{
 			int votingTurn = get_property("lastVoteMonsterTurn").to_int();
 			if(((total_turns_played() % 11) == 1) && (votingTurn < total_turns_played()))
@@ -1536,6 +1561,36 @@ boolean cc_cheesePostCS(int leave)
 				{
 					equip($slot[weapon], $item[Mutant Arm]);
 				}
+			}
+		}
+
+		if(((my_session_adv() % 12) == 0) && (item_amount($item[Kramco Sausage-o-Matic&trade;]) > 0))
+		{
+			equip($slot[off-hand], $item[Kramco Sausage-o-Matic&trade;]);
+		}
+		if((get_property("_sausagesMade").to_int() < 23) && (get_property("_sausagesEaten").to_int() < get_property("_sausageFights").to_int()) && (item_amount($item[Magical Sausage Casing]) > 0))
+		{
+			cli_execute("make 1 " + $item[Magical Sausage]);
+			ccEat(1, $item[Magical Sausage]);
+		}
+
+		if($familiars[Hobo Monkey, Robortender] contains my_familiar())
+		{
+			if(!get_property("_glennGoldenDiceUsed").to_boolean() && (item_amount($item[Glenn\'s Golden Dice]) > 0))
+			{
+				use(1, $item[Glenn\'s Golden Dice]);
+			}
+			if(!get_property("_legendaryBeat").to_boolean() && (item_amount($item[The Legendary Beat]) > 0))
+			{
+				use(1, $item[The Legendary Beat]);
+			}
+			if(!get_property("_defectiveTokenUsed").to_boolean() && (item_amount($item[Defective Game Grid Token]) > 0))
+			{
+				use(1, $item[Defective Game Grid Token]);
+			}
+			if(!get_property("expressCardUsed").to_boolean() && (item_amount($item[Platinum Yendorian Express Card]) > 0))
+			{
+				use(1, $item[Platinum Yendorian Express Card]);
 			}
 		}
 
@@ -1577,7 +1632,7 @@ boolean cc_cheesePostCS(int leave)
 				equip($slot[acc3], acc3);
 			}
 		}
-		
+
 		doNumberology("fites3");
 
 		if(have_effect($effect[How to Scam Tourists]) == 2)
@@ -1592,7 +1647,7 @@ boolean cc_cheesePostCS(int leave)
 		if((my_adventures() > leave) && (get_property("lastDMTDuplication").to_int() < my_ascensions()) && (item_amount($item[Clara\'s Bell]) > 0))
 		{
 			item toGet = $item[Eldritch Elixir];
-			toGet = $item[Denastified Haunch];
+//			toGet = $item[Denastified Haunch];
 			if(item_amount(toGet) == 0)
 			{
 				take_storage(1, toGet);
@@ -1634,7 +1689,7 @@ boolean cc_cheesePostCS(int leave)
 		equip($item[Snow Suit]);
 	}
 
-
+/*
 	while((inebriety_left() >= 5) && get_property("cc_breakstone").to_boolean())
 	{
 		if(!buyUpTo(1, $item[5-Hour Acrimony], 5000))
@@ -1655,7 +1710,7 @@ boolean cc_cheesePostCS(int leave)
 		}
 		drink(1, $item[Beery Blood]);
 	}
-
+*/
 	if(fullness_left() > 0)
 	{
 		put_closet(item_amount($item[Deviled Egg]), $item[Deviled Egg]);
@@ -1769,10 +1824,21 @@ boolean cc_cheesePostCS(int leave)
 	}
 	if(hippy_stone_broken())
 	{
-		if((item_amount($item[5-hour acrimony]) > 0) && (my_inebriety() <= inebriety_limit()))
+		if(my_daycount() == 1)
 		{
-			overdrink(1, $item[5-hour acrimony]);
+			use_familiar($familiar[Stooper]);
+			buffMaintain($effect[Ode to Booze], 50, 1, 5);
+			ccDrink(1, $item[Cold One]);
+			overdrink(1, $item[Hacked Gibson]);
 		}
+		else
+		{
+			if((item_amount($item[5-hour acrimony]) > 0) && (my_inebriety() <= inebriety_limit()))
+			{
+				overdrink(1, $item[5-hour acrimony]);
+			}
+		}
+
 		if(get_property("cc_pvpOutfit") != "")
 		{
 			cli_execute("pull outfit pvp");

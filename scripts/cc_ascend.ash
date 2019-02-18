@@ -1,6 +1,6 @@
 script "cc_ascend.ash";
 notify cheesecookie;
-since r19069;
+since r19102;
 /***
 	svn checkout https://svn.code.sf.net/p/ccascend/code/cc_ascend
 	Killing is wrong, and bad. There should be a new, stronger word for killing like badwrong or badong. YES, killing is badong. From this moment, I will stand for the opposite of killing, gnodab.
@@ -29,6 +29,7 @@ import <cc_ascend/cc_mr2015.ash>
 import <cc_ascend/cc_mr2016.ash>
 import <cc_ascend/cc_mr2017.ash>
 import <cc_ascend/cc_mr2018.ash>
+import <cc_ascend/cc_mr2019.ash>
 
 import <cc_ascend/cc_boris.ash>
 import <cc_ascend/cc_jellonewbie.ash>
@@ -45,6 +46,7 @@ import <cc_ascend/cc_bondmember.ash>
 import <cc_ascend/cc_groundhog.ash>
 import <cc_ascend/cc_digimon.ash>
 import <cc_ascend/cc_majora.ash>
+import <cc_ascend/cc_twilight.ash>
 import <cc_ascend/cc_glover.ash>
 import <cc_ascend/cc_monsterparts.ash>
 import <cc_ascend/cc_theSource.ash>
@@ -214,6 +216,11 @@ void initializeSettings()
 	set_property("choiceAdventure1003", 0);
 	beehiveConsider();
 
+	if(item_amount($item[Love Potion #XYZ]) == 0)
+	{
+		set_property("lovePotion", "");
+	}
+
 	cc_sourceTerminalEducate($skill[Extract], $skill[Digitize]);
 	if(contains_text(get_property("sourceTerminalEnquiryKnown"), "monsters.enq") && (cc_my_path() == "Pocket Familiars"))
 	{
@@ -250,6 +257,7 @@ void initializeSettings()
 	groundhog_initializeSettings();
 	digimon_initializeSettings();
 	majora_initializeSettings();
+	twilight_initializeSettings();
 	glover_initializeSettings();
 }
 
@@ -1818,6 +1826,7 @@ void initializeDay(int day)
 	bond_initializeDay(day);
 	digimon_initializeDay(day);
 	majora_initializeDay(day);
+	twilight_initializeDay(day);
 
 	if(day == 1)
 	{
@@ -2036,8 +2045,16 @@ boolean dailyEvents()
 
 	kgb_getMartini();
 	fightClubNap();
+	fightClubScavenge();
 
 	chateaumantegna_useDesk();
+
+	if((get_property("_daycareGymScavenges").to_int() == 0) && get_property("daycareOpen").to_boolean())
+	{
+		string temp = visit_url("place.php?whichplace=town_wrong&action=townwrong_boxingdaycare");
+		temp = visit_url("choice.php?pwd=&whichchoice=1334&option=3");
+		temp = visit_url("choice.php?pwd=&whichchoice=1336&option=2");
+	}
 
 	if((item_amount($item[Burned Government Manual Fragment]) > 0) && is_unrestricted($item[Burned Government Manual Fragment]) && get_property("cc_alienLanguage").to_boolean())
 	{
@@ -2569,6 +2586,7 @@ boolean doBedtime()
 	}
 
 	zataraSeaside("item");
+	fightClubSpa($effect[Uncucumbered]);
 
 	if(is_unrestricted($item[Source Terminal]) && (get_campground() contains $item[Source Terminal]))
 	{
@@ -7080,13 +7098,6 @@ boolean L12_sonofaBeach()
 	{
 		return false;
 	}
-	if(!get_property("cc_hippyInstead").to_boolean())
-	{
-		if(get_property("cc_gremlins") != "finished")
-		{
-			return false;
-		}
-	}
 	#Removing for now, we probably can not delay this at this point
 #	if(get_property("_sourceTerminalDigitizeMonster") == $monster[Lobsterfrogman])
 #	{
@@ -7147,6 +7158,14 @@ boolean L12_sonofaBeach()
 			{
 				return retval;
 			}
+		}
+	}
+
+	if(!get_property("cc_hippyInstead").to_boolean())
+	{
+		if(get_property("cc_gremlins") != "finished")
+		{
+			return false;
 		}
 	}
 
@@ -9174,13 +9193,13 @@ boolean LX_steelOrgan()
 	{
 		return false;
 	}
-	if($classes[Ed, Gelatinous Noob] contains my_class())
+	if($classes[Ed, Gelatinous Noob, Vampyre] contains my_class())
 	{
 		print(my_class() + " can not use a Steel Organ, turning off setting.", "blue");
 		set_property("cc_getSteelOrgan", false);
 		return false;
 	}
-	if((cc_my_path() == "Nuclear Autumn") || (cc_my_path() == "License to Adventure"))
+	if((cc_my_path() == "Nuclear Autumn") || (cc_my_path() == "License to Adventure") || (cc_my_path() == "Vampyre"))
 	{
 		print("You could get a Steel Organ for aftercore, but why? We won't help with this deviant and perverse behavior. Turning off setting.", "blue");
 		set_property("cc_getSteelOrgan", false);
@@ -13543,6 +13562,7 @@ boolean doTasks()
 	if(LM_groundhog())					return true;
 	if(LM_digimon())					return true;
 	if(LM_majora())						return true;
+	if(LM_twilight())					return true;
 	if(doHRSkills())					return true;
 
 	if(cc_my_path() != "Community Service")
@@ -13570,7 +13590,10 @@ boolean doTasks()
 	if(fortuneCookieEvent())			return true;
 	if(theSource_oracle())				return true;
 	if(LX_theSource())					return true;
-	if(LX_ghostBusting())				return true;
+	if(my_path() != "Community Service")
+	{
+		if(LX_ghostBusting())				return true;
+	}
 
 
 	if(L1_HRstart())					return true;
@@ -13803,6 +13826,9 @@ boolean doTasks()
 	if(L10_topFloor())					return true;
 	if(L10_holeInTheSkyUnlock())		return true;
 	if(L10_holeInTheSky())				return true;
+
+	if(L12_sonofaBeach())				return true;
+
 	if(L9_chasmStart())					return true;
 	if(L9_chasmBuild())					return true;
 	if(L9_highLandlord())				return true;
@@ -13952,6 +13978,7 @@ void cc_begin()
 		return;
 	}
 
+	//Could all of these actually be lastEncounter property checks?
 	if(contains_text(page, "Being Picky"))
 	{
 		picky_startAscension();
@@ -13959,6 +13986,10 @@ void cc_begin()
 	else if(contains_text(page, "Welcome to the Kingdom, Gelatinous Noob"))
 	{
 		jello_startAscension(page);
+	}
+	else if((get_property("lastEncounter") == "Intro: View of a Vampire") || (get_property("lastEncounter") == "Torpor"))
+	{
+		twilight_startAscension(page);
 	}
 
 #	if(my_class() == $class[Astral Spirit])

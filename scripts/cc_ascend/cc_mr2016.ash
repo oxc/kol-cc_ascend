@@ -1210,8 +1210,29 @@ boolean timeSpinnerGet(string goal)
 	}
 	return false;
 }
+
+boolean timeSpinnerAvailable(item it)
+{
+	string[int] chips = split_string(get_property("_timeSpinnerFoodAvailable"), ",");
+	string goal = to_string(to_int(it));
+
+	foreach index in chips
+	{
+		if(chips[index] == goal)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
 boolean timeSpinnerConsume(item goal)
 {
+	if(!timeSpinnerAvailable(goal))
+	{
+		return false;
+	}
 	if(is_unrestricted($item[Time-Spinner]) && (item_amount($item[Time-Spinner]) > 0) && (get_property("_timeSpinnerMinutesUsed").to_int() <= 7))
 	{
 		string temp = visit_url("inv_use.php?pwd=&which=3&whichitem=9104");
@@ -1219,6 +1240,7 @@ boolean timeSpinnerConsume(item goal)
 		{
 			temp = visit_url("choice.php?pwd=&whichchoice=1195&option=2");
 			temp = visit_url("choice.php?pwd=&whichchoice=1197&option=1&foodid=" + to_int(goal));
+			return true;
 		}
 	}
 	return false;
