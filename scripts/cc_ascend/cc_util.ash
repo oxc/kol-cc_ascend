@@ -284,6 +284,14 @@ void debugMaximize(string req, int meat)
 			{
 				doThis = false;
 			}
+			if(hp_cost(entry.skill) > my_hp())
+			{
+				doThis = false;
+			}
+			if(fuel_cost(entry.skill) > get_fuel())
+			{
+				doThis = false;
+			}
 		}
 		else
 		{
@@ -830,6 +838,10 @@ boolean is100FamiliarRun(familiar thisOne)
 
 boolean setAdvPHPFlag()
 {
+	if(get_property("_tempRelayCounters") != "")
+	{
+		print("setAdvPHPFlag called but we do not have any _tempRelayCounters according to mafia", "red");
+	}
 	location toAdv = provideAdvPHPZone();
 	if(toAdv == $location[none])
 	{
@@ -837,7 +849,40 @@ boolean setAdvPHPFlag()
 	}
 	ccAdv(toAdv);
 	return true;
+}
 
+boolean chibiChat()
+{
+	if(get_property("_chibiChat").to_boolean())
+	{
+		return false;
+	}
+	if(item_amount($item[Chibibuddy&trade; (off)]) > 0)
+	{
+		string chibi = visit_url("inv_use.php?pwd=&which=3&whichitem=5925");
+		visit_url("choice.php?pwd=&whichchoice=633&option=1&chibiname=BoBBo",true);
+		visit_url("choice.php?pwd=&whichchoice=627&option=5",true);
+		visit_url("choice.php?pwd=&whichchoice=627&option=7",true);
+	}
+
+	if(item_amount($item[5908]) > 0)
+	{
+		string chibi = visit_url("inv_use.php?pwd=&which=3&whichitem=5908");
+
+		if(contains_text(chibi, "Have a ChibiChat"))
+		{
+			visit_url("choice.php?pwd=&whichchoice=627&option=5",true);
+			visit_url("choice.php?pwd=&whichchoice=627&option=7",true);
+		}
+		else
+		{
+			visit_url("choice.php?pwd=&whichchoice=633&option=1&chibiname=BoBBo",true);
+			visit_url("choice.php?pwd=&whichchoice=627&option=5",true);
+			visit_url("choice.php?pwd=&whichchoice=627&option=7",true);
+		}
+	}
+	set_property("_chibiChat", true);
+	return true;
 }
 
 boolean isOverdueDigitize()
@@ -1308,6 +1353,61 @@ boolean canYellowRay()
 	return false;
 }
 
+boolean isSniffAction(skill sk)
+{
+	//No idea how to handle the Jarlsberg Jiggle.
+	return ((sk == $skill[Transcendent Olfaction]) ||
+		(sk == $skill[Curse Of Stench]) ||
+		(sk == $skill[Long Con]) ||
+		(sk == $skill[Make Friends]) ||
+		(sk == $skill[Gallapagosian Mating Call]) ||
+		(sk == $skill[Perceive Soul]) ||
+		(sk == $skill[Get A Good Whiff Of This Guy]));
+}
+
+boolean isSniffAction(item it)
+{
+	if(it == $item[Odor Extractor])
+	{
+		return true;
+	}
+	return false;
+}
+
+boolean isInstaKillAction(item it)
+{
+	return (it == $item[Replica Bat-Oomerang]);
+	
+}
+boolean isInstaKillAction(skill sk)
+{
+	return ((sk == $skill[Chest X-Ray]) || 
+		(sk == $skill[Fire The Jokester\'s Gun]) || 
+		(sk == $skill[Gingerbread Mob Hit]) || 
+		(sk == $skill[Shattering Punch]));
+}
+
+boolean isYellowRayAction(item it)
+{
+	return ((it == $item[Golden Light]) ||
+		(it == $item[Mayo Lance]) ||
+		(it == $item[Pumpkin Bomb]) ||
+		(it == $item[Unbearable Light]) ||
+		(it == $item[Viral Video]) ||
+		(it == $item[Yellowcake Bomb]));
+}
+
+boolean isYellowRayAction(skill sk)
+{
+	return ((sk == $skill[Asdon Martin: Missile Launcher]) ||
+		(sk == $skill[Ball Lightning]) ||
+		(sk == $skill[Disintegrate]) ||
+		(sk == $skill[Flash Headlight]) ||
+		(sk == $skill[Open A Big Yellow Present]) ||
+		(sk == $skill[Unleash Cowrruption]) ||
+		(sk == $skill[Wrath Of Ra]));
+}
+
 boolean[string] getBanisherInfo(location loc)
 {
 	string banished = get_property("banishedMonsters");
@@ -1369,7 +1469,6 @@ string getBanisherName(skill sk)
 	case $skill[Unleash Nanites]:							return "nanorhino";
 	case $skill[Walk Away From Explosion]:					return "walk away from explosion";
 	}
-	abort("Not a valid banisher skill: " + sk);
 	return "";
 }
 string getBanisherName(item it)
@@ -1397,7 +1496,6 @@ string getBanisherName(item it)
 	case $item[Tennis Ball]:							return "tennis ball";
 	case $item[Tryptophan Dart]:						return "tryptophan dart";
 	}
-	abort("Not a valid banisher item: " + it);
 	return "";
 }
 
@@ -4203,6 +4301,14 @@ boolean buffMaintain(skill source, effect buff, int mp_min, int casts, int turns
 	{
 		return false;
 	}
+	if(my_hp() < (casts * hp_cost(source)))
+	{
+		return false;
+	}
+	if(get_fuel() < (casts * fuel_cost(source)))
+	{
+		return false;
+	}
 	use_skill(casts, source);
 	return true;
 }
@@ -4332,6 +4438,7 @@ boolean buffMaintain(effect buff, int mp_min, int casts, int turns)
 	case $effect[Chalky Hand]:					useItem = $item[Handful of Hand Chalk];			break;
 	case $effect[Cranberry Cordiality]:			useItem = $item[Cranberry Cordial];				break;
 	case $effect[Cold Hard Skin]:				useItem = $item[Frost-Rimed Seal Hide];			break;
+	case $effect[Colorful Gratitude]:			useItem = $item[Cigar Box Turtle];				break;
 	case $effect[Contemptible Emanations]:		useItem = $item[Cologne of Contempt];			break;
 	case $effect[The Cupcake of Wrath]:			useItem = $item[Green-Frosted Astral Cupcake];	break;
 	case $effect[Curiosity of Br\'er Tarrypin]:	useSkill = $skill[Curiosity of Br\'er Tarrypin];break;
@@ -4665,6 +4772,7 @@ boolean buffMaintain(effect buff, int mp_min, int casts, int turns)
 	case $effect[Stone-Faced]:					useItem = $item[Stone Wool];					break;
 	case $effect[Strong Grip]:					useItem = $item[Finger Exerciser];				break;
 	case $effect[Strong Resolve]:				useItem = $item[Resolution: Be Stronger];		break;
+	case $effect[Sucrose-Colored Glasses]:		useItem = $item[Pair Of Candy Glasses];			break;
 	case $effect[Sugar Rush]:
 		foreach it in $items[Crimbo Fudge, Crimbo Peppermint Bark, Crimbo Candied Pecan, Breath Mint, Tasty Fun Good Rice Candy, That Gum You Like, Angry Farmer Candy]
 		{
@@ -4893,3 +5001,95 @@ location solveDelayZone()
 	}
 	return burnZone;
 }
+
+elementalBonuses_t cc_getElementalMods()
+{
+	elementalBonuses_t retval;
+	foreach damage in $strings[Cold Damage, Hot Damage, Sleaze Damage, Spooky Damage, Stench Damage]
+	{
+		float amt = numeric_modifier(damage);
+		if(amt > 0)
+		{
+			retval.weaponCount += 1;
+			retval.weaponTotal += amt;
+			switch(damage)
+			{
+			case "Cold Damage":		retval.weapon.cold = amt;		break;
+			case "Hot Damage":		retval.weapon.hot = amt;		break;
+			case "Sleaze Damage":	retval.weapon.sleaze = amt;		break;
+			case "Spooky Damage":	retval.weapon.spooky = amt;		break;
+			case "Stench Damage":	retval.weapon.stench = amt;		break;
+			}
+		}
+	}
+
+	foreach damage in $strings[Cold Spell Damage, Hot Spell Damage, Sleaze Spell Damage, Spooky Spell Damage, Stench Spell Damage]
+	{
+		float amt = numeric_modifier(damage);
+		if(amt > 0)
+		{
+			retval.spellCount += 1;
+			retval.spellTotal += amt;
+			switch(damage)
+			{
+			case "Cold Spell Damage":		retval.spell.cold = amt;		break;
+			case "Hot Spell Damage":		retval.spell.hot = amt;			break;
+			case "Sleaze Spell Damage":		retval.spell.sleaze = amt;		break;
+			case "Spooky Spell Damage":		retval.spell.spooky = amt;		break;
+			case "Stench Spell Damage":		retval.spell.stench = amt;		break;
+			}
+		}
+	}
+
+	return retval;
+}
+
+location cc_shenCopperheadGoal()
+{
+	item it = to_item(get_property("shenQuestItem"));
+	location goal = $location[none];
+	switch(it)
+	{
+	case $item[The Stankara Stone]:					goal = $location[The Batrat and Ratbat Burrow];						break;
+	case $item[The First Pizza]:					goal = $location[Lair of the Ninja Snowmen];						break;
+	case $item[Murphy\'s Rancid Black Flag]:		goal = $location[The Castle in the Clouds in the Sky (Top Floor)];	break;
+	case $item[The Eye of the Stars]:				goal = $location[The Hole in the Sky];								break;
+	case $item[The Lacrosse Stick of Lacoronado]:	goal = $location[The Smut Orc Logging Camp];						break;
+	case $item[The Shield of Brook]:				goal = $location[The VERY Unquiet Garves];							break;
+	}
+	return goal;
+}
+
+familiar[int] cc_meatFamiliarList()
+{
+	return List($familiars[Adventurous Spelunker, Grimstone Golem, Angry Jung Man, Bloovian Groose, Blavious Kloop, Hobo Monkey, Cat Burglar, Robortender, Piano Cat, Coffee Pixie, Cheshire Bat, Hand Turkey, Attention-Deficit Demon, Cymbal-Playing Monkey, Jitterbug, Nervous Tick, Casagnova Gnome, Hunchbacked Minion, Uniclops, Psychedelic Bear, He-Boulder, Urchin Urchin, Dancing Frog, Chauvinist Pig, Hippo Ballerina, Knob Goblin Organ Grinder, Dramatic Hedgehog, Leprechaun]);
+}
+
+
+familiar[int] cc_itemFamiliarList()
+{
+	return List($familiars[Rockin\' Robin, Garbage Fire, Optimistic Candle, Grimstone Golem, Angry Jung Man, Intergnat, XO Skeleton, Bloovian Groose, Fist Turkey, Cat Burglar, Slimeling, Jumpsuited Hound Dog, Adventurous Spelunker, Gelatinous Cubeling, Green Pixie, Blavious Kloop, Dandy Lion, Flaming Gravy Fairy, Frozen Gravy Fairy, Stinky Gravy Fairy, Spooky Gravy Fairy, Sleazy Gravy Fairy, Baby Gravy Fairy, Obtuse Angel, Crimbo Elf, Pair of Stomping Boots, Jack-in-the-Box, Attention-Deficit Demon, Jitterbug, Peppermint Rhino, Casagnova Gnome, Psychedelic Bear, Chocolate Lab, Piano Cat, Hippo Ballerina, Syncopated Turtle]);
+}
+
+string cc_meatFamiliarMaximizerString()
+{
+	familiar[int] fams = cc_meatFamiliarList();
+	string retval = "switch " + fams[0];
+	for(int i=1; i<count(fams); i++)
+	{
+		retval += ", switch " + fams[i];
+	}
+	return retval;
+}
+
+string cc_itemFamiliarMaximizerString()
+{
+	familiar[int] fams = cc_itemFamiliarList();
+	string retval = "switch " + fams[0];
+	for(int i=1; i<count(fams); i++)
+	{
+		retval += ", switch " + fams[i];
+	}
+	return retval;
+}
+

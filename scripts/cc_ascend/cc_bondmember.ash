@@ -549,7 +549,7 @@ boolean LM_bond()
 			if(item_amount($item[Goat Cheese]) == 0)
 			{
 				L8_trapperStart();
-				set_property("cc_combatDirective", "start;(olfaction)");
+				set_property("cc_combatDirective", "start;(skill transcendent olfaction)");
 				if((get_property("_kgbTranquilizerDartUses").to_int() < 3) && (item_amount($item[Kremlin\'s Greatest Briefcase]) > 0))
 				{
 					equip($slot[acc3], $item[Kremlin\'s Greatest Briefcase]);

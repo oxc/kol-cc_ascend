@@ -1278,15 +1278,18 @@ boolean asdonAutoFeed(int goal)
 	{
 		return false;
 	}
-	if(get_property("kingLiberated").to_boolean())
-	{
-		return false;
-	}
+
+	boolean missileLeft = !get_property("_missileLauncherUsed").to_boolean();
+	boolean banishAvail = !contains_text(get_property("banishedMonsters"), "Spring-Loaded Front Bumper");
 
 	if(goal == -1)
 	{
-		goal = 137;
-		if(get_property("_missileLauncherUsed").to_boolean())
+		goal = 37;
+		if(missileLeft)
+		{
+			goal = 137;
+		}
+		else if(banishAvail)
 		{
 			goal = 87;
 		}
@@ -1312,7 +1315,9 @@ boolean asdonAutoFeed(int goal)
 		}
 	}
 
-	if((get_fuel() < goal) && (my_meat() > 12000) && knoll_available() && isGeneralStoreAvailable())
+	boolean doughAvailable = knoll_available();
+
+	if((get_fuel() < goal) && (my_meat() > 12000) && doughAvailable && isGeneralStoreAvailable())
 	{
 		int want = ((goal + 5) - get_fuel()) / 6;
 		want = min(3 + ((my_meat() - 12000) / 1000), want);
@@ -1324,8 +1329,27 @@ boolean asdonAutoFeed(int goal)
 		}
 	}
 
+	if((get_fuel() < 37) && !doughAvailable)
+	{
+		if(item_amount($item[Wad Of Dough]) > 8)
+		{
+			doughAvailable = true;
+		}
+		else if(item_amount($item[All-Purpose Flower]) > 0)
+		{
+			use(1, $item[All-Purpose Flower]);
+			doughAvailable = true;
+		}
+		else if((my_ascensions() > 10) && (my_meat() > 5500) && isGeneralStoreAvailable())
+		{
+			buy(1, $item[All-Purpose Flower]);
+			use(1, $item[All-Purpose Flower]);
+			doughAvailable = true;
+		}
+	}
+
 	goal = 37;
-	if((get_fuel() < goal) && (my_meat() > 3500) && knoll_available() && isGeneralStoreAvailable())
+	if((get_fuel() < goal) && (my_meat() > 3500) && doughAvailable && isGeneralStoreAvailable())
 	{
 		int want = ((goal + 5) - get_fuel()) / 6;
 		if(want > 0)

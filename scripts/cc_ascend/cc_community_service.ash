@@ -40,16 +40,10 @@ boolean LA_cs_communityService()
 
 	cs_eat_spleen();
 
-	int spleenGoal = 12;
-	if(get_property("cc_hccsNoConcludeDay").to_boolean())
-	{
-		spleenGoal = 8;
-	}
-
 //	boolean [familiar] useFam = List($familiars[Galloping Grill, Fist Turkey, Puck Man, Ms. Puck Man]);
 	//Put these in priorty order
 	familiar[int] useFam = List($familiars[Ms. Puck Man, Puck Man, Fist Turkey, Galloping Grill]);
-	if(((curQuest == 11) || (curQuest == 6) || (curQuest == 9)) && (my_spleen_use() < spleenGoal))
+	if(((curQuest == 11) || (curQuest == 6) || (curQuest == 9)) && (my_spleen_use() < get_property("cc_csSpleenGoal").to_int()))
 	{
 		//These go in reverse priority order.
 		foreach fam in $familiars[Baby Sandworm, Unconscious Collective, Grim Brother, Bloovian Groose, Golden Monkey]
@@ -60,11 +54,6 @@ boolean LA_cs_communityService()
 	}
 	else
 	{
-		int pixelGoal = 25;
-		if(get_property("cc_hccsNoConcludeDay").to_boolean())
-		{
-			pixelGoal = 15;
-		}
 		if(have_familiar($familiar[Galloping Grill]) && ($familiar[Galloping Grill].drops_today == 0))
 		{
 			useFam = ListInsertFront(useFam, $familiar[Galloping Grill]);
@@ -74,7 +63,7 @@ boolean LA_cs_communityService()
 			useFam = ListInsertFront(useFam, $familiar[Rockin\' Robin]);
 			//useFam = $familiars[Galloping Grill, Fist Turkey, Rockin\' Robin, Puck Man, Ms. Puck Man];
 		}
- 		else if((item_amount($item[Yellow Pixel]) < pixelGoal) && (my_daycount() == 1))
+ 		else if(item_amount($item[Yellow Pixel]) < get_property("_cc_pixelGoal").to_int())
 		{
 			//leave default state
 		}
@@ -86,7 +75,7 @@ boolean LA_cs_communityService()
 		{
 			useFam = ListInsertFront(useFam, $familiar[Optimistic Candle]);
 		}
-		else if(my_spleen_use() < spleenGoal)
+		else if(my_spleen_use() < get_property("cc_csSpleenGoal").to_int())
 		{
 			foreach fam in $familiars[Baby Sandworm, Unconscious Collective, Grim Brother, Bloovian Groose, Golden Monkey]
 			{
@@ -291,16 +280,6 @@ boolean LA_cs_communityService()
 		cheeseWarMachine(0, 2, 1, random(3)+1);
 	}
 
-	if(get_property("cc_hccsNoConcludeDay").to_boolean() && get_property("_cc_hccsOneDay").to_boolean())
-	{
-		int nextResolution = cc_csSpecialDayOne();
-		if(nextResolution == 0)
-		{
-			return true;
-		}
-		curQuest = nextResolution;
-	}
-
 	if((curQuest == 11) || (curQuest == 6) || (curQuest == 9) || (curQuest == 7))
 	{
 		print("Beginning early quest actions (" + curQuest + ")", "green");
@@ -374,7 +353,7 @@ boolean LA_cs_communityService()
 					}
 					shrugAT($effect[Ode to Booze]);
 					buffMaintain($effect[Ode to Booze], 50, 1, (inebriety_left() - 9));
-					drink(min(item_amount($item[Sacramento Wine]), (inebriety_left() - 9)), $item[Sacramento Wine]);
+					ccDrink(min(item_amount($item[Sacramento Wine]), (inebriety_left() - 9)), $item[Sacramento Wine]);
 				}
 				else if(item_amount($item[Ice Island Long Tea]) > 0)
 				{
@@ -384,7 +363,7 @@ boolean LA_cs_communityService()
 					}
 					shrugAT($effect[Ode to Booze]);
 					buffMaintain($effect[Ode to Booze], 50, 1, 4);
-					drink(1, $item[Ice Island Long Tea]);
+					ccDrink(1, $item[Ice Island Long Tea]);
 				}
 				else if((item_amount($item[Splendid Martini]) > 0) && canDrink($item[Splendid Martini]))
 				{
@@ -394,7 +373,7 @@ boolean LA_cs_communityService()
 					}
 					shrugAT($effect[Ode to Booze]);
 					buffMaintain($effect[Ode to Booze], 50, 1, (inebriety_left() - 9));
-					drink(min(item_amount($item[Splendid Martini]), (inebriety_left() - 9)), $item[Splendid Martini]);
+					ccDrink(min(item_amount($item[Splendid Martini]), (inebriety_left() - 9)), $item[Splendid Martini]);
 				}
 				else if(item_amount($item[Meadeorite]) > 0)
 				{
@@ -404,7 +383,7 @@ boolean LA_cs_communityService()
 					}
 					shrugAT($effect[Ode to Booze]);
 					buffMaintain($effect[Ode to Booze], 50, 1, (inebriety_left() - 9));
-					drink(min(item_amount($item[Meadeorite]), (inebriety_left() - 9)), $item[Meadeorite]);
+					ccDrink(min(item_amount($item[Meadeorite]), (inebriety_left() - 9)), $item[Meadeorite]);
 				}
 
 			}
@@ -416,6 +395,11 @@ boolean LA_cs_communityService()
 
 			if(item_amount($item[A Ten-Percent Bonus]) > 0)
 			{
+				if(item_amount($item[LOV Epaulettes]) > 0)
+				{
+					equip($slot[back], $item[LOV Epaulettes]);
+				}
+				buffMaintain($effect[Inscrutable Gaze], 30, 1, 1);
 				use(1, $item[A Ten-Percent Bonus]);
 			}
 
@@ -423,6 +407,11 @@ boolean LA_cs_communityService()
 			{
 				if(do_cs_quest(11))
 				{
+					if(item_amount($item[LOV Epaulettes]) > 0)
+					{
+						equip($slot[back], $item[LOV Epaulettes]);
+					}
+					buffMaintain($effect[Inscrutable Gaze], 30, 1, 1);
 					use(1, $item[A Ten-Percent Bonus]);
 					curQuest = 0;
 					cli_execute("postcheese");
@@ -535,14 +524,6 @@ boolean LA_cs_communityService()
 				}
 			}
 
-			int tomatoGoal = 2;
-			int lemonGoal = 1;
-			if(get_property("cc_hccsNoConcludeDay").to_boolean())
-			{
-				tomatoGoal = 1;
-				lemonGoal = 0;
-			}
-
 			if(my_ascensions() > get_property("lastGuildStoreOpen").to_int())
 			{
 				location loc = $location[none];
@@ -570,7 +551,7 @@ boolean LA_cs_communityService()
 
 				if(loc == $location[The Haunted Pantry])
 				{
-					if((item_amount($item[Tomato]) >= tomatoGoal) || !have_skill($skill[Advanced Saucecrafting]))
+					if((item_amount($item[Tomato]) >= get_property("_cc_tomatoGoal").to_int()) || !have_skill($skill[Advanced Saucecrafting]))
 					{
 						ccAdv(1, loc, "cs_combatNormal");
 						return true;
@@ -583,7 +564,7 @@ boolean LA_cs_communityService()
 				}
 			}
 
-			if((item_amount($item[Tomato]) < tomatoGoal) && have_skill($skill[Advanced Saucecrafting]))
+			if((item_amount($item[Tomato]) < get_property("_cc_tomatoGoal").to_int()) && have_skill($skill[Advanced Saucecrafting]))
 			{
 				if(contains_text($location[The Haunted Pantry].combat_queue, to_string($monster[Possessed Can of Tomatoes])))
 				{
@@ -605,7 +586,7 @@ boolean LA_cs_communityService()
 				return true;
 			}
 
-			if(have_skill($skill[Advanced Saucecrafting]) && ((item_amount($item[Cherry]) < 1) || (item_amount($item[Grapefruit]) < 1) || (item_amount($item[Lemon]) < lemonGoal)))
+			if(have_skill($skill[Advanced Saucecrafting]) && ((item_amount($item[Cherry]) < 1) || (item_amount($item[Grapefruit]) < 1) || (item_amount($item[Lemon]) < get_property("_cc_lemonGoal").to_int())))
 			{
 				if(contains_text($location[The Skeleton Store].combat_queue, $monster[Novelty Tropical Skeleton]))
 				{
@@ -634,13 +615,13 @@ boolean LA_cs_communityService()
 					//equip($slot[Off-Hand], $item[Latte Lovers Member\'s Mug]);
 				}
 
-				if(possessEquipment($item[Lil\' Doctor&trade; Bag]) && (get_property("_reflexHammerUsed").to_int() < 2) && !didUseBanisherHere($item[Lil\' Doctor&trade; Bag], $location[The Skeleton Store]))
-				{
-					equip($slot[acc3], $item[Lil\' Doctor&trade; Bag]);
-				}
-				else if(possessEquipment($item[Latte Lovers Member\'s Mug]) && !get_property("_latteBanishUsed").to_boolean() && !didUseBanisherHere($item[Latte Lovers Member\'s Mug], $location[The Skeleton Store]))
+				if(possessEquipment($item[Latte Lovers Member\'s Mug]) && !get_property("_latteBanishUsed").to_boolean() && !didUseBanisherHere($item[Latte Lovers Member\'s Mug], $location[The Skeleton Store]))
 				{
 					equip($slot[Off-Hand], $item[Latte Lovers Member\'s Mug]);
+				}
+				else if(possessEquipment($item[Lil\' Doctor&trade; Bag]) && (get_property("_reflexHammerUsed").to_int() < 2) && !didUseBanisherHere($item[Lil\' Doctor&trade; Bag], $location[The Skeleton Store]))
+				{
+					equip($slot[acc3], $item[Lil\' Doctor&trade; Bag]);
 				}
 
 				if(item_amount($item[skeleton key]) == 0)
@@ -706,30 +687,52 @@ boolean LA_cs_communityService()
 				doHottub();
 			}
 
-#			if(((get_property("_g9Effect").to_int() > 125) || (item_amount($item[Airborne Mutagen]) == 0)) && (((curQuest == 9) || (my_turncount() < get_property("cc_cookie").to_int())) && elementalPlanes_access($element[spooky])))
-			if(((curQuest == 9) || (my_turncount() < get_property("cc_cookie").to_int())) && elementalPlanes_access($element[spooky]))
+			if((isOverdueDigitize() || isOverdueArrow()) && elementalPlanes_access($element[stench]))
 			{
-				if((isOverdueDigitize() || isOverdueArrow()) && elementalPlanes_access($element[stench]))
-				{
-					print("A Wanderer event is expected now.", "blue");
-					ccAdv(1, $location[Barf Mountain], "cs_combatNormal");
-					return true;
-				}
+				print("A Wanderer event is expected now.", "blue");
+				ccAdv(1, $location[Barf Mountain], "cs_combatNormal");
+				return true;
+			}
 
+			boolean labFarm = false;
+			labFarm |= (my_turncount() < get_property("cc_cookie").to_int());
+			if(curQuest == 9)
+			{
+				if((item_amount($item[Airborne Mutagen]) == 0) && (have_effect($effect[Heightened Senses]) == 0))
+				{
+					labFarm = true;
+				}
+			}
+			labFarm &= elementalPlanes_access($element[spooky]);
+
+			int turns_max = 10;
+			if(have_skill($skill[CLEESH]))
+			{
+				turns_max = 18;
+			}
+			labFarm &= ($location[The Secret Government Laboratory].turns_spent <= turns_max);
+			if(labFarm)
+			{
 				if(item_amount($item[Personal Ventilation Unit]) > 0)
 				{
 					equip($slot[acc1], $item[Personal Ventilation Unit]);
 				}
-				int turns_max = 10;
-				if(have_skill($skill[CLEESH]))
-				{
-					turns_max = 18;
-				}
-				if($location[The Secret Government Laboratory].turns_spent <= turns_max)
-				{
-					buffMaintain($effect[Singer\'s Faithful Ocelot], 47, 1, 1);
-					buffMaintain($effect[Fat Leon\'s Phat Loot Lyric], 43, 1, 1);
 
+				buffMaintain($effect[Singer\'s Faithful Ocelot], 47, 1, 1);
+				buffMaintain($effect[Fat Leon\'s Phat Loot Lyric], 43, 1, 1);
+
+				if((get_property("olfactedMonster") == $monster[Government Scientist]) || (get_property("_gallapagosMonster") == $monster[Government Scientist]))
+				{
+					buffMaintain($effect[Carol Of The Thrills], 110, 1, 1);
+					buffMaintain($effect[Pride Of The Puffin], 110, 1, 1);
+					buffMaintain($effect[Drescher\'s Annoying Noise], 120, 1, 1);
+					buffMaintain($effect[Ur-Kel\'s Aria Of Annoyance], 110, 1, 1);
+					buffMaintain($effect[Astral Shell], 40, 1, 1);
+					buffMaintain($effect[Ghostly Shell], 40, 1, 1);
+				}
+
+				if(item_amount($item[Experimental Serum G-9]) < get_property("_cc_g9Goal").to_int())
+				{
 					if(contains_text($location[The Secret Government Laboratory].combat_queue, $monster[Government Scientist]))
 					{
 						if(timeSpinnerCombat($monster[Government Scientist], "cs_combatNormal"))
@@ -737,13 +740,6 @@ boolean LA_cs_communityService()
 							return true;
 						}
 					}
-
-					if(get_property("olfactedMonster") == $monster[Government Scientist])
-					{
-						buffMaintain($effect[Pride Of The Puffin], 110, 1, 1);
-						buffMaintain($effect[Drescher\'s Annoying Noise], 120, 1, 1);
-					}
-
 					if(possessEquipment($item[Latte Lovers Member\'s Mug]) && !get_property("_latteCopyUsed").to_boolean())
 					{
 						equip($slot[Off-Hand], $item[Latte Lovers Member\'s Mug]);
@@ -752,11 +748,18 @@ boolean LA_cs_communityService()
 					{
 						equip($slot[acc3], $item[Lil\' Doctor&trade; Bag]);
 					}
-
-
-					ccAdv(1, $location[The Secret Government Laboratory], "cs_combatNormal");
-					return true;
 				}
+
+				//We would use _cc_g9Goal but if it is less than 30% we might disable it, also, we would like to avoid a digitize/wink/sausage/holiday wanderer
+				if(($location[The Secret Government Laboratory].turns_spent > 7) && have_familiar($familiar[Space Jellyfish]) && !is100FamiliarRun($familiar[Space Jellyfish]))
+				{
+					if((item_amount($item[Spooky Jelly]) == 0) && (spleen_left() > 0) && (get_property("_spaceJellyfishDrops").to_int() == 0) && elementalPlanes_access($element[hot]) && cc_have_skill($skill[Meteor Lore]))
+					{
+						handleFamiliar($familiar[Space Jellyfish]);
+					}
+				}
+				ccAdv(1, $location[The Secret Government Laboratory], "cs_combatNormal");
+				return true;
 			}
 		}
 		else if((curQuest == 7) && (item_amount($item[Emergency Margarita]) > 0))
@@ -772,22 +775,22 @@ boolean LA_cs_communityService()
 				if(item_amount($item[Astral Pilsner]) > 0)
 				{
 					buffMaintain($effect[Ode to Booze], 50, 1, min(inebriety_left(), item_amount($item[Astral Pilsner])));
-					drink(min(inebriety_left(), item_amount($item[Astral Pilsner])), $item[Astral Pilsner]);
+					ccDrink(min(inebriety_left(), item_amount($item[Astral Pilsner])), $item[Astral Pilsner]);
 				}
 				else if(item_amount($item[Sacramento Wine]) > 0)
 				{
 					buffMaintain($effect[Ode to Booze], 50, 1, 1);
-					drink(1, $item[Sacramento Wine]);
+					ccDrink(1, $item[Sacramento Wine]);
 				}
 				else if(item_amount($item[Iced Plum Wine]) > 0)
 				{
 					buffMaintain($effect[Ode to Booze], 50, 1, 1);
-					drink(1, $item[Iced Plum Wine]);
+					ccDrink(1, $item[Iced Plum Wine]);
 				}
 				else if(item_amount($item[Meadeorite]) > 0)
 				{
 					buffMaintain($effect[Ode to Booze], 50, 1, 1);
-					drink(1, $item[Meadeorite]);
+					ccDrink(1, $item[Meadeorite]);
 				}
 				else if((cc_get_clan_lounge() contains $item[Clan Speakeasy]) && (item_amount($item[Clan VIP Lounge Key]) > 0))
 				{
@@ -2042,17 +2045,17 @@ boolean LA_cs_communityService()
 						if((item_amount($item[Sacramento Wine]) >= 4) && (inebriety_left() >= 4))
 						{
 							buffMaintain($effect[Ode to Booze], 50, 1, 4);
-							drink(4, $item[Sacramento Wine]);
+							ccDrink(4, $item[Sacramento Wine]);
 						}
 						if((item_amount($item[Sacramento Wine]) >= 1) && (inebriety_left() >= 1))
 						{
 							buffMaintain($effect[Ode to Booze], 50, 1, 1);
-							drink(1, $item[Sacramento Wine]);
+							ccDrink(1, $item[Sacramento Wine]);
 						}
 						if((item_amount($item[Iced Plum Wine]) >= 1) && (inebriety_left() >= 1))
 						{
 							buffMaintain($effect[Ode to Booze], 50, 1, 1);
-							drink(1, $item[Iced Plum Wine]);
+							ccDrink(1, $item[Iced Plum Wine]);
 						}
 
 						if((my_meat() > 5000) && (item_amount($item[Clan VIP Lounge Key]) > 0) && (inebriety_left() >= 3) && (cc_get_clan_lounge() contains $item[Clan Speakeasy]))
@@ -2062,11 +2065,11 @@ boolean LA_cs_communityService()
 						}
 						if((item_amount($item[Asbestos Thermos]) > 0) && (inebriety_left() >= 4))
 						{
-							drink(1, $item[Asbestos Thermos]);
+							ccDrink(1, $item[Asbestos Thermos]);
 						}
 						if((item_amount($item[Cold One]) > 0) && (inebriety_left() >= 1))
 						{
-							drink(1, $item[Cold One]);
+							ccDrink(1, $item[Cold One]);
 						}
 
 					}
@@ -2074,7 +2077,7 @@ boolean LA_cs_communityService()
 					{
 						shrugAT($effect[Ode to Booze]);
 						buffMaintain($effect[Ode to Booze], 50, 1, 10);
-						drink(1, $item[Vintage Smart Drink]);
+						ccDrink(1, $item[Vintage Smart Drink]);
 					}
 				}
 			}
@@ -2139,6 +2142,16 @@ boolean LA_cs_communityService()
 
 	case 6:		#Weapon Damage
 		{
+			if((item_amount($item[Magical Sausage Casing]) > 0) && (item_amount($item[Magical Sausage]) == 0))
+			{
+				boolean temp = cli_execute("make 1 " + $item[Magical Sausage]);
+			}
+
+			if((item_amount($item[Magical Sausage]) > 0) && (get_property("_sausagesEaten").to_int() == 0))
+			{
+				cc_csBurnLibrams();
+				ccEat(1, $item[Magical Sausage]);
+			}
 			while((my_mp() < 50) && (get_property("timesRested").to_int() < total_free_rests()) && chateaumantegna_available())
 			{
 				doRest();
@@ -2154,7 +2167,7 @@ boolean LA_cs_communityService()
 
 			januaryToteAcquire($item[Broken Champagne Bottle]);
 
-			while((my_mp() < 207) && (get_property("timesRested").to_int() < total_free_rests()) && chateaumantegna_available())
+			while((my_mp() < 265) && (get_property("timesRested").to_int() < total_free_rests()) && chateaumantegna_available())
 			{
 				doRest();
 			}
@@ -2215,30 +2228,24 @@ boolean LA_cs_communityService()
 				return true;
 			}
 
-			if((item_amount($item[Astral Pilsner]) > 0) && (inebriety_left() > 0) && (my_adventures() < get_cs_questCost(curQuest)))
+			int questCost = get_cs_questCost(curQuest);
+			while((my_adventures() < questCost) && (inebriety_left() > 0))
 			{
-				shrugAT($effect[Ode to Booze]);
-				buffMaintain($effect[Ode to Booze], 50, 1, min(inebriety_left(), item_amount($item[Astral Pilsner])));
-				drink(min(inebriety_left(), item_amount($item[Astral Pilsner])), $item[Astral Pilsner]);
-			}
+				foreach it in $items[Splendid Martini, Iced Plum Wine, Sacramento Wine, Astral Pilsner, none]
+				{
+					if((it != $item[none]) && (item_amount(it) > 0))
+					{
+						shrugAT($effect[Ode To Booze]);
+						buffMaintain($effect[Ode To Booze], 50, 1, 1);
+						ccDrink(1, it);
+						break;
+					}
+					else
+					{
+						questCost = 0;
+					}
+				}
 
-			if((my_adventures() < get_cs_questCost(curQuest)) && ((my_inebriety() == 7) || (my_inebriety() == 13)))
-			{
-				if(item_amount($item[Iced Plum Wine]) > 0)
-				{
-					buffMaintain($effect[Ode to Booze], 50, 1, 1);
-					drink(1, $item[Iced Plum Wine]);
-				}
-				else if(item_amount($item[Sacramento Wine]) > 0)
-				{
-					buffMaintain($effect[Ode to Booze], 50, 1, 1);
-					drink(1, $item[Sacramento Wine]);
-				}
-				else if((cc_get_clan_lounge() contains $item[Clan Speakeasy]) && (item_amount($item[Clan VIP Lounge Key]) > 0))
-				{
-					buffMaintain($effect[Ode to Booze], 50, 1, 1);
-					cli_execute("drink cup of tea");
-				}
 			}
 
 			if(have_familiar($familiar[Disembodied Hand]))
@@ -2573,6 +2580,7 @@ boolean LA_cs_communityService()
 				return true;
 			}
 
+			//TODO: This is a decent place to drop some more banishes actually.
 			januaryToteAcquire($item[Wad Of Used Tape]);
 			if(have_familiar($familiar[Trick-or-Treating Tot]) && !possessEquipment($item[Li\'l Ninja Costume]))
 			{
@@ -2584,6 +2592,19 @@ boolean LA_cs_communityService()
 					runs = runs - get_property("_banderRunaways").to_int();
 					while(runs > 0)
 					{
+						if(possessEquipment($item[Kremlin\'s Greatest Briefcase]) && (get_property("_kgbTranquilizerDartUses").to_int() < 3) && !didUseBanisherHere($item[Kremlin\'s Greatest Briefcase], $location[The Haiku Dungeon]))
+						{
+							equip($slot[acc3], $item[Kremlin\'s Greatest Briefcase]);
+						}
+						else if(possessEquipment($item[Lil\' Doctor&trade; Bag]) && (get_property("_reflexHammerUsed").to_int() < 3) && !didUseBanisherHere($item[Lil\' Doctor&trade; Bag], $location[The Haiku Dungeon]))
+						{
+							equip($slot[acc3], $item[Lil\' Doctor&trade; Bag]);
+						}
+						else if(possessEquipment($item[Latte Lovers Member\'s Mug]) && !get_property("_latteBanishUsed").to_boolean() && !didUseBanisherHere($item[Latte Lovers Member\'s Mug], $location[The Haiku Dungeon]))
+						{
+							equip($slot[Off-Hand], $item[Latte Lovers Member\'s Mug]);
+						}
+
 						handleFamiliar($familiar[Pair of Stomping Boots]);
 						backupSetting("choiceAdventure297", "3");
 						ccAdv(1, $location[The Haiku Dungeon], "cs_combatNormal");
@@ -2635,7 +2656,7 @@ boolean LA_cs_communityService()
 				if(item_amount($item[Sacramento Wine]) > 0)
 				{
 					buffMaintain($effect[Ode to Booze], 50, 1, 1);
-					drink(1, $item[Sacramento Wine]);
+					ccDrink(1, $item[Sacramento Wine]);
 				}
 			}
 
@@ -2686,6 +2707,11 @@ boolean LA_cs_communityService()
 				use_skill(1, $skill[Incredible Self-Esteem]);
 			}
 
+			if(!possessEquipment($item[A Light that Never Goes Out]) && (item_amount($item[Lump of Brituminous Coal]) > 0) && (get_cs_questCost(curQuest) > 1))
+			{
+				cli_execute("make " + $item[A Light that Never Goes Out]);
+			}
+
 			if(get_cs_questCost(curQuest) > 7)
 			{
 #				makeGenieWish($effect[Frosty]);
@@ -2708,7 +2734,7 @@ boolean LA_cs_communityService()
 			{
 				shrugAT($effect[Ode to Booze]);
 				buffMaintain($effect[Ode to Booze], 50, 1, min(inebriety_left(), item_amount($item[Astral Pilsner])));
-				drink(min(inebriety_left(), item_amount($item[Astral Pilsner])), $item[Astral Pilsner]);
+				ccDrink(min(inebriety_left(), item_amount($item[Astral Pilsner])), $item[Astral Pilsner]);
 			}
 
 			if(get_cs_questCost(curQuest) > 7)
@@ -3018,6 +3044,23 @@ void cs_initializeDay(int day)
 
 	if(day == 1)
 	{
+		if(!get_property("cc_hccsNoConcludeDay").to_boolean())
+		{
+			set_property("_cc_tomatoGoal", 2);
+			set_property("_cc_lemonGoal", 1);
+			set_property("_cc_g9Goal", 2);
+			set_property("_cc_pixelGoal", 25);
+			set_property("cc_csSpleenGoal", 12);
+		}
+		else
+		{
+			set_property("_cc_tomatoGoal", 1);
+			set_property("_cc_lemonGoal", 0);
+			set_property("_cc_g9Goal", 1);
+			set_property("_cc_pixelGoal", 15);
+			set_property("cc_csSpleenGoal", 4);
+		}
+
 		if(get_property("cc_day1_init") != "finished")
 		{
 			set_property("cc_day1_dna", "finished");
@@ -3425,7 +3468,7 @@ void cs_make_stuff(int curQuest)
 			}
 			break;
 		}
-		if(!possessEquipment($item[A Light that Never Goes Out]) && (item_amount($item[Lump of Brituminous Coal]) > 0) && (curQuest == 9))
+		if(!possessEquipment($item[A Light that Never Goes Out]) && (item_amount($item[Lump of Brituminous Coal]) > 0) && (curQuest == 9) && !get_property("cc_hccsNoConcludeDay").to_boolean())
 		{
 			cli_execute("make " + $item[A Light that Never Goes Out]);
 		}
@@ -3518,14 +3561,8 @@ boolean cs_eat_spleen()
 		return false;
 	}
 
-	int spleenGoal = 12;
-	if(get_property("cc_hccsNoConcludeDay").to_boolean())
-	{
-		spleenGoal = 8;
-	}
-
 	int oldSpleenUse = my_spleen_use();
-	while((my_spleen_use() < spleenGoal) && ((item_amount($item[Unconscious Collective Dream Jar]) + item_amount($item[Grim Fairy Tale]) + item_amount($item[Powdered Gold]) + item_amount($item[Groose Grease]) + item_amount($item[Agua De Vida])) > 0))
+	while((my_spleen_use() < get_property("cc_csSpleenGoal").to_int()) && ((item_amount($item[Unconscious Collective Dream Jar]) + item_amount($item[Grim Fairy Tale]) + item_amount($item[Powdered Gold]) + item_amount($item[Groose Grease]) + item_amount($item[Agua De Vida])) > 0))
 	{
 		if((item_amount($item[Agua De Vida]) > 0) && (my_level() >= 4))
 		{
@@ -3727,8 +3764,8 @@ string cs_combatNormal(int round, string opp, string text)
 		return "skill " + $skill[Gulp Latte];
 	}
 
-	boolean[location] locationsToBanish = $locations[8-Bit Realm, The Haunted Pantry, The Skeleton Store];
-	boolean[monster] monstersToBanish = $monsters[Factory-Irregular Skeleton, Fiendish Can Of Asparagus, Flame-Broiled Meat Blob, Keese, Octorok, Overdone Flame-Broiled Meat Blob, Remaindered Skeleton, Swarm Of Skulls, Undead Elbow Macaroni];
+	boolean[location] locationsToBanish = $locations[8-Bit Realm, The Haiku Dungeon, The Haunted Pantry, The Skeleton Store];
+	boolean[monster] monstersToBanish = $monsters[Ancient Insane Monk, Factory-Irregular Skeleton, Ferocious Bugbear, Fiendish Can Of Asparagus, Flame-Broiled Meat Blob, Gelatinous Cube, Keese, Knob Goblin Poseur, Octorok, Overdone Flame-Broiled Meat Blob, Remaindered Skeleton, Swarm Of Skulls, Undead Elbow Macaroni];
 	//monstersToFreeKill?
 	boolean[string] currentBanishes = getBanisherInfo(loc);
 
@@ -3780,6 +3817,31 @@ string cs_combatNormal(int round, string opp, string text)
 		}
 	}
 
+/*
+	//Ugh, mafia was not updating the current monster for this, maybe because we are in the Haiku Dungeon?
+	if((my_location() == $location[The Haiku Dungeon]) && have_skill($skill[Meteor Lore]) && (get_property("_macrometeoriteUses").to_int() < 10))
+	{
+		if($monsters[Ancient Insane Monk, Ferocious Bugbear, Gelatinous Cube, Knob Goblin Poseur] contains enemy)
+		{
+			print("Macrometeoring: " + enemy, "green");
+			set_property("_macrometeoriteUses", 1 + get_property("_macrometeoriteUses").to_int());
+			return "skill " + $skill[Macrometeorite];
+		}
+	}
+*/
+
+	//Ugh, mafia was not updating the current monster for this, maybe because we are in the Haiku Dungeon?
+	if((my_location() == $location[The Haiku Dungeon]) && have_skill($skill[Meteor Lore]) && (get_property("_macrometeoriteUses").to_int() < 10))
+	{
+		if($monsters[Ancient Insane Monk, Ferocious Bugbear, Gelatinous Cube, Knob Goblin Poseur] contains enemy)
+		{
+			print("Macrometeoring: " + enemy, "green");
+			set_property("_macrometeoriteUses", 1 + get_property("_macrometeoriteUses").to_int());
+			return "skill " + $skill[Macrometeorite];
+		}
+	}
+
+
 	if((my_familiar() == $familiar[Pair of Stomping Boots]) && ($monsters[Ancient Insane Monk, Ferocious Bugbear, Gelatinous Cube, Knob Goblin Poseur] contains enemy))
 	{
 		return "runaway";
@@ -3794,16 +3856,6 @@ string cs_combatNormal(int round, string opp, string text)
 		}
 
 		return "runaway";
-	}
-
-	if((my_location() == $location[The Haiku Dungeon]) && have_skill($skill[Meteor Lore]) && (get_property("_macrometeoriteUses").to_int() < 10))
-	{
-		if($monsters[Ancient Insane Monk, Ferocious Bugbear, Gelatinous Cube, Knob Goblin Poseur] contains enemy)
-		{
-			print("Macrometeoring: " + enemy, "green");
-			set_property("_macrometeoriteUses", 1 + get_property("_macrometeoriteUses").to_int());
-			return "skill " + $skill[Macrometeorite];
-		}
 	}
 
 	if((my_location() == $location[Uncle Gator\'s Country Fun-Time Liquid Waste Sluice]) && !contains_text(combatState, "love gnats"))
@@ -3839,7 +3891,7 @@ string cs_combatNormal(int round, string opp, string text)
 		}
 	}
 
-	if(!contains_text(combatState, "love gnats") && have_skill($skill[Summon Love Gnats]))
+	if(!contains_text(combatState, "love gnats") && have_skill($skill[Summon Love Gnats]) && (enemy != $monster[Government Bureaucrat]))
 	{
 		set_property("cc_combatHandler", combatState + "(love gnats)");
 		return "skill " + $skill[Summon Love Gnats];
@@ -3850,13 +3902,17 @@ string cs_combatNormal(int round, string opp, string text)
 		boolean doOlfaction = false;
 		if((item_amount($item[Time-Spinner]) == 0) || (get_property("_timeSpinnerMinutesUsed").to_int() >= 8))
 		{
-			if($monsters[Novelty Tropical Skeleton, Possessed Can of Tomatoes] contains enemy)
+			if($monsters[Novelty Tropical Skeleton, Possessed Can Of Tomatoes] contains enemy)
 			{
 				doOlfaction = true;
 			}
+			if((enemy == $monster[Possessed Can Of Tomatoes]) && (item_amount($item[Tomato]) >= 1) && (item_drop_modifier() > 67.6))
+			{
+				doOlfaction = false;
+			}
 		}
 
-		if(($monster[Government Scientist] == enemy) && (item_amount($item[Experimental Serum G-9]) < 2))
+		if(($monster[Government Scientist] == enemy) && (item_amount($item[Experimental Serum G-9]) < get_property("_cc_g9Goal").to_int()))
 		{
 			doOlfaction = true;
 		}
@@ -3893,7 +3949,12 @@ string cs_combatNormal(int round, string opp, string text)
 	{
 		if(($monster[Government Scientist] == enemy) && (get_property("_latteMonster") != enemy))
 		{
-			if((!contains_text(combatState, "weaksauce")) && have_skill($skill[Curse Of Weaksauce]) && (my_mp() >= 72))
+			if(!contains_text(combatState, "lattegulp") && !get_property("_latteDrinkUsed").to_boolean() && have_skill($skill[Gulp Latte]) && (my_mp() > mp_cost($skill[Gulp Latte])))
+			{
+				set_property("cc_combatHandler", combatState + "(lattegulp)");
+				return "skill " + $skill[Gulp Latte];
+			}
+			if(!contains_text(combatState, "weaksauce") && have_skill($skill[Curse Of Weaksauce]) && (my_mp() >= 72))
 			{
 				set_property("cc_combatHandler", combatState + "(weaksauce)");
 				return "skill " + $skill[Curse Of Weaksauce];
@@ -3932,7 +3993,7 @@ string cs_combatNormal(int round, string opp, string text)
 	}
 
 
-	if(!contains_text(combatState, "cleesh") && have_skill($skill[Cleesh]) && (my_mp() > mp_cost($skill[Cleesh])) && ((enemy == $monster[creepy little girl]) || (enemy == $monster[lab monkey]) || (enemy == $monster[super-sized cola wars soldier])) && (item_amount($item[Experimental Serum G-9]) < 2))
+	if(!contains_text(combatState, "cleesh") && have_skill($skill[Cleesh]) && (my_mp() > mp_cost($skill[Cleesh])) && ((enemy == $monster[creepy little girl]) || (enemy == $monster[lab monkey]) || (enemy == $monster[super-sized cola wars soldier])) && (item_amount($item[Experimental Serum G-9]) < get_property("_cc_g9Goal").to_int()))
 	{
 		if(have_skill($skill[Meteor Lore]) && (get_property("_macrometeoriteUses").to_int() < 3))
 		{
@@ -3992,12 +4053,38 @@ string cs_combatNormal(int round, string opp, string text)
 			return "skill " + $skill[Curse Of Weaksauce];
 		}
 
-		if((!contains_text(combatState, "conspiratorialwhispers")) && (have_skill($skill[Conspiratorial Whispers])) && (my_mp() >= 49))
+		if(!contains_text(combatState, "conspiratorialwhispers") && (have_skill($skill[Conspiratorial Whispers])) && (my_mp() >= 49))
 		{
 			set_property("cc_combatHandler", combatState + "(conspiratorialwhispers)");
 			return "skill " + $skill[Conspiratorial Whispers];
 		}
 		danger = true;
+	}
+
+	if((my_location() == $location[The Secret Government Laboratory]) && (my_familiar() == $familiar[Space Jellyfish]))
+	{
+		if(!contains_text(combatState, "weaksauce") && have_skill($skill[Curse Of Weaksauce]) && (my_mp() >= 32))
+		{
+			set_property("cc_combatHandler", combatState + "(weaksauce)");
+			return "skill " + $skill[Curse Of Weaksauce];
+		}
+		if(!contains_text(combatState, "conspiratorialwhispers") && (have_skill($skill[Conspiratorial Whispers])) && (my_mp() >= 49))
+		{
+			set_property("cc_combatHandler", combatState + "(conspiratorialwhispers)");
+			return "skill " + $skill[Conspiratorial Whispers];
+		}
+		if(!contains_text(combatState, "soulbubble") && have_skill($skill[Soul Saucery]) && (my_soulsauce() >= soulsauce_cost($skill[Soul Bubble])))
+		{
+			set_property("cc_combatHandler", combatState + "(soulbubble)");
+			return "skill " + $skill[Soul Bubble];
+		}
+		if($monsters[Creepy Little Girl, Government Scientist, Lab Monkey, Super-Sized Cola Wars Soldier] contains enemy)
+		{
+			if(have_skill($skill[Extract Jelly]))
+			{
+				return "skill " + $skill[Extract Jelly];
+			}
+		}
 	}
 
 	if(!contains_text(combatState, "love stinkbug") && get_property("lovebugsUnlocked").to_boolean() && !danger)
@@ -4012,13 +4099,13 @@ string cs_combatNormal(int round, string opp, string text)
 		return "skill " + $skill[Digitize];
 	}
 
-	if(!contains_text(combatState, "(extract)") && have_skill($skill[Extract]) && (my_mp() > (mp_cost($skill[Extract]) * 3)) && !danger)
+	if(!contains_text(combatState, "(extract)") && have_skill($skill[Extract]) && (my_mp() > (mp_cost($skill[Extract]) * 3)) && !danger && (enemy != $monster[Government Bureaucrat]))
 	{
 		set_property("cc_combatHandler", combatState + "(extract)");
 		return "skill " + $skill[Extract];
 	}
 
-	if((!contains_text(combatState, "shattering punch")) && have_skill($skill[Shattering Punch]) && ((my_mp() / 2) > mp_cost($skill[Shattering Punch])) && !isFreeMonster(enemy) && !enemy.boss && (get_property("_shatteringPunchUsed").to_int() < 3))
+	if(!contains_text(combatState, "shattering punch") && have_skill($skill[Shattering Punch]) && ((my_mp() / 2) > mp_cost($skill[Shattering Punch])) && !isFreeMonster(enemy) && !enemy.boss && (get_property("_shatteringPunchUsed").to_int() < 3))
 	{
 		set_property("cc_combatHandler", combatState + "(shattering punch)");
 		handleTracker(enemy, $skill[shattering punch], "cc_instakill");
@@ -4037,6 +4124,9 @@ string cs_combatNormal(int round, string opp, string text)
 		set_property("cc_combatHandler", combatState + "(weaksauce)");
 		return "skill " + $skill[Curse Of Weaksauce];
 	}
+
+	//Stuffed Mortar Shell into Candyblast or Sing Along should probably be here.
+
 
 	if(!contains_text(combatState, "(candyblast)") && have_skill($skill[Candyblast]) && (my_mp() > (mp_cost($skill[Candyblast]) * 3)) && !danger && (my_class() != $class[Sauceror]))
 	{
@@ -4881,6 +4971,11 @@ boolean do_cs_quest(int quest)
 		}
 	}
 
+	if(questList[quest] > 15)
+	{
+		cc_csBurnLibrams();
+	}
+
 	if(((questList contains quest) && (advs >= questList[quest])) || (quest == 30))
 	{
 		string temp = visit_url("council.php");
@@ -4994,6 +5089,29 @@ void set_cs_questListFast(int[int] fast)
 	{
 		cc_cs_fastQuestList[val] = val;
 	}
+}
+
+boolean cc_csBurnLibrams()
+{
+	skill libram = $skill[Summon BRICKOs];
+	while(my_mp() >= mp_cost(libram))
+	{
+		int blueSwayed = have_effect($effect[Blue Swayed]) + (10 * item_amount($item[Pulled Blue Taffy]));
+		if(cc_have_skill($skill[Summon BRICKOs]) && (get_property("_brickoEyeSummons").to_int() < 3))
+		{
+			libram = $skill[Summon BRICKOs];
+		}
+		else if(cc_have_skill($skill[Summon Taffy]) && (blueSwayed < 56))
+		{
+			libram = $skill[Summon Taffy];
+		}
+		else if(cc_have_skill($skill[Summon Candy Heart]))
+		{
+			libram = $skill[Summon Candy Heart];
+		}
+		use_skill(1, libram);
+	}
+	return false;
 }
 
 boolean cs_preTurnStuff(int curQuest)
@@ -5126,7 +5244,7 @@ boolean cs_preTurnStuff(int curQuest)
 	use_barrels();
 	cs_make_stuff(curQuest);
 	cc_mayoItems();
-	cc_voteSetup(0, 1, 3);
+	cc_voteSetup(0, 2, 4);
 
 	if((item_amount($item[Gold Nuggets]) > 0) && (item_amount($item[Gold Nuggets]) <= 3))
 	{
@@ -5178,6 +5296,14 @@ boolean cs_preTurnStuff(int curQuest)
 		if((curQuest == 10) && !haveHotRes && !possessEquipment(meteors[1].it))
 		{
 			meteors[1].want = true;
+		}
+		if(get_property("cc_hccsNoConcludeDay").to_boolean())
+		{
+			meteors[1].want = true;
+			if(!haveHotRes)
+			{
+				meteors[0].want = false;
+			}
 		}
 		if(((questsLeft contains 1) || (questsLeft contains 2)) && (haveHotRes || !(questsLeft contains 10)) && !possessEquipment(meteors[2].it) && !haveMuscle)
 		{
@@ -5253,7 +5379,7 @@ boolean cs_preTurnStuff(int curQuest)
 			songboomSetting("dr");
 		}
 	}
-	else if(get_property("_cc_hccsOneDay").to_boolean())
+	else if(get_property("cc_hccsNoConcludeDay").to_boolean())
 	{
 		songboomSetting($item[Gathered Meat-Clip]);
 	}
@@ -5381,7 +5507,7 @@ boolean cc_csNormalDayOne()
 	{
 		shrugAT($effect[Ode to Booze]);
 		buffMaintain($effect[Ode to Booze], 50, 1, min(inebriety_left(), item_amount($item[Astral Pilsner])));
-		drink(min(inebriety_left(), item_amount($item[Astral Pilsner])), $item[Astral Pilsner]);
+		ccDrink(min(inebriety_left(), item_amount($item[Astral Pilsner])), $item[Astral Pilsner]);
 	}
 
 	if((item_amount($item[CSA fire-starting kit]) > 0) && !get_property("_fireStartingKitUsed").to_boolean() && (get_property("choiceAdventure595").to_int() == 1) && hippy_stone_broken())

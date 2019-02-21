@@ -1,5 +1,7 @@
 script "cc_twilight.ash"
 
+
+
 void twilight_initializeSettings()
 {
 }
@@ -10,7 +12,7 @@ void twilight_startAscension(string page)
 
 boolean twilight_buySkills()
 {
-	return false;
+	return twilight_buySkills("");
 }
 
 boolean twilight_buySkills(string page)

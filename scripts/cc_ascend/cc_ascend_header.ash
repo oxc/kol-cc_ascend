@@ -326,6 +326,7 @@ int ListFind(location[int] list, location what, int idx);	//Defined in cc_ascend
 location ListOutput(location[int] list);					//Defined in cc_ascend/cc_list.ash
 int [item] cc_get_campground();								//Defined in cc_ascend/cc_util.ash
 boolean basicAdjustML();									//Defined in cc_ascend/cc_util.ash
+boolean chibiChat();										//Deinfed in cc_ascend/cc_util.ash
 boolean beatenUpResolution();								//Defined in cc_ascend.ash
 boolean adventureFailureHandler();							//Defined in cc_ascend.ash
 boolean councilMaintenance();								//Defined in cc_ascend.ash
@@ -344,6 +345,38 @@ boolean awol_buySkills();									//Defined in cc_ascend/cc_awol.ash
 void awol_helper(string page);								//Defined in cc_ascend/cc_combat.ash
 boolean canSurvive(float mult, int add);					//Defined in cc_ascend/cc_combat.ash
 boolean canSurvive(float mult);								//Defined in cc_ascend/cc_combat.ash
+string combat_wallOfSkin();									//Defined in cc_ascend/cc_combat.ash
+string combat_sourceBosses();								//Defined in cc_ascend/cc_combat.ash
+string combat_handleDirective(int round);					//Defined in cc_ascend/cc_combat.ash
+string combat_shadow();										//Defined in cc_ascend/cc_combat.ash
+string combat_protonicGhost(boolean blocked, int damageReceived);//Defined in cc_ascend/cc_combat.ash
+string combat_majora(string page, int round);				//Defined in cc_ascend/cc_combat.ash
+string combat_flyer();										//Defined in cc_ascend/cc_combat.ash
+boolean cc_combatCanUse(item it);							//Defined in cc_ascend/cc_combat.ash
+boolean cc_combatCanUse(item it, item em);					//Defined in cc_ascend/cc_combat.ash
+boolean cc_combatCanUse(item it, boolean tracked);			//Defined in cc_ascend/cc_combat.ash
+boolean cc_combatCanUse(item it, item em, boolean tracked);	//Defined in cc_ascend/cc_combat.ash
+boolean cc_combatCanUse(string state, item it);				//Defined in cc_ascend/cc_combat.ash
+boolean cc_combatCanUse(string state, item it, item em);	//Defined in cc_ascend/cc_combat.ash
+boolean cc_combatCanUse(string state, item it, boolean tracked);//Defined in cc_ascend/cc_combat.ash
+boolean cc_combatCanUse(string state, item it, item em, boolean tracked);//Defined in cc_ascend/cc_combat.ash
+boolean cc_combatCanUse(string state, item it, int qty, boolean tracked);//Defined in cc_ascend/cc_combat.ash
+boolean cc_combatCanUse(skill sk);							//Defined in cc_ascend/cc_combat.ash
+boolean cc_combatCanUse(skill sk, boolean tracked);			//Defined in cc_ascend/cc_combat.ash
+boolean cc_combatCanUse(string state, skill sk);			//Defined in cc_ascend/cc_combat.ash
+boolean cc_combatCanUse(string state, skill sk, boolean tracked);//Defined in cc_ascend/cc_combat.ash
+string cc_combatUse(item it);								//Defined in cc_ascend/cc_combat.ash
+string cc_combatUse(item it, item em);						//Defined in cc_ascend/cc_combat.ash
+string cc_combatUse(item it, boolean track);				//Defined in cc_ascend/cc_combat.ash
+string cc_combatUse(item it, item em, boolean track);		//Defined in cc_ascend/cc_combat.ash
+string cc_combatUse(string state, item it);					//Defined in cc_ascend/cc_combat.ash
+string cc_combatUse(string state, item it, item em);		//Defined in cc_ascend/cc_combat.ash
+string cc_combatUse(string state, item it, boolean track);	//Defined in cc_ascend/cc_combat.ash
+string cc_combatUse(string state, item it, item em, boolean track);//Defined in cc_ascend/cc_combat.ash
+string cc_combatUse(skill sk);								//Defined in cc_ascend/cc_combat.ash
+string cc_combatUse(skill sk, boolean track);				//Defined in cc_ascend/cc_combat.ash
+string cc_combatUse(string state, skill sk);				//Defined in cc_ascend/cc_combat.ash
+string cc_combatUse(string state, skill sk, boolean track);//Defined in cc_ascend/cc_combat.ash
 boolean awol_initializeSettings();							//Defined in cc_ascend/cc_awol.ash
 void awol_useStuff();										//Defined in cc_ascend/cc_awol.ash
 effect awol_walkBuff();										//Defined in cc_ascend/cc_awol.ash
@@ -400,6 +433,7 @@ void cc_process_kmail(string functionname);					//Defined in cc_ascend/cc_zlib.a
 boolean cc_sourceTerminalEducate(skill first);				//Defined in cc_ascend/cc_mr2016.ash
 boolean cc_sourceTerminalEducate(skill first, skill second);//Defined in cc_ascend/cc_mr2016.ash
 boolean cc_sourceTerminalEnhance(string request);			//Defined in cc_ascend/cc_mr2016.ash
+boolean cc_sourceTerminalEnhance(effect eff);				//Defined in cc_ascend/cc_mr2016.ash
 int cc_sourceTerminalEnhanceLeft();							//Defined in cc_ascend/cc_mr2016.ash
 boolean cc_sourceTerminalExtrude(string request);			//Defined in cc_ascend/cc_mr2016.ash
 int cc_sourceTerminalExtrudeLeft();							//Defined in cc_ascend/cc_mr2016.ash
@@ -423,9 +457,6 @@ boolean clear_property_if(string setting, string cond);		//Defined in cc_ascend/
 boolean considerGrimstoneGolem(boolean bjornCrown);			//Defined in cc_ascend/cc_util.ash
 boolean acquireTransfunctioner();							//Defined in cc_ascend/cc_util.ash
 void consumeStuff();										//Defined in cc_ascend/cc_cooking.ash
-boolean containsCombat(item it);							//Defined in cc_ascend/cc_combat.ash
-boolean containsCombat(skill sk);							//Defined in cc_ascend/cc_combat.ash
-boolean containsCombat(string action);						//Defined in cc_ascend/cc_combat.ash
 
 string cs_combatKing(int round, string opp, string text);	//Defined in cc_ascend/cc_community_service.ash
 string cs_combatLTB(int round, string opp, string text);	//Defined in cc_ascend/cc_community_service.ash
@@ -447,6 +478,7 @@ boolean cc_csHandleGrapes();								//Defined in cc_ascend/cc_community_service.
 boolean cc_csSmashStuff();									//Defined in cc_ascend/cc_community_service.ash
 boolean cc_csNormalDayOne();								//Defined in cc_ascend/cc_community_service.ash
 int cc_csSpecialDayOne();									//Defined in cc_ascend/cc_community_service.ash
+boolean cc_csBurnLibrams();									//Defined in cc_ascend/cc_community_service.ash
 string what_cs_quest(int quest);							//Defined in cc_ascend/cc_community_service.ash
 int get_cs_questCost(int quest);							//Defined in cc_ascend/cc_community_service.ash
 int get_cs_questCost(string input);							//Defined in cc_ascend/cc_community_service.ash
@@ -570,6 +602,7 @@ boolean neverendingPartyCombat(stat st);					//Defined in cc_ascend/cc_mr2018.as
 boolean neverendingPartyCombat(effect eff);					//Defined in cc_ascend/cc_mr2018.ash
 boolean neverendingPartyCombat();							//Defined in cc_ascend/cc_mr2018.ash
 boolean neverendingPartyAvailable();						//Defined in cc_ascend/cc_mr2018.ash
+boolean cc_canVote();										//Defined in cc_ascend/cc_mr2018.ash
 boolean cc_voteSetup();										//Defined in cc_ascend/cc_mr2018.ash
 boolean cc_voteSetup(int candidate);						//Defined in cc_ascend/cc_mr2018.ash
 boolean cc_voteSetup(int candidate, int first, int second);	//Defined in cc_ascend/cc_mr2018.ash
@@ -734,9 +767,6 @@ int pullsNeeded(string data);								//Defined in cc_ascend.ash
 boolean pulverizeThing(item it);							//Defined in cc_ascend/cc_util.ash
 boolean rainManSummon(string monsterName, boolean copy, boolean wink);//Defined in cc_ascend/cc_heavyrains.ash
 boolean rainManSummon(string monsterName, boolean copy, boolean wink, string option);//Defined in cc_ascend/cc_heavyrains.ash
-boolean registerCombat(item it);							//Defined in cc_ascend/cc_combat.ash
-boolean registerCombat(skill sk);							//Defined in cc_ascend/cc_combat.ash
-boolean registerCombat(string action);						//Defined in cc_ascend/cc_combat.ash
 void replaceBaselineAcc3();									//Defined in cc_ascend/cc_equipment.ash
 boolean restoreAllSettings();								//Defined in cc_ascend/cc_util.ash
 boolean restoreSetting(string setting);						//Defined in cc_ascend/cc_util.ash
@@ -802,6 +832,12 @@ boolean xiblaxian_makeStuff();								//Defined in cc_ascend/cc_mr2014.ash
 string yellowRayCombatString();								//Defined in cc_ascend/cc_util.ash
 string banisherCombatString(monster enemy, location loc);	//Defined in cc_ascend/cc_util.ash
 boolean[string] getBanisherInfo(location loc);				//Defined in cc_ascend/cc_util.ash
+boolean isYellowRayAction(skill sk);						//Defined in cc_ascend/cc_util.ash
+boolean isYellowRayAction(item it);							//Defined in cc_ascend/cc_util.ash
+boolean isInstaKillAction(skill sk);						//Defined in cc_ascend/cc_util.ash
+boolean isInstaKillAction(item it);							//Defined in cc_ascend/cc_util.ash
+boolean isSniffAction(skill sk);							//Defined in cc_ascend/cc_util.ash
+boolean isSniffAction(item it);								//Defined in cc_ascend/cc_util.ash
 string getBanisherName(item it);							//Defined in cc_ascend/cc_util.ash
 string getBanisherName(skill sk);							//Defined in cc_ascend/cc_util.ash
 boolean didUseBanisherHere(skill banisher, location loc);	//Defined in cc_ascend/cc_util.ash
@@ -811,6 +847,12 @@ boolean zoneItem(location loc);								//Defined in cc_ascend/cc_util.ash
 boolean zoneMeat(location loc);								//Defined in cc_ascend/cc_util.ash
 boolean zoneNonCombat(location loc);						//Defined in cc_ascend/cc_util.ash
 boolean declineTrades();									//Defined in cc_ascend/cc_util.ash
+location cc_shenCopperheadGoal();							//Defined in cc_ascend/cc_util.ash
+familiar[int] cc_meatFamiliarList();						//Defined in cc_ascend/cc_util.ash
+familiar[int] cc_itemFamiliarList();						//Defined in cc_ascend/cc_util.ash
+string cc_meatFamiliarMaximizerString();					//Defined in cc_ascend/cc_util.ash
+string cc_itemFamiliarMaximizerString();					//Defined in cc_ascend/cc_util.ash
+
 
 //From Zlib Stuff
 record kmailObject {
@@ -904,6 +946,27 @@ boolean canGroundhog(location loc);							//Defined in cc_ascend/cc_groundhog.as
 boolean groundhogAbort(location loc);						//Defined in cc_ascend/cc_groundhog.ash
 boolean LM_groundhog();										//Defined in cc_ascend/cc_groundhog.ash
 
+record elements_t
+{
+	float cold;
+	float hot;
+	float sleaze;
+	float spooky;
+	float stench;
+};
+
+record elementalBonuses_t
+{
+	elements_t weapon;
+	elements_t spell;
+	float weaponTotal;
+	int weaponCount;
+	float spellTotal;
+	int spellCount;
+};
+
+elementalBonuses_t cc_getElementalMods();					//Defined in cc_ascend/cc_util.ash
+
 record lovePotion_t
 {
 	boolean valid;
@@ -915,6 +978,14 @@ record lovePotion_t
 };
 
 lovePotion_t lovePotionBuffs();								//Defined in cc_ascend/cc_mr2018.ash
+
+record itemSkill_t
+{
+	item it;
+	item em;
+	skill sk;
+};
+itemSkill_t cc_convertAction(string action);				//Defined in cc_ascend/cc_combat.ash
 
 //Record from cc_ascend/cc_zone.ash
 record generic_t

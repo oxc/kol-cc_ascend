@@ -1,6 +1,6 @@
 script "cc_ascend.ash";
 notify cheesecookie;
-since r19102;
+since r19105;
 /***
 	svn checkout https://svn.code.sf.net/p/ccascend/code/cc_ascend
 	Killing is wrong, and bad. There should be a new, stronger word for killing like badwrong or badong. YES, killing is badong. From this moment, I will stand for the opposite of killing, gnodab.
@@ -296,7 +296,7 @@ boolean handleFamiliar(string type)
 
 	if(type == "meat")
 	{
-		familiar[int] fams = List($familiars[Adventurous Spelunker, Grimstone Golem, Angry Jung Man, Bloovian Groose, Hobo Monkey, Cat Burglar, Piano Cat, Leprechaun]);
+		familiar[int] fams = cc_meatFamiliarList();
 
 #		if(available_amount($item[Li\'l Pirate Costume]) > 0)
 #		{
@@ -315,7 +315,7 @@ boolean handleFamiliar(string type)
 	}
 	else if(type == "item")
 	{
-		familiar[int] fams = List($familiars[Rockin\' Robin, Garbage Fire, Optimistic Candle, Grimstone Golem, Angry Jung Man, Intergnat, XO Skeleton, Bloovian Groose, Fist Turkey, Cat Burglar, Slimeling, Jumpsuited Hound Dog, Adventurous Spelunker, Gelatinous Cubeling, Baby Gravy Fairy, Obtuse Angel, Pair of Stomping Boots, Jack-in-the-Box, Peppermint Rhino, Syncopated Turtle]);
+		familiar[int] fams = cc_itemFamiliarList();
 		if((my_daycount() == 1) && ($familiar[Angry Jung Man].drops_today == 0) && (get_property("cc_crackpotjar") == ""))
 		{
 			fams = ListRemove(fams, $familiar[Angry Jung Man]);
@@ -380,7 +380,7 @@ boolean handleFamiliar(string type)
 
 		int index = 0;
 		while(index < count(fams))
-#		foreach fam in $familiars[Rockin\' Robin, Grimstone Golem, Angry Jung Man, Intergnat, Bloovian Groose, Fist Turkey, Slimeling, Jumpsuited Hound Dog, Adventurous Spelunker, Gelatinous Cubeling, Baby Gravy Fairy, Obtuse Angel, Pair of Stomping Boots, Jack-in-the-Box, Syncopated Turtle]
+#		foreach fam in cc_itemFamiliarList()
 		{
 			#if(cc_have_familiar(fam) && !(blacklist contains fam))
 			#print("Looking for " + fams[index] + " at: " + index, "blue");
@@ -1187,7 +1187,7 @@ boolean doThemtharHills(boolean trickMode)
 	}
 	else
 	{
-		ccMaximize("meat drop, outfit " + wearing + ", -equip snow suit, switch Hobo Monkey, switch rockin' robin, switch adventurous spelunker, switch Grimstone Golem, switch Fist Turkey, switch Unconscious Collective, switch Golden Monkey, switch Angry Jung Man, switch Leprechaun", 1500, 0, false);
+		ccMaximize("meat drop, outfit " + wearing + ", -equip snow suit, " + cc_meatFamiliarMaximizerString(), 1500, 0, false);
 		handleFamiliar(my_familiar());
 	}
 //	int expectedMeat = numeric_modifier("Generated:_spec", "meat drop");
@@ -2048,13 +2048,6 @@ boolean dailyEvents()
 	fightClubScavenge();
 
 	chateaumantegna_useDesk();
-
-	if((get_property("_daycareGymScavenges").to_int() == 0) && get_property("daycareOpen").to_boolean())
-	{
-		string temp = visit_url("place.php?whichplace=town_wrong&action=townwrong_boxingdaycare");
-		temp = visit_url("choice.php?pwd=&whichchoice=1334&option=3");
-		temp = visit_url("choice.php?pwd=&whichchoice=1336&option=2");
-	}
 
 	if((item_amount($item[Burned Government Manual Fragment]) > 0) && is_unrestricted($item[Burned Government Manual Fragment]) && get_property("cc_alienLanguage").to_boolean())
 	{
@@ -4095,134 +4088,233 @@ boolean L13_towerNSTower()
 		cc_change_mcd(0);
 		acquireMP(120, true);
 
-		int sources = 0;
-		if(item_amount($item[astral shirt]) > 0)
+		//We need to be careful when adding passive damage that we are not removing our elemental sources
+		//We could also get weapon damage from buffs but have to make sure we can still use our combat skills
+		elementalBonuses_t sourcesAll = cc_getElementalMods();
+		int sources = sourcesAll.weaponCount;
+
+		slot reservedSlot = $slot[none];
+		if(sources < 5)
 		{
-			equip($item[astral shirt]);
-		}
-		if((my_class() == $class[Turtle Tamer]) && (item_amount($item[Shocked Shell]) > 0))
-		{
-			equip($slot[shirt], $item[Shocked Shell]);
-		}
-		if(have_skill($skill[Belch the Rainbow]))
-		{
-			sources = 6;
-		}
-		else
-		{
-			foreach damage in $strings[Cold Damage, Hot Damage, Sleaze Damage, Spooky Damage, Stench Damage]
+			if((item_amount($item[Astral Shirt]) > 0) || have_equipped($item[Astral Shirt]))
 			{
-				if(numeric_modifier(damage) > 0)
+				equip($slot[shirt], $item[Astral Shirt]);
+				reservedSlot = $slot[Shirt];
+			}
+			else if((item_amount($item[Unfortunato\'s Foolscap]) > 0) || have_equipped($item[Unfortunato\'s Foolscap]))
+			{
+				equip($slot[hat], $item[Unfortunato\'s Foolscap]);
+				reservedSlot = $slot[Hat];
+			}
+			if((item_amount($item[17-Ball]) > 0) || have_equipped($item[17-Ball]))
+			{
+				equip($slot[off-hand], $item[17-Ball]);
+				reservedSlot = $slot[off-hand];
+			}
+		}
+
+		sourcesAll = cc_getElementalMods();
+		sources = sourcesAll.weaponCount;
+
+		foreach damage in $strings[Cold Damage, Hot Damage, Sleaze Damage, Spooky Damage, Stench Damage]
+		{
+			if(numeric_modifier(damage) == 0)
+			{
+				boolean ignore;
+				switch(damage)
 				{
-					sources += 1;
+				case "Cold Damage":
+					ignore = buffMaintain($effect[Frostbeard], 135, 1, 1);
+					break;
+				case "Hot Damage":
+					ignore = buffMaintain($effect[Pyromania], 135, 1, 1);
+					break;
+				case "Sleaze Damage":
+					ignore = buffMaintain($effect[Takin\' It Greasy], 135, 1, 1);
+					break;
+				case "Spooky Damage":
+					ignore = buffMaintain($effect[Dirge Of Dreadfulness], 129, 1, 1) || buffMaintain($effect[Snarl Of The Timberwolf], 130, 1, 1) || buffMaintain($effect[Intimidating Mien], 135, 1, 1);
+					break;
+				case "Stench Damage":
+					ignore = buffMaintain($effect[Rotten Memories], 135, 1, 1);
+					break;
 				}
 			}
 		}
-		if(have_skill($skill[headbutt]))
+
+		sourcesAll = cc_getElementalMods();
+		sources = sourcesAll.weaponCount;
+
+		if(sources < 5)
 		{
-			sources = sources + 1;
+			if(buffMaintain($effect[Colorful Gratitude], 0, 1, 1))
+			{
+				sourcesAll.weaponCount = sources = 5;
+			}
+			else if(cc_sourceTerminalEnhance($effect[Damage.enh]))
+			{
+				sourcesAll.weaponCount = sources = 5;
+			}
 		}
-		item familiarEquip = equipped_item($slot[Familiar]);
-		if((cc_have_familiar($familiar[warbear drone])) && !is100FamiliarRun())
+
+		if(have_skill($skill[Headbutt]) || have_skill($skill[Clobber]))
 		{
-			sources = sources + 2;
+			sources += 1;
+		}
+
+		//This prevents us from getting physical damage on the attack
+		if(have_skill($skill[Belch the Rainbow]))
+		{
+			sources = max(sources, 5);
+		}
+
+		//Passive Damage effects
+		if((item_amount($item[glob of spoiled mayo]) > 0) || (have_effect($effect[Mayeaugh]) > 0))
+		{
+			buffMaintain($effect[Mayeaugh], 0, 1, 1);
+			sources += 1;
+		}
+		if((have_skill($skill[Scarysauce])) || (have_effect($effect[Scarysauce]) > 0))
+		{
+			buffMaintain($effect[Scarysauce], 0, 1, 1);
+			sources += 1;
+		}
+		if((have_skill($skill[Spiky Shell])) || (have_effect($effect[Spiky Shell]) > 0))
+		{
+			buffMaintain($effect[Spiky Shell], 0, 1, 1);
+			sources += 1;
+		}
+		if((have_skill($skill[Jalape&ntilde;o Saucesphere])) || (have_effect($effect[Jalape&ntilde;o Saucesphere]) > 0))
+		{
+			buffMaintain($effect[Jalape&ntilde;o Saucesphere], 0, 1, 1);
+			sources += 1;
+		}
+
+
+		//Equipment
+		if(reservedSlot != $slot[back])
+		{
+			if((my_class() == $class[Turtle Tamer]) && (item_amount($item[Shocked Shell]) > 0))
+			{
+				equip($slot[back], $item[Shocked Shell]);
+				sources += 1;
+			}
+			else if(item_amount($item[Buddy Bjorn]) > 0)
+			{
+				equip($slot[back], $item[Buddy Bjorn]);
+			}
+		}
+		if(have_equipped($item[Buddy Bjorn]))
+		{
+			handleBjornify($familiar[Hobo Monkey]);
+			sources += 1;
+		}
+
+		if(reservedSlot != $slot[off-hand])
+		{
+			if((item_amount($item[Smirking Shrunken Head]) > 0) && can_equip($item[Smirking Shrunken Head]))
+			{
+				equip($slot[off-hand], $item[Smirking Shrunken Head]);
+				sources += 1;
+			}
+			else if((item_amount($item[Hot Plate]) > 0) && can_equip($item[Hot Plate]))
+			{
+				equip($slot[off-hand], $item[Hot Plate]);
+				sources += 1;
+			}
+		}
+
+		item[int] acc;
+		foreach it in $items[Hippy Protest Button, Groll Doll, Bottle Opener Belt Buckle, Acid-Squirting Flower, Old School Calculator Watch]
+		{
+			if((item_amount(it) > 0) && can_equip(it))
+			{
+				acc[count(acc)] = it;
+			}
+		}
+
+		if(count(acc) > 0)
+		{
+			equip($slot[acc1], acc[0]);
+		}
+		if(count(acc) > 1)
+		{
+			equip($slot[acc2], acc[1]);
+		}
+		if(count(acc) > 2)
+		{
+			equip($slot[acc3], acc[2]);
+		}
+		else if(!have_equipped($item[World\'s Best Adventurer Sash]))
+		{
+			equip($slot[acc3], $item[World\'s Best Adventurer Sash]);
+		}
+		sources += min(3, count(acc));
+
+		if(have_skill($skill[Frigidalmatian]) && ((my_mp() - 120) > mp_cost($skill[Frigidalmatian])))
+		{
+			sources += 1;
+		}
+
+		item familiarEquip = equipped_item($slot[Familiar]);
+		if((cc_have_familiar($familiar[Warbear Drone])) && !is100FamiliarRun($familiar[Warbear Drone]))
+		{
+			sources += 2;
 			handleFamiliar($familiar[Warbear Drone]);
 			use_familiar($familiar[Warbear Drone]);
 			cli_execute("precheese");
 			if(!possessEquipment($item[Warbear Drone Codes]))
 			{
-				pullXWhenHaveY($item[warbear drone codes], 1, 0);
+				pullXWhenHaveY($item[Warbear Drone Codes], 1, 0);
 			}
-			if((item_amount($item[warbear drone codes]) > 0) || (equipped_item($slot[familiar]) == $item[warbear drone codes]))
+			if((item_amount($item[Warbear Drone Codes]) > 0) || (equipped_item($slot[familiar]) == $item[warbear drone codes]))
 			{
-				equip($item[warbear drone codes]);
-				sources = sources + 2;
+				equip($item[warbear Drone Codes]);
+				sources += 2;
 			}
 		}
-		else if((cc_have_familiar($familiar[Sludgepuppy])) && !is100FamiliarRun())
+		else if((cc_have_familiar($familiar[Sludgepuppy])) && !is100FamiliarRun($familiar[Sludgepuppy]))
 		{
 			handleFamiliar($familiar[Sludgepuppy]);
-			sources = sources + 3;
+			sources += 3;
 		}
-		else if((cc_have_familiar($familiar[Imitation Crab])) && !is100FamiliarRun())
+		else if((cc_have_familiar($familiar[Imitation Crab])) && !is100FamiliarRun($familiar[Imitation Crab]))
 		{
 			handleFamiliar($familiar[Imitation Crab]);
-			sources = sources + 2;
+			sources += 2;
 		}
-		if(item_amount($item[hippy protest button]) > 0)
-		{
-			equip($slot[acc1], $item[hippy protest button]);
-			sources = sources + 1;
-		}
-		if(item_amount($item[glob of spoiled mayo]) > 0)
-		{
-			buffMaintain($effect[Mayeaugh], 0, 1, 1);
-			sources = sources + 1;
-		}
-		if((item_amount($item[smirking shrunken head]) > 0) && can_equip($item[smirking shrunken head]))
-		{
-			equip($item[smirking shrunken head]);
-			sources = sources + 1;
-		}
-		else if((item_amount($item[hot plate]) > 0) && can_equip($item[hot plate]))
-		{
-			equip($item[hot plate]);
-			sources = sources + 1;
-		}
-		if(have_skill($skill[Scarysauce]))
-		{
-			buffMaintain($effect[Scarysauce], 0, 1, 1);
-			sources = sources + 1;
-		}
-		if(have_skill($skill[Spiky Shell]))
-		{
-			buffMaintain($effect[Spiky Shell], 0, 1, 1);
-			sources = sources + 1;
-		}
-		if(have_skill($skill[Jalape&ntilde;o Saucesphere]))
-		{
-			sources = sources + 1;
-			buffMaintain($effect[Jalape&ntilde;o Saucesphere], 0, 1, 1);
-		}
-		handleBjornify($familiar[Hobo Monkey]);
-		if(equipped_item($slot[acc2]) != $item[world\'s best adventurer sash])
-		{
-			equip($slot[acc2], $item[world\'s best adventurer sash]);
-		}
-		if(item_amount($item[Groll Doll]) > 0)
-		{
-			equip($slot[acc3], $item[Groll Doll]);
-		}
-		if(item_amount($item[old school calculator watch]) > 0)
-		{
-			equip($slot[acc3], $item[old school calculator watch]);
-		}
-		if(item_amount($item[Bottle Opener Belt Buckle]) > 0)
-		{
-			equip($slot[acc3], $item[Bottle Opener Belt Buckle]);
-		}
-		if((equipped_item($slot[acc3]) != $item[acid-squirting flower]) && (item_amount($item[acid-squirting flower]) > 0))
-		{
-			equip($slot[acc3], $item[acid-squirting flower]);
-		}
-		if(have_skill($skill[Frigidalmatian]) && (my_mp() > 300))
-		{
-			sources = sources + 1;
-		}
+
+
 		int sourceNeed = 13;
 		if(have_skill($skill[Shell Up]))
 		{
-			if((have_effect($effect[Blessing of the Storm Tortoise]) > 0) || (have_effect($effect[Grand Blessing of the Storm Tortoise]) > 0) || (have_effect($effect[Glorious Blessing of the Storm Tortoise]) > 0))
+			if(my_class() == $class[Turtle Tamer])
 			{
-				if(have_skill($skill[Blessing of the War Snapper]) && (my_mp() > (2 * mp_cost($skill[Blessing of the War Snapper]))))
+				//Was this a mistake and meant to be She-Who-Was?
+				//if((have_effect($effect[Blessing of the Storm Tortoise]) > 0) || (have_effect($effect[Grand Blessing of the Storm Tortoise]) > 0) || (have_effect($effect[Glorious Blessing of the Storm Tortoise]) > 0))
+				if((have_effect($effect[Blessing of She-Who-Was]) > 0) || (have_effect($effect[Grand Blessing of She-Who-Was]) > 0) || (have_effect($effect[Glorious Blessing of She-Who-Was]) > 0))
 				{
-					use_skill(1, $skill[Blessing of the War Snapper]);
+					if(have_skill($skill[Headbutt]))
+					{
+						if(have_skill($skill[Blessing of the Storm Tortoise]) && (my_mp() > (2 * mp_cost($skill[Blessing of the Storm Tortoise]))))
+						{
+							use_skill(1, $skill[Blessing of the Storm Tortoise]);
+							//What does attack twice mean? Wiki says "two attacks of physical damage" what about elemental bonuses?
+							sources += 1;
+							//Could be sources += sourcesAll.weaponCount() + 1;
+						}
+						else if(have_skill($skill[Blessing of the War Snapper]) && (my_mp() > (2 * mp_cost($skill[Blessing of the War Snapper]))))
+						{
+							use_skill(1, $skill[Blessing of the War Snapper]);
+						}
+					}
+				}
+				if((have_effect($effect[Blessing of the Storm Tortoise]) == 0) && (have_effect($effect[Grand Blessing of the Storm Tortoise]) == 0) && (have_effect($effect[Glorious Blessing of the Storm Tortoise]) == 0))
+				{
+					sourceNeed -= 2;
 				}
 			}
-			if((have_effect($effect[Blessing of the Storm Tortoise]) == 0) && (have_effect($effect[Grand Blessing of the Storm Tortoise]) == 0) && (have_effect($effect[Glorious Blessing of the Storm Tortoise]) == 0))
-			{
-				sourceNeed -= 2;
-			}
+			sourceNeed -= 2;
 		}
 		if(have_skill($skill[Sauceshell]))
 		{
@@ -4289,7 +4381,7 @@ boolean L13_towerNSTower()
 		}
 		else
 		{
-			ccMaximize("meat drop, -equip snow suit, switch Hobo Monkey, switch rockin' robin, switch adventurous spelunker, switch Grimstone Golem, switch Fist Turkey, switch Unconscious Collective, switch Golden Monkey, switch Angry Jung Man, switch Leprechaun", 1500, 0, false);
+			ccMaximize("meat drop, -equip snow suit, " + cc_meatFamiliarMaximizerString(), 1500, 0, false);
 			handleFamiliar(my_familiar());
 		}
 		if((my_class() == $class[Seal Clubber]) && (item_amount($item[Meat Tenderizer is Murder]) > 0))
@@ -5176,6 +5268,29 @@ boolean LX_attemptPowerLevel()
 	}
 	else
 	{
+		if((my_level() >= 9) && ((get_property("cc_highlandlord") == "start") || (get_property("cc_highlandlord") == "finished")))
+		{
+			if(get_property("oilPeakProgress").to_float() > 0.0)
+			{
+				if((monster_level_adjustment() < 60) && (item_amount($item[Dress Pants]) > 0))
+				{
+					equip($slot[Pants], $item[Dress Pants]);
+				}
+				ccAdv($location[Oil Peak]);
+				return true;
+			}
+			else if(get_property("booPeakProgress:").to_int() > 0)
+			{
+				ccAdv($location[A-Boo Peak]);
+				return true;
+			}
+			else if(get_property("twinPeakProgress").to_int() != 15)
+			{
+				ccAdv($location[Twin Peak]);
+				return true;
+			}
+		}
+
 		if((my_level() >= 11) && (get_property("cc_hiddenzones") == "finished"))
 		{
 			ccAdv($location[The Hidden Hospital]);
@@ -5188,10 +5303,6 @@ boolean LX_attemptPowerLevel()
 		}
 		if((my_level() >= 9) && ((get_property("cc_highlandlord") == "start") || (get_property("cc_highlandlord") == "finished")))
 		{
-			if((monster_level_adjustment() < 60) && (item_amount($item[Dress Pants]) > 0) && (get_property("oilPeakProgress").to_float() > 0.0))
-			{
-				equip($slot[Pants], $item[Dress Pants]);
-			}
 			ccAdv($location[Oil Peak]);
 			return true;
 		}
@@ -10165,6 +10276,15 @@ boolean adventureFailureHandler()
 			}
 		}
 
+		if($location[The Smut Orc Logging Camp] == my_location())
+		{
+			int progress = get_property("chasmBridgeProgress").to_int();
+			if((progress > 0) && (progress <= 30) && (get_property("lastChasmReset").to_int() == my_ascensions()))
+			{
+				tooManyAdventures = false;
+			}
+		}
+
 		int plCount = get_property("cc_powerLevelAdvCount").to_int();
 		if((plCount > 20) && (my_level() < 13))
 		{
@@ -10175,6 +10295,15 @@ boolean adventureFailureHandler()
 		}
 
 		if(($locations[The Hidden Hospital, The Penultimate Fantasy Airship] contains my_location()) && (my_location().turns_spent < 100))
+		{
+			tooManyAdventures = false;
+		}
+
+		if(my_location() == $location[none])
+		{
+			tooManyAdventures = false;
+		}
+		if(my_location() == cc_shenCopperheadGoal())
 		{
 			tooManyAdventures = false;
 		}
@@ -12399,17 +12528,7 @@ boolean L11_shenCopperhead()
 
 	if((internalQuestStatus("questL11Shen") == 1) || (internalQuestStatus("questL11Shen") == 3) || (internalQuestStatus("questL11Shen") == 5))
 	{
-		item it = to_item(get_property("shenQuestItem"));
-		location goal = $location[none];
-		switch(it)
-		{
-		case $item[The Stankara Stone]:					goal = $location[The Batrat and Ratbat Burrow];						break;
-		case $item[The First Pizza]:					goal = $location[Lair of the Ninja Snowmen];						break;
-		case $item[Murphy\'s Rancid Black Flag]:		goal = $location[The Castle in the Clouds in the Sky (Top Floor)];	break;
-		case $item[The Eye of the Stars]:				goal = $location[The Hole in the Sky];								break;
-		case $item[The Lacrosse Stick of Lacoronado]:	goal = $location[The Smut Orc Logging Camp];						break;
-		case $item[The Shield of Brook]:				goal = $location[The VERY Unquiet Garves];							break;
-		}
+		location goal = cc_shenCopperheadGoal();
 		if(goal == $location[none])
 		{
 			abort("Could not parse Shen event");

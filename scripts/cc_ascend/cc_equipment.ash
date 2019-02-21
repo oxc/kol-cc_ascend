@@ -556,7 +556,7 @@ void equipBaselineHat()
 {
 	item toEquip = $item[none];
 
-	item[int] poss = List($items[Knob Goblin Harem Veil, Snorkel, Seal-Skull Helmet, Helmet Turtle, Ravioli Hat, Hollandaise Helmet, Kentucky-Style Derby, Knobby Helmet Turtle, Viking Helmet, Eyepatch, Pentacorn Hat, Oversized Skullcap, Goofily-Plumed Helmet, Dolphin King\'s Crown, Yellow Plastic Hard Hat, Wooden Salad Bowl, Football Helmet, Filthy Knitted Dread Sack, Chef\'s Hat, Genie\'s Turbane, Bellhop\'s Hat, Crown of the Goblin King, Gravy Boat, one-gallon hat, two-gallon hat, three-gallon hat, four-gallon hat, five-gallon hat, six-gallon hat, seven-gallon hat, Psychic\'s Circlet, Meteortarboard, Wad Of Used Tape, Astral Chapeau, Van der Graaf helmet, Safarrri Hat, Mohawk Wig, Brown Felt Tophat, Mark I Steam-Hat, Burning Paper Hat, Mark II Steam-Hat, eight-gallon hat, nine-gallon hat, ten-gallon hat, eleven-gallon hat, Cold Water Bottle, Beer Helmet, Mark III Steam-Hat, Mark IV Steam-Hat, Nurse\'s Hat, Training Helmet, Fuzzy Earmuffs, Mark V Steam-Hat, Hairpiece On Fire, Reinforced Beaded Headband, Giant Yellow Hat, Xiblaxian Stealth Cowl, Very Pointy Crown, Boris\'s Helm, Boris\'s Helm (askew), The Crown of Ed the Undying, Team Avarice Cap]);
+	item[int] poss = List($items[Knob Goblin Harem Veil, Snorkel, Seal-Skull Helmet, Helmet Turtle, Ravioli Hat, Hollandaise Helmet, Kentucky-Style Derby, Knobby Helmet Turtle, Viking Helmet, Eyepatch, Pentacorn Hat, Oversized Skullcap, Goofily-Plumed Helmet, Dolphin King\'s Crown, Yellow Plastic Hard Hat, Wooden Salad Bowl, Football Helmet, Filthy Knitted Dread Sack, Chef\'s Hat, Genie\'s Turbane, Fuzzy Earmuffs, Bellhop\'s Hat, Crown of the Goblin King, Gravy Boat, one-gallon hat, two-gallon hat, three-gallon hat, four-gallon hat, five-gallon hat, six-gallon hat, seven-gallon hat, Psychic\'s Circlet, Meteortarboard, Wad Of Used Tape, Astral Chapeau, Van der Graaf helmet, Safarrri Hat, Mohawk Wig, Brown Felt Tophat, Mark I Steam-Hat, Burning Paper Hat, Mark II Steam-Hat, eight-gallon hat, nine-gallon hat, ten-gallon hat, eleven-gallon hat, Cold Water Bottle, Beer Helmet, Mark III Steam-Hat, Mark IV Steam-Hat, Nurse\'s Hat, Training Helmet, Fuzzy Earmuffs, Mark V Steam-Hat, Hairpiece On Fire, Reinforced Beaded Headband, Giant Yellow Hat, Xiblaxian Stealth Cowl, Very Pointy Crown, Boris\'s Helm, Boris\'s Helm (askew), The Crown of Ed the Undying, Team Avarice Cap]);
 
 	if(my_class() == $class[Turtle Tamer])
 	{
@@ -635,10 +635,13 @@ void equipBaselineWeapon()
 	case $class[Gelatinous Noob]:
 		poss = $items[Finger Cymbals, Double-Barreled Sling, Hilarious Comedy Prop, Space Tourist Phaser, Frigid Derringer, Thor\'s Pliers, Bass Clarinet, Frankly Mr. Shank];
 		break;
+	case $class[Vampyre]:
+		poss = $items[Pasta Spoon, Knob Goblin Tongs, Dishrag, Corn Holder, Eggbeater, Cardboard Wakizashi, Witty Rapier, Astral Mace, Thor\'s Pliers, Wrench, Fish Hatchet, Bass Clarinet, Hand That Rocks The Ladle];
+		break;
 
 	default:
 		print("If you just started an ascension (Ed primarily) enter 'refresh all' and then restart", "red");
-		abort("You don't have a valid class for this equipper, must be an avatar path or something.");
+		abort("You do not have a valid class for this equipper, must be an avatar path or something.");
 		break;
 	}
 	toEquip = handleSolveThing(poss, $slot[weapon]);

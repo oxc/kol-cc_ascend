@@ -761,6 +761,19 @@ boolean neverendingPartyCombat(effect eff, boolean hardmode, string option)
 	return retval;
 }
 
+boolean cc_canVote()
+{
+	if(!get_property("_voteToday").to_boolean() && !get_property("voteAlways").to_boolean())
+	{
+		return false;
+	}
+	if(get_property("_voteModifier") != "")
+	{
+		return false;
+	}
+	return true;
+}
+
 boolean cc_voteSetup()
 {
 	return cc_voteSetup(0,0,0);
@@ -785,15 +798,11 @@ boolean cc_voteSetup(int candidate, int first, int second)
 	{
 		return false;
 	}
-	if(first == second)
+	if((first == second) && (first != 0))
 	{
 		return false;
 	}
-	if(!get_property("_voteToday").to_boolean() && !get_property("voteAlways").to_boolean())
-	{
-		return false;
-	}
-	if(get_property("_voteModifier") != "")
+	if(!cc_canVote())
 	{
 		return false;
 	}
@@ -802,23 +811,91 @@ boolean cc_voteSetup(int candidate, int first, int second)
 		return false;
 	}
 
+	string temp = visit_url("place.php?whichplace=town_right&action=townright_vote", false);
+	if(get_property("_voteLocal1") == "")
+	{
+		return false;
+	}
+
 	if(candidate == 0)
 	{
 		candidate = 1 + random(2);
 	}
-	while((first == 0) || (first == second))
+
+	int[int] votingFor = {first, second};
+	if(first == second)
 	{
-		first = 1 + random(4);
+		first = 0;
 	}
-	while((second == 0) || (first == second))
+	if(second == 0)
 	{
-		second = 1 + random(4);
+		int temp = first;
+		first = second;
+		second = temp;
 	}
 
-	//When using random, should we check for negative initiatives?
+	int[int] eligible;
+	int bias = 0;
+	for i from 1 to 4
+	{
+		string init = get_property("_voteLocal" + i);
+		if(init.contains_text("-"))
+		{
+			continue;
+		}
 
-	string temp = visit_url("place.php?whichplace=town_right&action=townright_vote", false);
-	temp = visit_url("choice.php?whichchoice=1331&pwd=&option=1&g=" + candidate + "&local[]=" + first + "&local[]=" + second);
+		//-10ML is probably never desirable but we do not want to risk a +ML passive (remember the barrel lid!)
+		if(init.contains_text("Monster Level"))
+		{
+			continue;
+		}
+
+		//Bias towards +meat, +item
+		if(init.contains_text("Item") || init.contains_text("Meat"))
+		{
+			if(count(eligible) > bias)
+			{
+				int temp = eligible[bias];
+				eligible[bias] = i;
+				i = temp;
+				bias++;
+			}
+		}
+
+		eligible[count(eligible)] = i;
+	}
+
+	if(count(eligible) < 2)
+	{
+		abort("Unable to find at least 2 voting options... this makes no sense, what voting options are available?");
+	}
+
+	int at = 0;
+	if(votingFor[0] == 0)
+	{
+		votingFor[0] = eligible[0];
+		at++;
+	}
+	while(votingFor[1] == 0)
+	{
+		if(eligible[at] == votingFor[0])
+		{
+			at++;
+		}
+		else
+		{
+			votingFor[1] = eligible[at];
+		}
+		if(at >= count(eligible))
+		{
+			abort("Unable to resolve random initiative handling");
+		}
+	}
+
+	votingFor[0] -= 1;
+	votingFor[1] -= 1;
+
+	temp = visit_url("choice.php?whichchoice=1331&pwd=&option=1&g=" + candidate + "&local[]=" + votingFor[0] + "&local[]=" + votingFor[1]);
 	return true;
 }
 

@@ -213,6 +213,11 @@ int cc_sourceTerminalExtrudeLeft()
 	return 0;
 }
 
+boolean cc_sourceTerminalEnhance(effect eff)
+{
+	return cc_sourceTerminalEnhance(to_string(eff));
+}
+
 boolean cc_sourceTerminalEnhance(string request)
 {
 	if(!cc_haveSourceTerminal())
@@ -450,6 +455,7 @@ boolean cc_advWitchess(string target, string option)
 	int goal = cc_advWitchessTargets(target);
 	if(goal == 0)
 	{
+		print("Invalid Witchess Goal '" + target + "', we can not comply", "red");
 		return false;
 	}
 

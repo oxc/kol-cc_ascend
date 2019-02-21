@@ -506,6 +506,14 @@ boolean canDrink(item toDrink)
 		}
 	}
 
+	if(my_class() == $class[Vampyre])
+	{
+		if(!($items[Bottle Of Sanguiovese, Dusty Bottle Of Blood, Mulled Blood, Red Russian, Vampagne] contains toDrink))
+		{
+			return false;
+		}
+	}
+
 	if(!glover_usable(toDrink))
 	{
 		return false;
@@ -534,6 +542,13 @@ boolean canEat(item toEat)
 		return false;
 	}
 
+	if(my_class() == $class[Vampyre])
+	{
+		if(!($items[Actual Blood Sausage, Bloodstick, Blood-Soaked Sponge Cake, Blood Roll-Up, Blood Snowcone] contains toEat))
+		{
+			return false;
+		}
+	}
 	if(!glover_usable(toEat))
 	{
 		return false;

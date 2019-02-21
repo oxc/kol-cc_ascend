@@ -340,6 +340,7 @@ void handlePostAdventure()
 
 		buffMaintain($effect[Inscrutable Gaze], 30, 1, 1);
 		buffMaintain($effect[Big], 50, 1, 1);
+		buffMaintain($effect[Curiosity of Br'er Tarrypin], 80, 1, 1);
 
 		boolean [skill] toCast = $skills[Acquire Rhinestones, Advanced Cocktailcrafting, Advanced Saucecrafting, Communism!, Grab a Cold One, Lunch Break, Pastamastery, Perfect Freeze, Request Sandwich, Spaghetti Breakfast, Summon Alice\'s Army Cards, Summon Carrot, Summon Confiscated Things, Summon Crimbo Candy, Summon Geeky Gifts, Summon Hilarious Objects, Summon Holiday Fun!, Summon Kokomo Resort Pass, Summon Tasteful Items];
 
@@ -355,7 +356,7 @@ void handlePostAdventure()
 		{
 			use_skill(1, libram);
 		}
-		if((libram != $skill[none]) && ((my_mp() - mp_cost(libram)) > 175))
+		if((libram != $skill[none]) && ((my_mp() - mp_cost(libram)) > 150))
 		{
 			use_skill(1, libram);
 		}
