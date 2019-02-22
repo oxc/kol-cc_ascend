@@ -299,6 +299,11 @@ void handlePostAdventure()
 		buffMaintain($effect[Go Get \'Em\, Tiger!], 0, 1, 1);
 	}
 
+	if(my_class() == $class[Vampyre])
+	{
+		twilightPostAdventure();
+	}
+
 	if(my_path() == "Community Service")
 	{
 		int blueSwayed = have_effect($effect[Blue Swayed]) + (10 * item_amount($item[Pulled Blue Taffy]));

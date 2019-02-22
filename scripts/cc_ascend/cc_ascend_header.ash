@@ -324,6 +324,20 @@ location[int] ListInsertInorder(location[int] list, location what);//Defined in 
 int ListFind(location[int] list, location what);			//Defined in cc_ascend/cc_list.ash
 int ListFind(location[int] list, location what, int idx);	//Defined in cc_ascend/cc_list.ash
 location ListOutput(location[int] list);					//Defined in cc_ascend/cc_list.ash
+monster ListOutput(monster[int] list);						//Defined in cc_ascend/cc_list.ash
+monster[int] monsterList();									//Defined in cc_ascend/cc_list.ash
+monster[int] List(boolean[monster] data);					//Defined in cc_ascend/cc_list.ash
+monster[int] List(monster[int] data);						//Defined in cc_ascend/cc_list.ash
+monster[int] ListRemove(monster[int] list, monster what);	//Defined in cc_ascend/cc_list.ash
+monster[int] ListRemove(monster[int] list, monster what, int idx);//Defined in cc_ascend/cc_list.ash
+monster[int] ListErase(monster[int] list, int index);		//Defined in cc_ascend/cc_list.ash
+monster[int] ListInsertFront(monster[int] list, monster what);//Defined in cc_ascend/cc_list.ash
+monster[int] ListInsert(monster[int] list, monster what);	//Defined in cc_ascend/cc_list.ash
+monster[int] ListInsertAt(monster[int] list, monster what, int idx);//Defined in cc_ascend/cc_list.ash
+monster[int] ListInsertInorder(monster[int] list, monster what);//Defined in cc_ascend/cc_list.ash
+int ListFind(monster[int] list, monster what);				//Defined in cc_ascend/cc_list.ash
+int ListFind(monster[int] list, monster what, int idx);		//Defined in cc_ascend/cc_list.ash
+monster ListOutput(monster[int] list);						//Defined in cc_ascend/cc_list.ash
 int [item] cc_get_campground();								//Defined in cc_ascend/cc_util.ash
 boolean basicAdjustML();									//Defined in cc_ascend/cc_util.ash
 boolean chibiChat();										//Deinfed in cc_ascend/cc_util.ash
@@ -345,7 +359,7 @@ boolean awol_buySkills();									//Defined in cc_ascend/cc_awol.ash
 void awol_helper(string page);								//Defined in cc_ascend/cc_combat.ash
 boolean canSurvive(float mult, int add);					//Defined in cc_ascend/cc_combat.ash
 boolean canSurvive(float mult);								//Defined in cc_ascend/cc_combat.ash
-string combat_wallOfSkin();									//Defined in cc_ascend/cc_combat.ash
+string combat_wallOfSkin(int round);						//Defined in cc_ascend/cc_combat.ash
 string combat_sourceBosses();								//Defined in cc_ascend/cc_combat.ash
 string combat_handleDirective(int round);					//Defined in cc_ascend/cc_combat.ash
 string combat_shadow();										//Defined in cc_ascend/cc_combat.ash
@@ -541,6 +555,7 @@ boolean elementalPlanes_initializeSettings();				//Defined in cc_ascend/cc_eleme
 boolean elementalPlanes_takeJob(element ele);				//Defined in cc_ascend/cc_elementalPlanes.ash
 int elemental_resist(element goal);							//Defined in cc_ascend/cc_util.ash
 float elemental_resist_value(int resistance);				//Defined in cc_ascend/cc_util.ash
+boolean equipAnyBanisherForZone(location loc);				//Defined in cc_ascend/cc_equipment.ash
 void ensureSealClubs();										//Defined in cc_ascend/cc_equipment.ash
 void equipBaseline();										//Defined in cc_ascend/cc_equipment.ash
 void equipBaselineAccessories();							//Defined in cc_ascend/cc_equipment.ash
@@ -593,6 +608,8 @@ boolean fightClubSpa(int option);							//Defined in cc_ascend/cc_mr2018.ash
 boolean fightClubSpa(effect eff);							//Defined in cc_ascend/cc_mr2018.ash
 boolean fightClubRecruit(int limit);						//Defined in cc_ascend/cc_mr2018.ash
 boolean fightClubSpar(int limit);							//Defined in cc_ascend/cc_mr2018.ash
+boolean latteRefill(string goal1, string goal2, string goal3, boolean wantBanish, boolean wantSniff);//Defined in cc_ascend/cc_mr2018.ash
+boolean equipLatteForUnlock(location loc);					//Defined in cc_ascend/cc_mr2018.ash
 boolean cheeseWarMachine(int stats, int it, int buff, int potion);//Defined in cc_ascend/cc_mr2018.ash
 boolean neverendingPartyCombat(stat st, boolean hardmode, string option);//Defined in cc_ascend/cc_mr2018.ash
 boolean neverendingPartyCombat(effect eff, boolean hardmode, string option);//Defined in cc_ascend/cc_mr2018.ash
@@ -832,6 +849,9 @@ boolean xiblaxian_makeStuff();								//Defined in cc_ascend/cc_mr2014.ash
 string yellowRayCombatString();								//Defined in cc_ascend/cc_util.ash
 string banisherCombatString(monster enemy, location loc);	//Defined in cc_ascend/cc_util.ash
 boolean[string] getBanisherInfo(location loc);				//Defined in cc_ascend/cc_util.ash
+monster[int] getRemainingMonsters(location loc);			//Defined in cc_ascend/cc_util.ash
+monster[int] getBanishList();								//Defined in cc_ascend/cc_util.ash
+int howManyBanishTargetsInZone(location loc);				//Defined in cc_ascend/cc_util.ash
 boolean isYellowRayAction(skill sk);						//Defined in cc_ascend/cc_util.ash
 boolean isYellowRayAction(item it);							//Defined in cc_ascend/cc_util.ash
 boolean isInstaKillAction(skill sk);						//Defined in cc_ascend/cc_util.ash
@@ -928,6 +948,10 @@ void twilight_startAscension(string page);					//Defined in cc_ascend/cc_twiligh
 void twilight_initializeSettings();							//Defined in cc_ascend/cc_twilight.ash
 void twilight_initializeDay(int day);						//Defined in cc_ascend/cc_twilight.ash
 boolean LM_twilight();										//Defined in cc_ascend/cc_twilight.ash
+void twilightConsume();										//Defined in cc_ascend/cc_twilight.ash
+boolean[item] twilightFoodConsumables();					//Defined in cc_ascend/cc_twilight.ash
+boolean[item] twilightBoozeConsumables();					//Defined in cc_ascend/cc_twilight.ash
+void twilightPostAdventure();								//Defined in cc_ascend/cc_twilight.ash
 
 void digimon_initializeSettings();							//Defined in cc_ascend/cc_digimon.ash
 void digimon_initializeDay(int day);						//Defined in cc_ascend/cc_digimon.ash

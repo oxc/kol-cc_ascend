@@ -1864,7 +1864,7 @@ void initializeDay(int day)
 
 			hr_initializeDay(day);
 
-			if((item_amount($item[Antique Accordion]) == 0) && (item_amount($item[Aerogel Accordion]) == 0) && isGeneralStoreAvailable() && !($classes[Accordion Thief, Avatar of Boris, Avatar of Jarlsberg, Avatar of Sneaky Pete, Ed] contains my_class()) && (my_meat() > npc_price($item[Toy Accordion])))
+			if((item_amount($item[Antique Accordion]) == 0) && (item_amount($item[Aerogel Accordion]) == 0) && isGeneralStoreAvailable() && !($classes[Accordion Thief, Avatar of Boris, Avatar of Jarlsberg, Avatar of Sneaky Pete, Ed, Vampyre] contains my_class()) && (my_meat() > npc_price($item[Toy Accordion])))
 			{
 				buyUpTo(1, $item[Toy Accordion]);
 			}
@@ -2326,7 +2326,7 @@ boolean doBedtime()
 
 	if((friars_available()) && (!get_property("friarsBlessingReceived").to_boolean()))
 	{
-		if(cc_my_path() == "Pocket Familiars")
+		if((cc_my_path() == "Pocket Familiars") || (get_property("cc_100familiar").to_familiar() == $familiar[Egg Benedict]))
 		{
 			cli_execute("friars food");
 		}
@@ -4465,7 +4465,8 @@ boolean L13_towerNSTower()
 	{
 		set_property("choiceAdventure1015", "2");
 		visit_url("place.php?whichplace=nstower&action=ns_08_monster4");
-		visit_url("choice.php?pwd=&whichchoice=1015&option=2", true);
+		int lastChoice = count(available_choice_options());
+		visit_url("choice.php?pwd=&whichchoice=1015&option=" + lastChoice, true);
 		return true;
 	}
 
@@ -6584,6 +6585,11 @@ boolean L11_mauriceSpookyraven()
 			buffMaintain($effect[Sweetbreads Flamb&eacute;], 0, 1, 1);
 		}
 
+		if(monster_level_adjustment() == 0)
+		{
+			abort("No ML appears to be available for the Boiler Room. You may have to do this manually");
+		}
+
 		ccAdv(1, $location[The Haunted Boiler Room]);
 
 		if(item_amount($item[wine bomb]) == 1)
@@ -7781,7 +7787,9 @@ boolean L12_finalizeWar()
 		}
 	}
 
-	if(my_mp() < 40)
+	//Needs to make sure we do not function when MP does not matter.
+	//Twilight gives you 0 MP but Max MP is still valid. Ugh.
+	if((my_mp() < 40) && (my_class() != $class[Vampyre]))
 	{
 		if(possessEquipment($item[Pantsgiving]))
 		{
@@ -13224,7 +13232,7 @@ boolean cc_tavern()
 		{
 			equip($slot[off-hand], $item[17-Ball]);
 		}
-		if(possessEquipment($item[Kremlin\'s Greatest Briefcase]))
+		else if(possessEquipment($item[Kremlin\'s Greatest Briefcase]))
 		{
 			string mod = string_modifier($item[Kremlin\'s Greatest Briefcase], "Modifiers");
 			if(contains_text(mod, "Weapon Damage Percent"))
@@ -13652,6 +13660,7 @@ boolean doTasks()
 	awol_buySkills();
 	awol_useStuff();
 	theSource_buySkills();
+	twilight_buySkills();
 
 	oldPeoplePlantStuff();
 	use_barrels();

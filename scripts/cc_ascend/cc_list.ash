@@ -1,6 +1,6 @@
 script "cc_list.ash"
 
-# familiar, int, item, effect, location defined. Define the rest at some point.
+# familiar, int, item, effect, location, monster defined. Define the rest at some point.
 
 #	All lists have the construct type[int] and are 0-indexed, like nature intended.
 #	Types: familiar, item
@@ -1013,3 +1013,191 @@ string ListOutput(location[int] list)
 }
 
 //end of location[int]
+//start of monster[int]
+monster ListOutput(monster[int] list);
+
+monster[int] monsterList();
+
+monster[int] List(boolean[monster] data);
+
+monster[int] List(monster[int] data);
+
+monster[int] ListRemove(monster[int] list, monster what);
+monster[int] ListRemove(monster[int] list, monster what, int idx);
+monster[int] ListErase(monster[int] list, int index);
+
+monster[int] ListInsertFront(monster[int] list, monster what);
+monster[int] ListInsert(monster[int] list, monster what);
+monster[int] ListInsertAt(monster[int] list, monster what, int idx);
+monster[int] ListInsertInorder(monster[int] list, monster what);
+
+int ListFind(monster[int] list, monster what);
+int ListFind(monster[int] list, monster what, int idx);
+
+monster ListOutput(monster[int] list);
+
+monster[int] monsterList()
+{
+	monster[int] retval;
+	return retval;
+}
+
+monster[int] List(boolean[monster] data)
+{
+	monster[int] retval;
+	int index = 0;
+
+	foreach el in data
+	{
+		retval[index] = el;
+		index = index + 1;
+	}
+	return retval;
+}
+
+monster[int] List(monster[int] data)
+{
+	monster[int] retval;
+
+	monster[int] temp;
+	foreach idx, el in data
+	{
+		temp[idx] = el;
+	}
+	sort temp by index;
+
+	int index = 0;
+	foreach idx, el in temp
+	{
+		retval[index] = el;
+		index = index + 1;
+	}
+
+	return retval;
+}
+
+int ListFind(monster[int] list, monster what)
+{
+	return ListFind(list, what, 0);
+}
+
+int ListFind(monster[int] list, monster what, int idx)
+{
+	if(idx < 0)
+	{
+		abort("Attempted index out of bounds: " + idx);
+	}
+	monster[int] retval = List(list);
+	int at = idx;
+	while(at < count(retval))
+	{
+		if(what == retval[at])
+		{
+			return at;
+		}
+		at = at + 1;
+	}
+	return -1;
+}
+
+
+monster[int] ListRemove(monster[int] list, monster what)
+{
+	return ListRemove(list, what, 0);
+}
+
+monster[int] ListRemove(monster[int] list, monster what, int idx)
+{
+	monster[int] retval = List(list);
+	foreach at, el in retval
+	{
+		if((el == what) && (at >= idx))
+		{
+			remove retval[at];
+		}
+	}
+	return List(retval);
+}
+
+monster[int] ListErase(monster[int] list, int index)
+{
+	monster[int] retval = List(list);
+	remove retval[index];
+	return List(retval);
+}
+
+monster[int] ListInsertFront(monster[int] list, monster what)
+{
+	monster[int] retval = List(list);
+	retval[-1] = what;
+	return List(retval);
+}
+
+monster[int] ListInsert(monster[int] list, monster what)
+{
+	monster[int] retval = List(list);
+	retval[count(retval)] = what;
+	return List(retval);
+}
+
+monster[int] ListInsertAt(monster[int] list, monster what, int idx)
+{
+	if((idx < 0) || (idx >= count(list)))
+	{
+		abort("List index " + idx + " out of bounds: " + count(list));
+	}
+	monster[int] retval = List(list);
+	int shift = count(retval);
+	while(shift > idx)
+	{
+		retval[shift] = retval[shift-1];
+		shift = shift - 1;
+	}
+	retval[idx] = what;
+	return retval;
+}
+
+monster[int] ListInsertInorder(monster[int] list, monster what)
+{
+	monster[int] retval = List(list);
+	if(to_string(what) < to_string(retval[0]))
+	{
+		return ListInsertAt(list, what, 0);
+	}
+	int shift = count(retval);
+	while(shift > 0)
+	{
+		if(to_string(what) > to_string(retval[shift-1]))
+		{
+			retval[shift] = what;
+			return retval;
+		}
+		retval[shift] = retval[shift-1];
+		shift = shift - 1;
+	}
+	if(shift == 0)
+	{
+		abort("Inorder Insertion Failure");
+	}
+	return retval;
+}
+
+string ListOutput(monster[int] list)
+{
+	string retval;
+	if(count(list) > 0)
+	{
+		retval = to_string(list[0]);
+		int index = 1;
+		while(index < count(list))
+		{
+			retval = retval + ", " + to_string(list[index]);
+			index = index + 1;
+		}
+	}
+
+	return retval;
+}
+
+//end of monster[int]
+

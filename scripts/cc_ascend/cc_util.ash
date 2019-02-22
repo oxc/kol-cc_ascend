@@ -1432,6 +1432,107 @@ boolean[string] getBanisherInfo(location loc)
 	return used;
 }
 
+monster[int] getBanishList()
+{
+	monster[int] retval = monsterList();
+
+	//Level 2: Spooky Forest:
+	//Level 3: Tavern:
+	//Level 4: Bat Hole: (Doughbat?)
+	//Level 5: Knob: Knob Goblin Harem Guard, Madam (cond)
+	retval = retval.ListInsert($monster[Knob Goblin Harem Guard]);
+	//Level 6: Friars:
+	//Level 7: Crypt: Senile Lihc, Slick Lihc
+	retval = retval.ListInsert($monster[Senile Lihc]);
+	retval = retval.ListInsert($monster[Slick Lihc]);
+	//Level 8: Icy Peak: Drunk Goat, Sabre-Toothed Goat
+	retval = retval.ListInsert($monster[Drunk Goat]);
+	retval = retval.ListInsert($monster[Sabre-Toothed Goat]);
+	//Level 9: Orc Chasm: Twin Peak Zone: Bubblemint Twins, Mismatched Twins
+	retval = retval.ListInsert($monster[Bubblemint Twins]);
+	retval = retval.ListInsert($monster[Mismatched Twins]);
+	//Level 10: Beanstalk: Burly Sidekick (cond)
+	retval = retval.ListInsert($monster[Protagonist]);
+	retval = retval.ListInsert($monster[Procrastination Giant]);
+	//Level 11:
+	//Spookyraven: Bookbat, Animated Mahogany Nightstand, Animated Rustic Nightstand,  Wardr&ouml;b Nightstand, Mad Wino, Skeletal Sommelier, Plaid Ghost, Possessed Laundry Press, Steam Elemental, Coaltergeist
+	retval = retval.ListInsert($monster[Wardr&ouml;b Nightstand]);
+	retval = retval.ListInsert($monster[Bookbat]);
+	retval = retval.ListInsert($monster[Animated Mahogany Nightstand]);
+	retval = retval.ListInsert($monster[Animated Rustic Nightstand]);
+	retval = retval.ListInsert($monster[Mad Wino]);
+	retval = retval.ListInsert($monster[Skeletal Sommelier]);
+	retval = retval.ListInsert($monster[Plaid Ghost]);
+	retval = retval.ListInsert($monster[Possessed Laundry Press]);
+	retval = retval.ListInsert($monster[Steam Elemental]);
+	retval = retval.ListInsert($monster[Coaltergeist]);
+	//Palindome: Tan Gnat, Taco Cat, Flock Of Stab-Bats, Evil Olive
+	retval = retval.ListInsert($monster[Tan Gnat]);
+	retval = retval.ListInsert($monster[Taco Cat]);
+	retval = retval.ListInsert($monster[Evil Olive]);
+	retval = retval.ListInsert($monster[Flock Of Stab-Bats]);
+	//Hidden Ciry: Pygmy Headhunter, Pygmy Janitor (cond), Pygmy Orderlies, Pygmy Witch Lawyer, Pygmy Witch Nurse,
+	retval = retval.ListInsert($monster[Pygmy Headhunter]);
+	retval = retval.ListInsert($monster[Pygmy Orderlies]);
+	retval = retval.ListInsert($monster[Pygmy Witch Lawyer]);
+	retval = retval.ListInsert($monster[Pygmy Witch Nurse]);
+	//Desert/Pyramid: Tomb Asp, Tomb Servant
+	retval = retval.ListInsert($monster[Tomb Asp]);
+	retval = retval.ListInsert($monster[Tomb Servant]);
+	//Level 12: Gremlins (this is handled separately and we need to review that
+	//Pixels: Bullet Bill, Animated Posssessions, Natural Spider
+	retval = retval.ListInsert($monster[Bullet Bill]);
+	retval = retval.ListInsert($monster[Animated Possessions]);
+	retval = retval.ListInsert($monster[Natural Spider]);
+	//Star Key
+	//Special Cases: Warehouse Janitor
+	retval = retval.ListInsert($monster[Warehouse Janitor]);
+
+	return retval;
+}
+
+//If there is only one monster, it does not matter what it is, it is not banishable.
+int howManyBanishTargetsInZone(location loc)
+{
+	monster[int] leftover = getRemainingMonsters(loc);
+	if(count(leftover) <= 1)
+	{
+		return 0;
+	}
+
+	int count = 0;
+	monster[int] banishThese = getBanishList();
+	foreach idx, mon in leftover
+	{
+		if(banishThese.listFind(mon) != -1)
+		{
+			count++;
+			print(mon);
+		}
+	}
+	return count;
+}
+
+monster[int] getRemainingMonsters(location loc)
+{
+	string banished = get_property("banishedMonsters");
+	string[int] banishList = split_string(banished, ":");
+	monster[int] atLoc = List(get_monsters(loc));
+
+	for(int i=0; (i+1)<count(banishList); i = i + 3)
+	{
+		monster curMon = to_monster(banishList[i]);
+
+		int idx = ListFind(atLoc, curMon);
+		if(idx == -1)
+		{
+			continue;
+		}
+		atLoc = ListErase(atLoc, idx);
+	}
+	return atLoc;
+}
+
 boolean didUseBanisherHere(skill banisher, location loc)
 {
 	return getBanisherInfo(loc) contains getBanisherName(banisher);
@@ -1511,7 +1612,7 @@ string banisherCombatString(monster enemy, location loc)
 
 	// Is it a special banish? (cocktail napkin?)
 
-	if(!($monsters[Animated Mahogany Nightstand, Animated Possessions, Animated Rustic Nightstand, Bubblemint Twins, Bullet Bill, Burly Sidekick, Chatty Pirate, Clingy Pirate (Female), Clingy Pirate (Male), Coaltergeist, Crusty Pirate, Doughbat, Drunk Goat, Evil Olive, Flock Of Stab-Bats, Knob Goblin Harem Guard, Knob Goblin Madam, Mad Wino, Mismatched Twins, Natural Spider, Plaid Ghost, Possessed Laundry Press, Procrastination Giant, Protagonist, Pygmy Headhunter, Pygmy Janitor, Pygmy Orderlies, Pygmy Witch Lawyer, Pygmy Witch Nurse, Sabre-Toothed Goat, Senile Lihc, Slick Lihc, Skeletal Sommelier, Snow Queen, Steam Elemental, Taco Cat, Tan Gnat, Tomb Asp, Tomb Servant, Wardr&ouml;b Nightstand, Warehouse Janitor, Upgraded Ram] contains enemy))
+	if(!($monsters[Animated Mahogany Nightstand, Animated Possessions, Animated Rustic Nightstand, Bookbat, Bubblemint Twins, Bullet Bill, Burly Sidekick, Chatty Pirate, Clingy Pirate (Female), Clingy Pirate (Male), Coaltergeist, Crusty Pirate, Doughbat, Drunk Goat, Evil Olive, Flock Of Stab-Bats, Knob Goblin Harem Guard, Knob Goblin Madam, Mad Wino, Mismatched Twins, Natural Spider, Plaid Ghost, Possessed Laundry Press, Procrastination Giant, Protagonist, Pygmy Headhunter, Pygmy Janitor, Pygmy Orderlies, Pygmy Witch Lawyer, Pygmy Witch Nurse, Sabre-Toothed Goat, Senile Lihc, Slick Lihc, Skeletal Sommelier, Snow Queen, Steam Elemental, Taco Cat, Tan Gnat, Tomb Asp, Tomb Servant, Wardr&ouml;b Nightstand, Warehouse Janitor, Upgraded Ram] contains enemy))
 	{
 		return "";
 	}
@@ -4281,6 +4382,13 @@ boolean buffMaintain(skill source, effect buff, int mp_min, int casts, int turns
 	{
 		return false;
 	}
+	if(hp_cost(source) > 0)
+	{
+		if((my_hp() < mp_min) || (my_hp() < (casts * hp_cost(source))))
+		{
+			return false;
+		}
+	}
 	if(my_adventures() < (casts * adv_cost(source)))
 	{
 		return false;
@@ -4393,6 +4501,7 @@ boolean buffMaintain(effect buff, int mp_min, int casts, int turns)
 	case $effect[Balls of Ectoplasm]:			useItem = $item[Ectoplasmic Orbs];				break;
 	case $effect[Bandersnatched]:				useItem = $item[Tonic O\' Banderas];			break;
 	case $effect[Barbecue Saucy]:				useItem = $item[Dollop of Barbecue Sauce];		break;
+	case $effect[Bats Form]:					useSkill = $skill[Flock Of Bats Form];			break;
 	case $effect[Be A Mind Master]:				useItem = $item[Daily Affirmation: Be A Mind Master];	break;
 	case $effect[Become Superficially Interested]:	useItem = $item[Daily Affirmation: Be Superficially Interested];	break;
 	case $effect[Bendin\' Hell]:					useSkill = $skill[Bend Hell];					break;
@@ -4429,11 +4538,13 @@ boolean buffMaintain(effect buff, int mp_min, int casts, int turns)
 	case $effect[Carol Of The Hells]:			useSkill = $skill[Carol Of The Hells];			break;
 	case $effect[Carol Of The Thrills]:			useSkill = $skill[Carol Of The Thrills];		break;
 	case $effect[Cautious Prowl]:				useSkill = $skill[Walk: Cautious Prowl];		break;
+	case $effect[Ceaseless Snarling]:			useSkill = $skill[Ceaseless Snarl];				break;
 	case $effect[Celestial Camouflage]:			useItem = $item[Celestial Squid Ink];			break;
 	case $effect[Celestial Saltiness]:			useItem = $item[Celestial Au Jus];				break;
 	case $effect[Celestial Sheen]:				useItem = $item[Celestial Olive Oil];			break;
 	case $effect[Cinnamon Challenger]:			useItem = $item[Pulled Red Taffy];				break;
 	case $effect[Cletus\'s Canticle of Celerity]:	useSkill = $skill[Cletus\'s Canticle of Celerity];break;
+	case $effect[Cloak Of Shadows]:				useSKill = $skill[Blood Cloak];					break;
 	case $effect[Clyde\'s Blessing]:			useItem = $item[The Legendary Beat];			break;
 	case $effect[Chalky Hand]:					useItem = $item[Handful of Hand Chalk];			break;
 	case $effect[Cranberry Cordiality]:			useItem = $item[Cranberry Cordial];				break;
@@ -4603,6 +4714,7 @@ boolean buffMaintain(effect buff, int mp_min, int casts, int turns)
 	case $effect[Merry Smithsness]:				useItem = $item[Flaskfull of Hollow];			break;
 	case $effect[Mind Vision]:					useSkill = $skill[Intracranial Eye];			break;
 	case $effect[Ministrations in the Dark]:	useItem = $item[EMD Holo-Record];				break;
+	case $effect[Mist Form]:					useSkill = $skill[Mist Form];					break;
 	case $effect[The Moxie Of LOV]:				useItem = $item[LOV Elixir #9];					break;
 	case $effect[The Moxious Madrigal]:			useSkill = $skill[The Moxious Madrigal];		break;
 	case $effect[Muffled]:						useSkill = $skill[Rev Engine];					break;
@@ -4749,6 +4861,7 @@ boolean buffMaintain(effect buff, int mp_min, int casts, int turns)
 	case $effect[The Sonata of Sneakiness]:		useSkill = $skill[The Sonata of Sneakiness];	break;
 	case $effect[Soulerskates]:					useSkill = $skill[Soul Rotation];				break;
 	case $effect[Sour Softshoe]:				useItem = $item[pulled yellow taffy];			break;
+	case $effect[Spectral Awareness]:			useSkill = $skill[Spectral Awareness];			break;
 	case $effect[Spice Haze]:					useSkill = $skill[Bind Spice Ghost];			break;
 	case $effect[Spiky Hair]:					useItem = $item[Super-Spiky Hair Gel];			break;
 	case $effect[Spiky Shell]:					useSkill = $skill[Spiky Shell];					break;
@@ -4819,6 +4932,7 @@ boolean buffMaintain(effect buff, int mp_min, int casts, int turns)
 	case $effect[Wisdom of Thoth]:				useSkill = $skill[Wisdom of Thoth];				break;
 	case $effect[Wit Tea]:						useItem = $item[cuppa Wit tea];					break;
 	case $effect[Woad Warrior]:					useItem = $item[Pygmy Pygment];					break;
+	case $effect[Wolf Form]:					useSkill = $skill[Wolf Form];					break;
 	case $effect[Wry Smile]:					useSkill = $skill[Wry Smile];					break;
 	case $effect[Yoloswagyoloswag]:				useItem = $item[Yolo&trade; Chocolates];		break;
 	case $effect[You Read the Manual]:			useItem = $item[O\'Rly Manual];					break;

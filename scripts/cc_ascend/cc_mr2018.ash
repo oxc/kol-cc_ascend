@@ -1068,6 +1068,10 @@ boolean fightClubSpa(int option)
 
 boolean fightClubScavenge()
 {
+	if(!is_unrestricted($item[Boxing Day Care Package]))
+	{
+		return false;
+	}
 	if((get_property("_daycareGymScavenges").to_int() == 0) && get_property("daycareOpen").to_boolean())
 	{
 		string temp = visit_url("place.php?whichplace=town_wrong&action=townwrong_boxingdaycare");
@@ -1081,6 +1085,10 @@ boolean fightClubScavenge()
 
 boolean fightClubRecruit(int limit)
 {
+	if(!is_unrestricted($item[Boxing Day Care Package]))
+	{
+		return false;
+	}
 	if((get_property("_daycareRecruits").to_int() < limit) && get_property("daycareOpen").to_boolean())
 	{
 		string temp = visit_url("place.php?whichplace=town_wrong&action=townwrong_boxingdaycare");
@@ -1093,6 +1101,10 @@ boolean fightClubRecruit(int limit)
 
 boolean fightClubSpar(int limit)
 {
+	if(!is_unrestricted($item[Boxing Day Care Package]))
+	{
+		return false;
+	}
 	if((get_property("_daycareGymSpar").to_int() < limit) && get_property("daycareOpen").to_boolean())
 	{
 		string temp = visit_url("place.php?whichplace=town_wrong&action=townwrong_boxingdaycare");
@@ -1125,4 +1137,164 @@ lovePotion_t lovePotionBuffs()
 	retval.mp = 30 - (10 * (number % 5));
 
 	return retval;
+}
+
+boolean latteRefill(string goal1, string goal2, string goal3, boolean wantBanish, boolean wantSniff)
+{
+	if(!possessEquipment($item[Latte Lovers Member\'s Mug]))
+	{
+		return false;
+	}
+	if(!is_unrestricted($item[Latte Lovers Club Card]))
+	{
+		return false;
+	}
+
+	if(get_property("_latteRefillsUsed").to_int() >= 3)
+	{
+		return false;
+	}
+
+	if(wantBanish && get_property("_latteBanishUsed").to_boolean())
+	{
+		wantBanish = false;
+	}
+	if(wantSniff && get_property("_latteCopyUsed").to_boolean())
+	{
+		wantSniff = false;
+	}
+
+	if(wantBanish || wantSniff)
+	{
+		return false;
+	}
+
+	string[int] unlocks = split_string(get_property("latteUnlocks"), ",");
+	string[3] defaults = {"cinnamon", "pumpkin", "vanilla"};
+
+	foreach idx, mod in defaults
+	{
+		if((mod == goal1) || (mod == goal2) || (mod == goal3))
+		{
+			defaults[idx] = "";
+		}
+	}
+
+	int index = 0;
+	string[3] opts = {"", "", ""};
+
+	foreach idx, mod in unlocks
+	{
+		if(mod == goal1)
+		{
+			opts[index] = goal1;
+			index++;
+		}
+		else if(mod == goal2)
+		{
+			opts[index] = goal2;
+			index++;
+		}
+		else if(mod == goal3)
+		{
+			opts[index] = goal3;
+			index++;
+		}
+	}
+
+	int subIndex = 0;
+	while((index < 3) && (subIndex < 3))
+	{
+		if(defaults[subIndex] != "")
+		{
+			opts[index] = defaults[subIndex];
+			index++;
+		}
+
+		subIndex++;
+	}
+
+	string action = "latte refill " + opts[0] + " " + opts[1] + " " + opts[2];
+	print("Latte filling: " + action);
+	cli_execute(action);
+	return true;
+}
+
+
+boolean equipLatteForUnlock(location loc)
+{
+	if(!possessEquipment($item[Latte Lovers Member\'s Mug]))
+	{
+		return false;
+	}
+	if(!is_unrestricted($item[Latte Lovers Club Card]))
+	{
+		return false;
+	}
+
+	//Should probably do split_string to avoid substring matches
+	if(loc == $location[The Black Forest])
+	{
+		if(get_property("latteUnlocks").contains_text("cajun"))
+		{
+			return false;
+		}
+		equip($slot[off-hand], $item[Latte Lovers Member\'s Mug]);
+		return true;
+	}
+	if(loc == $location[The Haunted Library])
+	{
+		if(get_property("latteUnlocks").contains_text("ink"))
+		{
+			return false;
+		}
+		equip($slot[off-hand], $item[Latte Lovers Member\'s Mug]);
+		return true;
+	}
+	if(loc == $location[The Haunted Kitchen])
+	{
+		if(get_property("latteUnlocks").contains_text("chili"))
+		{
+			return false;
+		}
+		if(elemental_resist($element[hot]) > 6)
+		{
+			return false;
+		}
+		equip($slot[off-hand], $item[Latte Lovers Member\'s Mug]);
+		return true;
+	}
+	if(loc == $location[The Dark Neck Of The Woods])
+	{
+		if(get_property("latteUnlocks").contains_text("hellion"))
+		{
+			return false;
+		}
+		equip($slot[off-hand], $item[Latte Lovers Member\'s Mug]);
+		return true;
+	}
+	if(loc == $location[The Dark Heart Of The Woods])
+	{
+		if(get_property("latteUnlocks").contains_text("wing"))
+		{
+			return false;
+		}
+		equip($slot[off-hand], $item[Latte Lovers Member\'s Mug]);
+		return true;
+	}
+	if(loc == $location[The Dark Elbow Of The Woods])
+	{
+		if(get_property("latteUnlocks").contains_text("vitamins"))
+		{
+			return false;
+		}
+		if(get_property("cc_100familiar") == $familiar[Egg Benedict])
+		{
+			return false;
+		}
+		equip($slot[off-hand], $item[Latte Lovers Member\'s Mug]);
+		return true;
+	}
+
+	return false;
 }

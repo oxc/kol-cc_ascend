@@ -508,7 +508,7 @@ boolean canDrink(item toDrink)
 
 	if(my_class() == $class[Vampyre])
 	{
-		if(!($items[Bottle Of Sanguiovese, Dusty Bottle Of Blood, Mulled Blood, Red Russian, Vampagne] contains toDrink))
+		if(!(twilightBoozeConsumables() contains toDrink))
 		{
 			return false;
 		}
@@ -544,7 +544,7 @@ boolean canEat(item toEat)
 
 	if(my_class() == $class[Vampyre])
 	{
-		if(!($items[Actual Blood Sausage, Bloodstick, Blood-Soaked Sponge Cake, Blood Roll-Up, Blood Snowcone] contains toEat))
+		if(!(twilightFoodConsumables() contains toEat))
 		{
 			return false;
 		}
@@ -575,6 +575,11 @@ void consumeStuff()
 	if(cc_my_path() == "Community Service")
 	{
 		cs_eat_spleen();
+		return;
+	}
+	if(my_class() == $class[Vampyre])
+	{
+		twilightConsume();
 		return;
 	}
 

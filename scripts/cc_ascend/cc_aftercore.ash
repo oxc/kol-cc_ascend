@@ -1204,7 +1204,9 @@ monster cc_specialAftercore(familiar toFam)
 		//This should happen.
 		if(isOverdueDigitize())
 		{
+			set_property("cc_combatDirective", "start;skill curse of weaksauce;skill stuffed mortar shell; skill sing along;item rain-doh indigo cup, rain-doh blue balls; skill saucestorm; skill saucestorm; skill saucestorm; skill saucestorm; skill saucestorm; skill saucestorm");
 			ccAdv(1, $location[The Ice Hotel]);
+			set_property("cc_combatDirective", "");
 		}
 	}
 	return target;

@@ -152,7 +152,7 @@ string cc_combatHandler(int round, string opp, string text)
 
 	if(enemy == $monster[Wall Of Skin])
 	{
-		return combat_wallOfSkin();
+		return combat_wallOfSkin(round);
 	}
 
 	if(enemy == $monster[Wall Of Bones])
@@ -1021,12 +1021,13 @@ string cc_combatHandler(int round, string opp, string text)
 			return cc_combatUse($skill[Summon Love Stinkbug], true);
 		}
 
-		if(cc_combatCanUse($skill[Sing Along], true))
+		if(cc_combatCanUse($skill[Sing Along], true) && (get_property("boomBoxSong") == "Remainin\' Alive"))
 		{
-			if((get_property("boomBoxSong") == "Remainin\' Alive") || (get_property("boomBoxSong") == "Total Eclipse of Your Meat"))
-			{
-				return cc_combatUse($skill[Sing Along], true);
-			}
+			return cc_combatUse($skill[Sing Along], true);
+		}
+		if(cc_combatCanUse($skill[Sing Along], true) && (get_property("boomBoxSong") == "Total Eclipse of Your Meat") && canSurvive(2.5))
+		{
+			return cc_combatUse($skill[Sing Along], true);
 		}
 	}
 
@@ -1369,7 +1370,7 @@ string cc_combatHandler(int round, string opp, string text)
 		}
 		break;
 	case $class[Vampyre]:
-			if(my_hp() < my_maxhp())
+			if((my_hp() < my_maxhp()) && cc_combatCanUse($skill[Dark Feast], true))
 			{
 				//Current HP is what matters
 				if(enemy.base_hp <= 30)
@@ -2730,6 +2731,10 @@ void awol_helper(string page)
 
 boolean canSurvive(float mult, int add)
 {
+	if(my_class() == $class[Vampyre])
+	{
+		mult += 2.0;
+	}
 	int damage = expected_damage();
 	damage *= mult;
 	damage += add;
@@ -3030,7 +3035,7 @@ string cc_combatUse(string state, skill sk, boolean track)
 
 string combat_wallOfSkin(int round)
 {
-	if(cc_combatCanUse($item[Beehive]))
+	if(cc_combatCanUse($item[Beehive], false))
 	{
 		return cc_combatUse($item[Beehive], false);
 	}

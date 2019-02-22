@@ -20,7 +20,7 @@ item handleSolveThing(item[int] poss);
 item handleSolveThing(boolean[item] poss, slot loc);
 item handleSolveThing(boolean[item] poss);
 void makeStartingSmiths();
-
+boolean equipAnyBanisherForZone(location loc);
 
 //	Replace the current acc3 item (from baseline) with another. Mostly for our Xiblaxian handling so that is why this is the only one implemented.
 void replaceBaselineAcc3();
@@ -489,6 +489,11 @@ void equipBaselineShirt()
 	item toEquip = $item[none];
 	item[int] poss = List($items[Professor What T-Shirt, Barskin Cloak, Thinknerd T-Shirt, Harem Girl T-Shirt, Clownskin Harness, Bronze Breastplate, KoL Con 13 T-Shirt, White Snakeskin Duster, Grateful Undead T-shirt, Demonskin Jacket, Gnauga Hide Vest, Tuxedo Shirt, Grungy Flannel Shirt, Lynyrdskin Tunic, Makeshift Garbage Shirt, Glass Casserole Dish, Surgical Apron, Punk Rock Jacket, Bat-Ass Leather Jacket, Midriff Scrubs, Star Shirt, Yak Anorak, Dragonscale Breastplate, Blessed Rustproof +2 Gray Dragon Scale Mail, Ultracolor&trade; Shirt, Sea Salt Scrubs, Shark Jumper, Bod-Ice, Liam\'s Mail, Astral Shirt, Stephen\'s Lab Coat, LOV Eardigan, Sneaky Pete\'s Leather Jacket, Sneaky Pete\'s Leather Jacket (Collar Popped)]);
 
+	if(my_class() == $class[Vampyre])
+	{
+		poss = ListInsert(poss, $item[Sea Salt Scrubs]);
+	}
+
 
 	if((my_primestat() == $stat[muscle]) && (my_level() < 13))
 	{
@@ -558,6 +563,10 @@ void equipBaselineHat()
 
 	item[int] poss = List($items[Knob Goblin Harem Veil, Snorkel, Seal-Skull Helmet, Helmet Turtle, Ravioli Hat, Hollandaise Helmet, Kentucky-Style Derby, Knobby Helmet Turtle, Viking Helmet, Eyepatch, Pentacorn Hat, Oversized Skullcap, Goofily-Plumed Helmet, Dolphin King\'s Crown, Yellow Plastic Hard Hat, Wooden Salad Bowl, Football Helmet, Filthy Knitted Dread Sack, Chef\'s Hat, Genie\'s Turbane, Fuzzy Earmuffs, Bellhop\'s Hat, Crown of the Goblin King, Gravy Boat, one-gallon hat, two-gallon hat, three-gallon hat, four-gallon hat, five-gallon hat, six-gallon hat, seven-gallon hat, Psychic\'s Circlet, Meteortarboard, Wad Of Used Tape, Astral Chapeau, Van der Graaf helmet, Safarrri Hat, Mohawk Wig, Brown Felt Tophat, Mark I Steam-Hat, Burning Paper Hat, Mark II Steam-Hat, eight-gallon hat, nine-gallon hat, ten-gallon hat, eleven-gallon hat, Cold Water Bottle, Beer Helmet, Mark III Steam-Hat, Mark IV Steam-Hat, Nurse\'s Hat, Training Helmet, Fuzzy Earmuffs, Mark V Steam-Hat, Hairpiece On Fire, Reinforced Beaded Headband, Giant Yellow Hat, Xiblaxian Stealth Cowl, Very Pointy Crown, Boris\'s Helm, Boris\'s Helm (askew), The Crown of Ed the Undying, Team Avarice Cap]);
 
+	if(my_class() == $class[Vampyre])
+	{
+		poss = ListInsert(poss, $item[Nurse\'s Hat]);
+	}
 	if(my_class() == $class[Turtle Tamer])
 	{
 		poss = ListInsertAt(poss, $item[Elder Turtle Shell], poss.ListFind($item[Van der Graaf Helmet]));
@@ -602,7 +611,7 @@ void equipBaselineWeapon()
 		poss = $items[Saucepan, Dishrag, Corn Holder, Eggbeater, Cardboard Wakizashi, Witty Rapier, Oversized Pizza Cutter, Titanium Assault Umbrella, Thor\'s Pliers, Candlestick, Fish Hatchet, Bass Clarinet, Saucepanic];
 		break;
 	case $class[Pastamancer]:
-		poss = $items[Pasta Spoon, Knob Goblin Tongs, Dishrag, Corn Holder, Eggbeater, Cardboard Wakizashi, Witty Rapier, Thor\'s Pliers, Wrench, Fish Hatchet, Bass Clarinet, Hand That Rocks The Ladle];
+		poss = $items[Pasta Spoon, Knob Goblin Tongs, Dishrag, Corn Holder, Eggbeater, Cardboard Wakizashi, Elegant Nightstick, Witty Rapier, Thor\'s Pliers, Wrench, Fish Hatchet, Bass Clarinet, Hand That Rocks The Ladle];
 		break;
 	case $class[Disco Bandit]:
 		poss = $items[Boot Knife, Dented Harmonica, Foam Pistol, Frigid Derringer, The Nuge\'s Favorite Crossbow, The Jokester\'s Gun, Fish Hatchet, Knife, Bass Clarinet, Frankly Mr. Shank];
@@ -636,7 +645,7 @@ void equipBaselineWeapon()
 		poss = $items[Finger Cymbals, Double-Barreled Sling, Hilarious Comedy Prop, Space Tourist Phaser, Frigid Derringer, Thor\'s Pliers, Bass Clarinet, Frankly Mr. Shank];
 		break;
 	case $class[Vampyre]:
-		poss = $items[Pasta Spoon, Knob Goblin Tongs, Dishrag, Corn Holder, Eggbeater, Cardboard Wakizashi, Witty Rapier, Astral Mace, Thor\'s Pliers, Wrench, Fish Hatchet, Bass Clarinet, Hand That Rocks The Ladle];
+		poss = $items[Pasta Spoon, Knob Goblin Tongs, Dishrag, Corn Holder, Eggbeater, Cardboard Wakizashi, Elegant Nightstick, Witty Rapier, Astral Mace, Fiberglass Foil, Thor\'s Pliers, Wrench, Fish Hatchet, Bass Clarinet, Hand That Rocks The Ladle];
 		break;
 
 	default:
@@ -1134,4 +1143,42 @@ void equipRollover()
 			equip($slot[familiar], toEquip);
 		}
 	}
+}
+
+
+boolean equipAnyBanisherForZone(location loc)
+{
+	if(loc == $location[none])
+	{
+		return false;
+	}
+
+	if(howManyBanishTargetsInZone(loc) == 0)
+	{
+		return false;
+	}
+
+	//We are going to reset latte if it is worth it. Sniffs are nice but I think we want to try to get all 4 banishes rather than put pressure on the lattesniffs.
+
+	if(possessEquipment($item[Kremlin\'s Greatest Briefcase]) && (get_property("_kgbTranquilizerDartUses").to_int() < 3) && !didUseBanisherHere($item[Kremlin\'s Greatest Briefcase], loc))
+	{
+		equip($slot[acc3], $item[Kremlin\'s Greatest Briefcase]);
+	}
+	else if(possessEquipment($item[Lil\' Doctor&trade; Bag]) && (get_property("_reflexHammerUsed").to_int() < 3) && !didUseBanisherHere($item[Lil\' Doctor&trade; Bag], loc))
+	{
+		equip($slot[acc3], $item[Lil\' Doctor&trade; Bag]);
+	}
+	else if(possessEquipment($item[Latte Lovers Member\'s Mug]) && !get_property("_latteBanishUsed").to_boolean() && !didUseBanisherHere($item[Latte Lovers Member\'s Mug], loc))
+	{
+		equip($slot[off-hand], $item[Latte Lovers Member\'s Mug]);
+	}
+	else if(possessEquipment($item[Latte Lovers Member\'s Mug]) && get_property("_latteBanishUsed").to_boolean() && (get_property("_latteRefillsUsed").to_int() < 3) && !didUseBanisherHere($item[Latte Lovers Member\'s Mug], loc))
+	{
+		//Yeah, we could make better latte choices... we never did map this out.
+		latteRefill("", "", "", true, false);
+		equip($slot[off-hand], $item[Latte Lovers Member\'s Mug]);
+
+	}
+
+	return false;
 }
