@@ -5154,6 +5154,7 @@ boolean LX_melvignShirt()
 	return true;
 }
 
+
 boolean LX_attemptPowerLevel()
 {
 	set_property("cc_powerLevelAdvCount", get_property("cc_powerLevelAdvCount").to_int() + 1);
@@ -5243,33 +5244,34 @@ boolean LX_attemptPowerLevel()
 		}
 	}
 
+	location pGoal = $location[none];
 	if(elementalPlanes_access($element[stench]) && have_skill($skill[Summon Smithsness]) && (get_property("cc_beatenUpCount").to_int() == 0))
 	{
-		ccAdv(1, $location[Uncle Gator\'s Country Fun-Time Liquid Waste Sluice]);
+		pGoal = $location[Uncle Gator\'s Country Fun-Time Liquid Waste Sluice];
 	}
 	else if(elementalPlanes_access($element[spooky]))
 	{
-		ccAdv(1, $location[The Deep Dark Jungle]);
+		pGoal = $location[The Deep Dark Jungle];
 	}
 	else if(elementalPlanes_access($element[cold]))
 	{
-		ccAdv(1, $location[VYKEA]);
+		pGoal = $location[VYKEA];
 	}
 	else if((elementalPlanes_access($element[sleaze])) && (my_level() < 11))
 	{
-		ccAdv(1, $location[Sloppy Seconds Diner]);
+		pGoal = $location[Sloppy Seconds Diner];
 	}
 #	else if(elementalPlanes_access($element[stench]))
 #	{
-#		ccAdv(1, $location[Uncle Gator\'s Country Fun-Time Liquid Waste Sluice]);
+#		pGoal = $location[Uncle Gator\'s Country Fun-Time Liquid Waste Sluice];
 #	}
 	else if(elementalPlanes_access($element[sleaze]))
 	{
-		ccAdv(1, $location[Sloppy Seconds Diner]);
+		pGoal = $location[Sloppy Seconds Diner];
 	}
 	else
 	{
-		if((my_level() >= 9) && ((get_property("cc_highlandlord") == "start") || (get_property("cc_highlandlord") == "finished")))
+		if((my_level() >= 9) && (get_property("cc_highlandlord") != "finished"))
 		{
 			if(get_property("oilPeakProgress").to_float() > 0.0)
 			{
@@ -5277,37 +5279,30 @@ boolean LX_attemptPowerLevel()
 				{
 					equip($slot[Pants], $item[Dress Pants]);
 				}
-				ccAdv($location[Oil Peak]);
-				return true;
+				pGoal = $location[Oil Peak];
 			}
-			else if(get_property("booPeakProgress:").to_int() > 0)
+			else if(get_property("booPeakProgress").to_int() > 0)
 			{
-				ccAdv($location[A-Boo Peak]);
-				return true;
+				pGoal = $location[A-Boo Peak];
 			}
 			else if(get_property("twinPeakProgress").to_int() != 15)
 			{
-				ccAdv($location[Twin Peak]);
-				return true;
+				pGoal = $location[Twin Peak];
 			}
 		}
-
-		if((my_level() >= 11) && (get_property("cc_hiddenzones") == "finished"))
+		else if((my_level() >= 11) && (get_property("cc_hiddenzones") == "finished"))
 		{
-			ccAdv($location[The Hidden Hospital]);
-			return true;
+			pGoal = $location[The Hidden Hospital];
 		}
-		if((my_level() >= 10) && zone_isAvailable($location[The Hole In The Sky]))
+		else if((my_level() >= 10) && zone_isAvailable($location[The Hole In The Sky]))
 		{
-			ccAdv($location[The Hole In The Sky]);
-			return true;
+			pGoal = $location[The Hole In The Sky];
 		}
-		if((my_level() >= 9) && ((get_property("cc_highlandlord") == "start") || (get_property("cc_highlandlord") == "finished")))
+		else if((my_level() >= 9) && (get_property("cc_highlandlord") != ""))
 		{
-			ccAdv($location[Oil Peak]);
-			return true;
+			pGoal = $location[Oil Peak];
 		}
-		if((my_level() >= 8) && (get_property("cc_trapper") == "finished"))
+		else if((my_level() >= 8) && (get_property("cc_trapper") == "finished"))
 		{
 			float elemDamage = numeric_modifier("Hot Damage");
 			elemDamage += numeric_modifier("Sleaze Damage");
@@ -5315,16 +5310,23 @@ boolean LX_attemptPowerLevel()
 			elemDamage += numeric_modifier("Stench Damage");
 			if(elemDamage > 20)
 			{
-				ccAdv($location[The Icy Peak]);
+				pGoal = $location[The Icy Peak];
 			}
 			else
 			{
-				ccAdv($location[The Extreme Slope]);
+				pGoal = $location[The Extreme Slope];
 			}
-			return true;
 		}
+	}
+	if(pGoal == $location[none])
+	{
 		return false;
 	}
+
+	int turns_spent = pGoal.turns_spent;
+	ccAdv(1, pGoal);
+	string func = "set_location_turns_spent";
+	call void func(pGoal, turns_spent);
 	return true;
 }
 
