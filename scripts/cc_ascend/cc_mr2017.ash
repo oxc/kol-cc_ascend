@@ -420,6 +420,7 @@ boolean kgbWasteClicks()
 	# Yes, this will not be pleasant if we matched our number and each page click changes the buttons.
 	while((get_property("_kgbClicksUsed").to_int() < clickLimit) && (clicked < 9))
 	{
+		int oldClick = clicked;
 		foreach ef in $effects[Items Are Forever, A View To Some Meat, Light!, The Spy Who Loved XP, Initiative And Let Die, The Living Hitpoints, License To Punch, Goldentongue, Thunderspell]
 		{
 			if(contains_text(get_property("cc_kgbTracker"), ":" + to_int(ef)))
@@ -438,6 +439,10 @@ boolean kgbWasteClicks()
 					break;
 				}
 			}
+		}
+		if(oldClick == clicked)
+		{
+			break;
 		}
 	}
 
@@ -1329,7 +1334,7 @@ boolean asdonAutoFeed(int goal)
 		}
 	}
 
-	if((get_fuel() < 37) && !doughAvailable)
+	if((get_fuel() < goal) && !doughAvailable)
 	{
 		if(item_amount($item[Wad Of Dough]) > 8)
 		{
@@ -1348,7 +1353,7 @@ boolean asdonAutoFeed(int goal)
 		}
 	}
 
-	goal = 37;
+	goal = 50;
 	if((get_fuel() < goal) && (my_meat() > 3500) && doughAvailable && isGeneralStoreAvailable())
 	{
 		int want = ((goal + 5) - get_fuel()) / 6;

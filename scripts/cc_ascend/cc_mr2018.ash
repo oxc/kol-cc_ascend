@@ -295,7 +295,7 @@ boolean fantasyRealmToken()
 		}
 	}
 
-	if(is100familiarRun())
+	if(is100familiarRun($familiar[Egg Benedict]))
 	{
 		return false;
 	}
@@ -1105,6 +1105,11 @@ boolean fightClubSpar(int limit)
 	{
 		return false;
 	}
+	if(!get_property("_daycareFights").to_boolean() && (get_property("_daycareGymSpar").to_int() < 1))
+	{
+		set_property("_daycareGymSpar", 1);
+	}
+
 	if((get_property("_daycareGymSpar").to_int() < limit) && get_property("daycareOpen").to_boolean())
 	{
 		string temp = visit_url("place.php?whichplace=town_wrong&action=townwrong_boxingdaycare");
@@ -1267,6 +1272,10 @@ boolean equipLatteForUnlock(location loc)
 	if(loc == $location[The Dark Neck Of The Woods])
 	{
 		if(get_property("latteUnlocks").contains_text("hellion"))
+		{
+			return false;
+		}
+		if(!hippy_stone_broken())
 		{
 			return false;
 		}

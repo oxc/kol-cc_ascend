@@ -220,7 +220,8 @@ boolean ccAdvBypass(int urlGetFlags, string[int] url, location loc, string optio
 		boolean retval = false;
 		if(!retval)
 		{
-			run_choice(get_property("choiceAdventure" + choice).to_int());
+			string temp = visit_url("choice.php?whichchoice=" + choice + "&pwd=&option=" + get_property("choiceAdventure" + choice));
+			//run_choice(get_property("choiceAdventure" + choice).to_int());
 			cli_execute("postcheese");
 			//We can no longer return an adventure return value here... is false acceptable?
 		}

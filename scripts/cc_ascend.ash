@@ -1,6 +1,6 @@
 script "cc_ascend.ash";
 notify cheesecookie;
-since r19105;
+since r19129;
 /***
 	svn checkout https://svn.code.sf.net/p/ccascend/code/cc_ascend
 	Killing is wrong, and bad. There should be a new, stronger word for killing like badwrong or badong. YES, killing is badong. From this moment, I will stand for the opposite of killing, gnodab.
@@ -7266,7 +7266,7 @@ boolean L12_sonofaBeach()
 			if(cc_voteMonster())
 			{
 				set_property("cc_combatDirective", "start;skill macrometeorite");
-				retval = cc_voteMonster(true, $location[Sonofa Beach], "");
+				retval = cc_voteMonster(false, $location[Sonofa Beach], "");
 				set_property("cc_combatDirective", "");
 				if(retval)
 				{
@@ -12044,7 +12044,7 @@ boolean L9_twinPeak()
 			}
 		}
 
-		if(elemental_resist($element[stench]) > 4)
+		if(elemental_resist($element[stench]) >= 4)
 		{
 			attemptNum = 1;
 			attempt = true;
@@ -13761,7 +13761,7 @@ boolean doTasks()
 			{
 				songboomSetting(3);
 			}
-			else if((cc_my_path() == "Disguises Delimit") && (get_property("cc_crypt") != "finished") && (get_property("_songboomCounter").to_int() == 10) && (get_property("_boomBoxSongsLeft").to_int() > 3))
+			else if((cc_my_path() == "Disguises Delimit") && (get_property("cc_crypt") != "finished") && (get_property("_boomBoxFights").to_int() == 10) && (get_property("_boomBoxSongsLeft").to_int() > 3))
 			{
 				songboomSetting(1);
 			}
@@ -14154,13 +14154,11 @@ void cc_begin()
 	backupSetting("afterAdventureScript", "scripts/postcheese.ash");
 	backupSetting("betweenAdventureScript", "scripts/precheese.ash");
 	backupSetting("betweenBattleScript", "scripts/precheese.ash");
+	backupSetting("trackVoteMonster", false);
 
 	backupSetting("choiceAdventure1107", 1);
 
-	if(get_property("counterScript") != "")
-	{
-		backupSetting("counterScript", "scripts/cheeseCounter.ash");
-	}
+	backupSetting("counterScript", "scripts/cheeseCounter.ash");
 
 	string charpane = visit_url("charpane.php");
 	if(contains_text(charpane, "<hr width=50%><table"))

@@ -227,6 +227,14 @@ string cc_combatHandler(int round, string opp, string text)
 		return cc_combatUse($item[Cigarette Lighter]);
 	}
 
+	if(cc_combatCanUse($item[Glark Cable], true) && (my_location() == $location[The Red Zeppelin]) && (get_property("questL11Ron") == "step3") && (get_property("_glarkCableUses").to_int() < 5))
+	{
+		if($monsters[Man With The Red Buttons, Red Butler, Red Fox, Red Skeleton] contains enemy)
+		{
+			return cc_combatUse($item[Glark Cable]);
+		}
+	}
+
 	if((my_class() == $class[Avatar of Sneaky Pete]) && canSurvive(2.0))
 	{
 		int maxAudience = 30;
@@ -507,6 +515,42 @@ string cc_combatHandler(int round, string opp, string text)
 		}
 	}
 
+	if(cc_combatCanUse($skill[Perceive Soul], true))
+	{
+		if((enemy == $monster[pygmy shaman]) && (my_location() == $location[The Hidden Apartment Building]) && (have_effect($effect[Thrice-Cursed]) == 0) && (get_property("_perceiveSoulMonster") != enemy))
+		{
+			return cc_combatUse($skill[Perceive Soul], true);
+		}
+		if((enemy == $monster[Pygmy Witch Accountant]) && (my_location() == $location[The Hidden Office Building]) && (get_property("_perceiveSoulMonster") != enemy))
+		{
+			return cc_combatUse($skill[Perceive Soul], true);
+		}
+		if((enemy == $monster[Writing Desk]) && (my_location() == $location[The Haunted Library]) && (get_property("writingDesksDefeated").to_int() < 5) && (get_property("_perceiveSoulMonster") != enemy))
+		{
+			return cc_combatUse($skill[Perceive Soul], true);
+		}
+		if(($monsters[Animated Ornate Nightstand, Blue Oyster Cultist, cabinet of Dr. Limpieza, Dairy Goat, Dirty Old Lihc, Green Ops Soldier, Monstrous Boiler, Morbid Skull, Possessed Wine Rack, Pygmy Bowler, Pygmy Witch Surgeon, Quiet Healer, Red Butler, Tomb Rat, Waiter Dressed As A Ninja] contains enemy) && (get_property("_perceiveSoulMonster") != enemy))
+		{
+			return cc_combatUse($skill[Perceive Soul], true);
+		}
+		//Topiary?
+		if(($monsters[Blur, Knob Goblin Harem Girl] contains enemy) && (get_property("_perceiveSoulMonster") != enemy))
+		{
+			return cc_combatUse($skill[Perceive Soul], true);
+		}
+		if(($monsters[Blooper] contains enemy) && (my_location() == $location[8-Bit Realm]) && (get_property("_perceiveSoulMonster") != enemy))
+		{
+			return cc_combatUse($skill[Perceive Soul], true);
+		}
+		if($monsters[Bob Racecar, Racecar Bob] contains enemy)
+		{
+			if((get_property("_perceiveSoulMonster") != $monster[Bob Racecar]) && (get_property("_perceiveSoulMonster") != $monster[Racecar Bob]))
+			{
+				return cc_combatUse($skill[Perceive Soul], true);
+			}
+		}
+	}
+
 	if(cc_combatCanUse($skill[Make Friends], true) && (get_property("makeFriendsMonster") != enemy) && (my_audience() >= 20))
 	{
 		if((enemy == $monster[Pygmy Shaman]) && (my_location() == $location[The Hidden Apartment Building]))
@@ -728,27 +772,27 @@ string cc_combatHandler(int round, string opp, string text)
 		combatState += "(banishercheck)";
 	}
 
-	if(cc_have_skill($skill[Meteor Lore]) && (get_property("_macrometeoriteUses").to_int() < 10) && (my_mp() > mp_cost($skill[Macrometeorite])) && (cc_my_path() != "G-Lover"))
+	if(cc_have_skill($skill[Meteor Lore]) && (get_property("_macrometeoriteUses").to_int() < 10) && cc_combatCanUse($skill[Macrometeorite], true) && (cc_my_path() != "G-Lover"))
 	{
-		if((enemy == $monster[Banshee Librarian]) && (item_amount($item[Killing Jar]) == 0))
+		if((enemy == $monster[Banshee Librarian]) && (item_amount($item[Killing Jar]) > 0))
 		{
 			return cc_combatUse($skill[Macrometeorite]);
 		}
-		if((enemy == $monster[Beefy Bodyguard Bat]) && ($location[The Boss Bat\'s Lair].turns_spent >= 4) && (my_location() == $location[The Boss Bat\'s Lair]))
+		if((enemy == $monster[Beefy Bodyguard Bat]) && ($location[The Boss Bat\'s Lair].turns_spent >= 4) && (my_location() == $location[The Boss Bat\'s Lair]) && (my_class() != $class[Vampyre]))
 		{
 			return cc_combatUse($skill[Macrometeorite]);
 		}
-		if((enemy == $monster[Government Agent]) && (my_location() == $location[Sonofa Beach]))
+		if(($monsters[Angry Ghost, Annoyed Snake, Government Agent, Government Bureaucrat, Sausage Goblin, Slime Blob, Terrible Mutant] contains enemy) && (my_location() == $location[Sonofa Beach]) && (item_amount($item[Barrel Of Gunpowder]) < 5))
 		{
 			return cc_combatUse($skill[Macrometeorite]);
 		}
-		if((enemy == $monster[Knob Goblin Madam]) && (item_amount($item[Knob Goblin Perfume]) == 0))
+		if((enemy == $monster[Knob Goblin Madam]) && (item_amount($item[Knob Goblin Perfume]) > 0))
 		{
 			return cc_combatUse($skill[Macrometeorite]);
 		}
 		if($monsters[Bookbat, Craven Carven Raven, Drunk Goat, Knight In White Satin, Knob Goblin Harem Guard, Mad Wino, Plaid Ghost, Possessed Laundry Press, Sabre-Toothed Goat, Senile Lihc, Skeletal Sommelier, Slick Lihc, White Chocolate Golem] contains enemy)
 		{
-			return cc_combatUse($skill[Macrometeorite]);
+			return cc_combatUse($skill[Macrometeorite], true);
 		}
 		if((enemy == $monster[Stone Temple Pirate]) && possessEquipment($item[Eyepatch]))
 		{
@@ -1370,7 +1414,7 @@ string cc_combatHandler(int round, string opp, string text)
 		}
 		break;
 	case $class[Vampyre]:
-			if((my_hp() < my_maxhp()) && cc_combatCanUse($skill[Dark Feast], true))
+			if((my_hp() < my_maxhp()) && cc_combatCanUse($skill[Dark Feast], true) && (enemy.base_hp > 0))
 			{
 				//Current HP is what matters
 				if(enemy.base_hp <= 30)
@@ -1382,7 +1426,14 @@ string cc_combatHandler(int round, string opp, string text)
 					return cc_combatUse($skill[Dark Feast], true);
 				}
 			}
-			foreach sk in $skills[Chill Of The Tomb, Piercing Gaze, Savage Bite]
+			foreach sk in $skills[Chill Of The Tomb]
+			{
+				if(cc_combatCanUse(sk) && (enemy.defense_element != $element[cold]))
+				{
+					return cc_combatUse(sk);
+				}
+			}
+			foreach sk in $skills[Piercing Gaze, Savage Bite]
 			{
 				if(cc_combatCanUse(sk))
 				{
@@ -1661,13 +1712,17 @@ string findBanisher(int round, string opp, string text)
 		}
 	}
 
-	foreach act in $skills[Banishing Shout, Asdon Martin: Spring-Loaded Front Bumper, Talk About Politics, Batter Up!, Thunder Clap, Curse of Vacation, Breathe Out, Snokebomb, KGB Tranquilizer Dart, Beancannon]
+	foreach act in $skills[Baleful Howl, Banishing Shout, Asdon Martin: Spring-Loaded Front Bumper, Talk About Politics, Batter Up!, Thunder Clap, Curse of Vacation, Breathe Out, Snokebomb, KGB Tranquilizer Dart, Beancannon]
 	{
-		if((!contains_text(get_property("cc_gremlinBanishes"), act)) && cc_have_skill(act) && (my_mp() >= mp_cost(act)) && (my_thunder() >= thunder_cost(act)) && (get_fuel() >= fuel_cost(act)))
+		if(!contains_text(get_property("cc_gremlinBanishes"), act) && cc_have_skill(act) && (my_mp() >= mp_cost(act)) && (my_hp() > hp_cost(act)) && (my_thunder() >= thunder_cost(act)) && (get_fuel() >= fuel_cost(act)))
 		{
-			if(act == $skill[Banishing Shout])
+			if((act == $skill[Banishing Shout]) && !cc_combatCanUse(act, true))
 			{
-				return cc_combatUse(act, true);
+				continue;
+			}
+			if((act == $skill[Baleful Howl]) && (get_property("_balefulHowlUses").to_int() >= 10))
+			{
+				continue;
 			}
 			if((act == $skill[Batter Up!]) && ((my_fury() < 5) || (item_type(equipped_item($slot[weapon])) != "club")))
 			{
@@ -3358,11 +3413,11 @@ string combat_flyer()
 
 	if((my_location() != $location[The Battlefield (Frat Uniform)]) && (my_location() != $location[The Battlefield (Hippy Uniform)]) && !get_property("cc_ignoreFlyer").to_boolean() && (get_property("flyeredML").to_int() < 10000))
 	{
-		foreach sk in $skills[Beanscreen, Blood Chains, Broadside, Curse Of Indecision, Mind Bullets, Snap Fingers, Soul Bubble]
+		foreach sk in $skills[Beanscreen, Blood Chains, Broadside, Curse Of Indecision, Mind Bullets, Snap Fingers, Soul Bubble, Blood Chains]
 		{
 			if(cc_combatCanUse(sk, true))
 			{
-				cc_combatUse(sk, true);
+				return cc_combatUse(sk, true);
 			}
 		}
 
@@ -3407,6 +3462,10 @@ itemSkill_t cc_convertAction(string action)
 			retval.it = to_item(action);
 		}
 	}
+//	else if(action == "runaway")
+//	{
+//		retval.sk = $skill[Run Away];
+//	}
 	else
 	{
 		abort("Can not convert action '" + action + "' into a skill or item.");
