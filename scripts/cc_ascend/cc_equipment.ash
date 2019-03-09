@@ -544,6 +544,18 @@ void equipBaselineBack()
 		break;
 	}
 
+	if(my_class() == $class[Vampyre])
+	{
+		if(my_level() >= 13)
+		{
+			poss = ListInsert(poss, $item[vampyric cloake]);
+		}
+		if(!get_property("_vampyricCloakeDrop").to_boolean())
+		{
+			poss = ListInsert(poss, $item[vampyric cloake]);
+		}
+	}
+
 	if(expectGhostReport())
 	{
 		poss = poss.ListInsert($item[Protonic Accelerator Pack]);
@@ -975,7 +987,7 @@ void equipRollover()
 	}
 
 	toEquip = $item[none];
-	poss = List($items[Time Bandit Time Towel, Chalk Chlamys, Auxiliary Backbone, Gabardine Gunnysack, Burning Cape, First Post Shirt - Cir Senam, Octolus-Skin Cloak]);
+	poss = List($items[Time Bandit Time Towel, Chalk Chlamys, Auxiliary Backbone, Gabardine Gunnysack, Vampyric Cloake, Burning Cape, First Post Shirt - Cir Senam, Octolus-Skin Cloak]);
 
 	toEquip = handleSolveThing(poss, $slot[back]);
 	if((toEquip != $item[none]) && (toEquip != equipped_item($slot[back])))
