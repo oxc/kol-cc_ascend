@@ -1,6 +1,6 @@
 script "cc_ascend.ash";
 notify cheesecookie;
-since r19129;
+since r19141;
 /***
 	svn checkout https://svn.code.sf.net/p/ccascend/code/cc_ascend
 	Killing is wrong, and bad. There should be a new, stronger word for killing like badwrong or badong. YES, killing is badong. From this moment, I will stand for the opposite of killing, gnodab.
@@ -1190,8 +1190,16 @@ boolean doThemtharHills(boolean trickMode)
 		ccMaximize("meat drop, outfit " + wearing + ", -equip snow suit, " + cc_meatFamiliarMaximizerString(), 1500, 0, false);
 		handleFamiliar(my_familiar());
 	}
-//	int expectedMeat = numeric_modifier("Generated:_spec", "meat drop");
 
+	if((my_class() == $class[Vampyre]) && (my_daycount() == 2))
+	{
+		if(!contains_text(get_property("ensorcelModifiers"), "Meat Drop") && have_skill($skill[Ensorcel]))
+		{
+			abort("Brad Pitt does not have a Meat Drop Ensorcel active");
+		}
+	}
+
+//	int expectedMeat = numeric_modifier("Generated:_spec", "meat drop");
 
 	buffMaintain($effect[Greedy Resolve], 0, 1, 1);
 	buffMaintain($effect[Disco Leer], 10, 1, 1);
@@ -14233,6 +14241,7 @@ void cc_begin()
 
 void main()
 {
-	cc_begin(); 
+	print("Please note that cc_ascend is no longer a public script.");
+	cc_begin();
 }
 
