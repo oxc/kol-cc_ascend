@@ -247,17 +247,17 @@ void handleOffHand()
 		}
 		else
 		{
-			poss = $items[7-ball, 5-ball, 2-ball, 1-ball, Hot Plate, Disturbing Fanfic, Coffin Lid, Tesla\'s Electroplated Beans, Rubber Ribcage, Heavy-Duty Clipboard, Meteorite Guard, Party Crasher, Sawblade Shield, Wicker Shield, Keg Shield, Six-Rainbow Shield, Whatsian Ionic Pliers, Little Black Book, KoL Con 13 Snowglobe, Yorick, Astral Shield, Latte Lovers Member\'s Mug, Kramco Sausage-o-Matic&trade;, A Light That Never Goes Out, Astral Statuette, Operation Patriot Shield, Ox-head Shield, Fake Washboard, Barrel Lid];
+			poss = $items[7-ball, 5-ball, 2-ball, 1-ball, Hot Plate, Disturbing Fanfic, Meteorite Guard, Coffin Lid, Tesla\'s Electroplated Beans, Rubber Ribcage, Heavy-Duty Clipboard, Snarling Wolf Shield, Meteorite Guard, Party Crasher, Sawblade Shield, Wicker Shield, Keg Shield, Six-Rainbow Shield, Whatsian Ionic Pliers, Little Black Book, KoL Con 13 Snowglobe, Yorick, Astral Shield, Latte Lovers Member\'s Mug, Kramco Sausage-o-Matic&trade;, A Light That Never Goes Out, Astral Statuette, Operation Patriot Shield, Ox-head Shield, Fake Washboard, Barrel Lid];
 
 			if(have_skill($skill[Beancannon]) && (get_property("_beancannonUses").to_int() < 5))
 			{
-				poss = $items[7-ball, 5-ball, 2-ball, 1-ball, Hot Plate, Disturbing Fanfic, Coffin Lid, Rubber Ribcage, Astral Statuette, Heavy-Duty Clipboard, KoL Con 13 Snowglobe, Sawblade Shield, Wicker Shield, Keg Shield, Whatsian Ionic Pliers, Little Black Book, Tesla\'s Electroplated Beans, World\'s Blackest-Eyed Peas, Trader Olaf\'s Exotic Stinkbeans, Shrub\'s Premium Baked Beans, Hellfire Spicy Beans, Frigid Northern Beans, Heimz Fortified Kidney Beans, Pork \'n\' Pork \'n\' Pork \'n\' Beans, Mixed Garbanzos and Chickpeas, Yorick, Astral Shield, Latte Lovers Member\'s Mug, Kramco Sausage-o-Matic&trade;, A Light That Never Goes Out, Ox-head Shield, Operation Patriot Shield, Fake Washboard, Barrel Lid];
+				poss = $items[7-ball, 5-ball, 2-ball, 1-ball, Hot Plate, Disturbing Fanfic, Coffin Lid, Rubber Ribcage, Astral Statuette, Heavy-Duty Clipboard, Snarling Wolf Shield, KoL Con 13 Snowglobe, Sawblade Shield, Wicker Shield, Keg Shield, Whatsian Ionic Pliers, Little Black Book, Tesla\'s Electroplated Beans, World\'s Blackest-Eyed Peas, Trader Olaf\'s Exotic Stinkbeans, Shrub\'s Premium Baked Beans, Hellfire Spicy Beans, Frigid Northern Beans, Heimz Fortified Kidney Beans, Pork \'n\' Pork \'n\' Pork \'n\' Beans, Mixed Garbanzos and Chickpeas, Yorick, Astral Shield, Latte Lovers Member\'s Mug, Kramco Sausage-o-Matic&trade;, A Light That Never Goes Out, Ox-head Shield, Operation Patriot Shield, Fake Washboard, Barrel Lid];
 			}
 		}
 	}
 	if(my_class() == $class[Turtle Tamer])
 	{
-		poss = $items[Hot Plate, Coffin Lid, Sewer Turtle, Barskin Buckler, Turtle Wax Shield, Clownskin Buckler, Box Turtle, Demon Buckler, Meat Shield, White Satin Shield, Meteorite Guard, Polyester Pad, Gnauga Hide Buckler, Yakskin Buckler, Rubber Ribcage, Penguin Skin Buckler, Hippo Skin Buckler, Tortoboggan Shield, Padded Tortoise, Painted Shield, Spiky Turtle Shield, Wicker Shield, Catskin Buckler, Battered Hubcap, Keg Shield, Mer-kin Roundshield, KoL Con 13 Snowglobe, Latte Lovers Member\'s Mug, Kramco Sausage-o-Matic&trade;, Ouija Board\, Ouija Board, Ox-head Shield, Barrel Lid, Operation Patriot Shield, Fake Washboard];
+		poss = $items[Hot Plate, Coffin Lid, Sewer Turtle, Barskin Buckler, Turtle Wax Shield, Clownskin Buckler, Box Turtle, Demon Buckler, Meat Shield, White Satin Shield, Snarling Wolf Shield, Meteorite Guard, Polyester Pad, Gnauga Hide Buckler, Yakskin Buckler, Rubber Ribcage, Penguin Skin Buckler, Hippo Skin Buckler, Tortoboggan Shield, Padded Tortoise, Painted Shield, Spiky Turtle Shield, Wicker Shield, Catskin Buckler, Battered Hubcap, Keg Shield, Mer-kin Roundshield, KoL Con 13 Snowglobe, Latte Lovers Member\'s Mug, Kramco Sausage-o-Matic&trade;, Ouija Board\, Ouija Board, Ox-head Shield, Barrel Lid, Operation Patriot Shield, Fake Washboard];
 	}
 
 	if(my_class() == $class[Pastamancer])
@@ -268,13 +268,13 @@ void handleOffHand()
 		}
 		else
 		{
-			poss = $items[Hot Plate, Disturbing Fanfic, Coffin Lid, Rubber Ribcage, Heavy-Duty Clipboard, Meteorite Guard, KoL Con 13 Snowglobe, Sawblade Shield, Wicker Shield, Keg Shield, Sticky Hand Whip, Whatsian Ionic Pliers, Little Black Book, Astral Shield, Astral Statuette, Yorick, A Light That Never Goes Out, Ox-head Shield, Latte Lovers Member\'s Mug, Kramco Sausage-o-Matic&trade;, Barrel Lid, Basaltamander Buckler, Operation Patriot Shield, Jarlsberg\'s Pan];
+			poss = $items[Hot Plate, Disturbing Fanfic, Coffin Lid, Rubber Ribcage, Heavy-Duty Clipboard, Meteorite Guard, Snarling Wolf Shield, KoL Con 13 Snowglobe, Sawblade Shield, Wicker Shield, Keg Shield, Sticky Hand Whip, Whatsian Ionic Pliers, Little Black Book, Astral Shield, Astral Statuette, Yorick, A Light That Never Goes Out, Ox-head Shield, Latte Lovers Member\'s Mug, Kramco Sausage-o-Matic&trade;, Barrel Lid, Basaltamander Buckler, Operation Patriot Shield, Jarlsberg\'s Pan];
 		}
 	}
 
 	if(my_class() == $class[Sauceror])
 	{
-		poss = $items[Hot Plate, Low-Budget Shield, Disturbing Fanfic, Coffin Lid, Rubber Ribcage, Heavy-Duty Clipboard, Meteorite Guard, Sawblade Shield, Wicker Shield, Keg Shield, Whatsian Ionic Pliers, Little Black Book, KoL Con 13 Snowglobe, Astral Shield, Astral Statuette, Yorick, Ox-head Shield, Latte Lovers Member\'s Mug, Kramco Sausage-o-Matic&trade;, Operation Patriot Shield, Jarlsberg\'s Pan, Barrel Lid, Basaltamander Buckler, A Light that Never Goes Out];
+		poss = $items[Hot Plate, Low-Budget Shield, Disturbing Fanfic, Coffin Lid, Rubber Ribcage, Heavy-Duty Clipboard, Snarling Wolf Shield, Meteorite Guard, Sawblade Shield, Wicker Shield, Keg Shield, Whatsian Ionic Pliers, Little Black Book, KoL Con 13 Snowglobe, Astral Shield, Astral Statuette, Yorick, Ox-head Shield, Latte Lovers Member\'s Mug, Kramco Sausage-o-Matic&trade;, Operation Patriot Shield, Jarlsberg\'s Pan, Barrel Lid, Basaltamander Buckler, A Light that Never Goes Out];
 	}
 
 	if(my_class() == $class[Disco Bandit])
@@ -285,7 +285,7 @@ void handleOffHand()
 		}
 		else
 		{
-			poss = $items[Hot Plate, Disturbing Fanfic, Coffin Lid, Rubber Ribcage, Heavy-Duty Clipboard, Meteorite Guard, KoL Con 13 Snowglobe, Sawblade Shield, Wicker Shield, Keg Shield, Whatsian Ionic Pliers, Little Black Book, Astral Shield, Astral Statuette, Latte Lovers Member\'s Mug, Kramco Sausage-o-Matic&trade;, Yorick, Ox-head Shield, Operation Patriot Shield, Fake Washboard, A Light That Never Goes Out, Barrel Lid];
+			poss = $items[Hot Plate, Disturbing Fanfic, Coffin Lid, Rubber Ribcage, Heavy-Duty Clipboard, Snarling Wolf Shield, Meteorite Guard, KoL Con 13 Snowglobe, Sawblade Shield, Wicker Shield, Keg Shield, Whatsian Ionic Pliers, Little Black Book, Astral Shield, Astral Statuette, Latte Lovers Member\'s Mug, Kramco Sausage-o-Matic&trade;, Yorick, Ox-head Shield, Operation Patriot Shield, Fake Washboard, A Light That Never Goes Out, Barrel Lid];
 		}
 	}
 
@@ -398,6 +398,10 @@ item handleSolveThing(item[int] poss, slot loc)
 		{
 			ignore = true;
 		}
+		if((weapon_type(thing) != $stat[none]) && (loc == $slot[off-hand]) && !cc_have_skill($skill[Ambidextrous Funkslinging]))
+		{
+			ignore = true;
+		}
 		if(!glover_usable(thing))
 		{
 			if(thing != $item[Protonic Accelerator Pack])
@@ -460,7 +464,7 @@ void equipBaselinePants()
 {
 	item toEquip = $item[none];
 
-	item[int] poss = List($items[Old Sweatpants, Studded Leather Boxer Shorts, Knob Goblin Harem Pants, three-legged pants, Knob Goblin Pants, Pants Of The Slug Lord, Chain-Mail Monokini, Stylish Swimsuit, Union Scalemail Pants, Genie\'s Pants, Hep Waders, Paper-Plate-Mail Pants, Troutpiece, Bloody Clown Pants, Alpha-Mail Pants, Knob Goblin Uberpants, Psychic\'s Pslacks, Filthy Corduroys, Antique Greaves, Ninja Hot Pants, Demonskin Trousers, Leotarrrd, Swashbuckling Pants, Burnt Snowpants, Troutpiece, Snowboarder Pants, Oil Slacks, Furry Pants, Pygmy Briefs, Bloodied Surgical Dungarees, Spangly Mariachi Pants, Stainless Steel Slacks, Vicar\'s Tutu, Troll Britches, Xiblaxian Stealth Trousers, Distressed Denim Pants, Greatest American Pants, Pantogram Pants, Troutsers, Bankruptcy Barrel, Astral Shorts, Pantsgiving]);
+	item[int] poss = List($items[Old Sweatpants, Studded Leather Boxer Shorts, Knob Goblin Harem Pants, three-legged pants, Knob Goblin Pants, Bugbear Bungguard, Pants Of The Slug Lord, Chain-Mail Monokini, Stylish Swimsuit, Discarded Swimming Trunks, Union Scalemail Pants, Genie\'s Pants, Hep Waders, Paper-Plate-Mail Pants, Troutpiece, Bloody Clown Pants, Alpha-Mail Pants, Knob Goblin Uberpants, Psychic\'s Pslacks, Filthy Corduroys, Antique Greaves, Ninja Hot Pants, Demonskin Trousers, Leotarrrd, Swashbuckling Pants, Burnt Snowpants, Troutpiece, Snowboarder Pants, Oil Slacks, Furry Pants, Pygmy Briefs, Bloodied Surgical Dungarees, Spangly Mariachi Pants, Stainless Steel Slacks, Vicar\'s Tutu, Troll Britches, Xiblaxian Stealth Trousers, Distressed Denim Pants, Greatest American Pants, Pantogram Pants, Troutsers, Bankruptcy Barrel, Astral Shorts, Pantsgiving]);
 
 	if(my_primestat() == $stat[Muscle])
 	{
@@ -487,7 +491,7 @@ void equipBaselineShirt()
 		return;
 	}
 	item toEquip = $item[none];
-	item[int] poss = List($items[Professor What T-Shirt, Barskin Cloak, Thinknerd T-Shirt, Harem Girl T-Shirt, Clownskin Harness, Bronze Breastplate, KoL Con 13 T-Shirt, White Snakeskin Duster, Grateful Undead T-shirt, Demonskin Jacket, Gnauga Hide Vest, Tuxedo Shirt, Grungy Flannel Shirt, Lynyrdskin Tunic, Makeshift Garbage Shirt, Glass Casserole Dish, Surgical Apron, Punk Rock Jacket, Bat-Ass Leather Jacket, Midriff Scrubs, Star Shirt, Yak Anorak, Dragonscale Breastplate, Blessed Rustproof +2 Gray Dragon Scale Mail, Ultracolor&trade; Shirt, Sea Salt Scrubs, Shark Jumper, Bod-Ice, Liam\'s Mail, Astral Shirt, Stephen\'s Lab Coat, LOV Eardigan, Sneaky Pete\'s Leather Jacket, Sneaky Pete\'s Leather Jacket (Collar Popped)]);
+	item[int] poss = List($items[Professor What T-Shirt, Barskin Cloak, Thinknerd T-Shirt, Harem Girl T-Shirt, Clownskin Harness, Bronze Breastplate, KoL Con 13 T-Shirt, White Snakeskin Duster, Grateful Undead T-shirt, Demonskin Jacket, Gnauga Hide Vest, Tuxedo Shirt, Grungy Flannel Shirt, Lynyrdskin Tunic, Makeshift Garbage Shirt, Glass Casserole Dish, Surgical Apron, Punk Rock Jacket, Bat-Ass Leather Jacket, Midriff Scrubs, Star Shirt, Yak Anorak, Dragonscale Breastplate, Blessed Rustproof +2 Gray Dragon Scale Mail, Ultracolor&trade; Shirt, Sea Salt Scrubs, Shark Jumper, Bod-Ice, Liam\'s Mail, Astral Shirt, Dragonscale Breastplate, Stephen\'s Lab Coat, LOV Eardigan, Sneaky Pete\'s Leather Jacket, Sneaky Pete\'s Leather Jacket (Collar Popped)]);
 
 	if(my_class() == $class[Vampyre])
 	{
@@ -522,7 +526,7 @@ void equipBaselineBack()
 {
 	item toEquip = $item[none];
 
-	item[int] poss = List($items[Whatsit-Covered Turtle Shell, Black Cloak, Pillow Shell, Oil Shell, Gabardine Gunnysack, Fiberglass Frock, Giant Gym Membership Card, Frozen Turtle Shell, Spant Backplate, Misty Cloak, Misty Cape, Misty Robe, Makeshift Cape, Chalk Chlamys, Polyester Parachute, Buddy Bjorn, Camp Scout Backpack, Protonic Accelerator Pack]);
+	item[int] poss = List($items[Whatsit-Covered Turtle Shell, Black Cloak, Pillow Shell, Oil Shell, Gabardine Gunnysack, Fiberglass Frock, Giant Gym Membership Card, Frozen Turtle Shell, Spant Backplate, Misty Cloak, Misty Cape, Misty Robe, Makeshift Cape, Vampyric Cloake, Chalk Chlamys, Polyester Parachute, Buddy Bjorn, Camp Scout Backpack, Protonic Accelerator Pack]);
 
 	switch(my_primestat())
 	{
@@ -546,11 +550,11 @@ void equipBaselineBack()
 
 	if(my_class() == $class[Vampyre])
 	{
-		if(my_level() >= 13)
+		if(!get_property("_vampyricCloakeDrop").to_boolean() || (my_level() >= 13))
 		{
 			poss = ListInsert(poss, $item[vampyric cloake]);
 		}
-		if(!get_property("_vampyricCloakeDrop").to_boolean())
+		else if((get_property("darkGyfftePoints").to_int() >= 18) && (my_level() >= 12))
 		{
 			poss = ListInsert(poss, $item[vampyric cloake]);
 		}
@@ -573,7 +577,7 @@ void equipBaselineHat()
 {
 	item toEquip = $item[none];
 
-	item[int] poss = List($items[Knob Goblin Harem Veil, Snorkel, Seal-Skull Helmet, Helmet Turtle, Ravioli Hat, Hollandaise Helmet, Kentucky-Style Derby, Knobby Helmet Turtle, Viking Helmet, Eyepatch, Pentacorn Hat, Oversized Skullcap, Goofily-Plumed Helmet, Dolphin King\'s Crown, Yellow Plastic Hard Hat, Wooden Salad Bowl, Football Helmet, Filthy Knitted Dread Sack, Chef\'s Hat, Genie\'s Turbane, Fuzzy Earmuffs, Bellhop\'s Hat, Crown of the Goblin King, Gravy Boat, one-gallon hat, two-gallon hat, three-gallon hat, four-gallon hat, five-gallon hat, six-gallon hat, seven-gallon hat, Psychic\'s Circlet, Meteortarboard, Wad Of Used Tape, Astral Chapeau, Van der Graaf helmet, Safarrri Hat, Mohawk Wig, Brown Felt Tophat, Mark I Steam-Hat, Burning Paper Hat, Mark II Steam-Hat, eight-gallon hat, nine-gallon hat, ten-gallon hat, eleven-gallon hat, Cold Water Bottle, Beer Helmet, Mark III Steam-Hat, Mark IV Steam-Hat, Nurse\'s Hat, Training Helmet, Fuzzy Earmuffs, Mark V Steam-Hat, Hairpiece On Fire, Reinforced Beaded Headband, Giant Yellow Hat, Xiblaxian Stealth Cowl, Very Pointy Crown, Boris\'s Helm, Boris\'s Helm (askew), The Crown of Ed the Undying, Team Avarice Cap]);
+	item[int] poss = List($items[Knob Goblin Harem Veil, Snorkel, Seal-Skull Helmet, Helmet Turtle, Ravioli Hat, Hollandaise Helmet, Kentucky-Style Derby, Knobby Helmet Turtle, Viking Helmet, Bugbear Beanie, Eyepatch, Pentacorn Hat, Oversized Skullcap, Pentagram Bandana, Goofily-Plumed Helmet, Dolphin King\'s Crown, Yellow Plastic Hard Hat, Wooden Salad Bowl, Football Helmet, Filthy Knitted Dread Sack, Chef\'s Hat, Genie\'s Turbane, Fuzzy Earmuffs, Bellhop\'s Hat, Crown of the Goblin King, Gravy Boat, one-gallon hat, two-gallon hat, three-gallon hat, four-gallon hat, five-gallon hat, six-gallon hat, seven-gallon hat, Psychic\'s Circlet, Meteortarboard, Wad Of Used Tape, Astral Chapeau, Van der Graaf helmet, Safarrri Hat, Mohawk Wig, Brown Felt Tophat, Mark I Steam-Hat, Burning Paper Hat, Mark II Steam-Hat, eight-gallon hat, nine-gallon hat, ten-gallon hat, eleven-gallon hat, Cold Water Bottle, Beer Helmet, Mark III Steam-Hat, Mark IV Steam-Hat, Nurse\'s Hat, Training Helmet, Fuzzy Earmuffs, Mark V Steam-Hat, Hairpiece On Fire, Reinforced Beaded Headband, Giant Yellow Hat, Xiblaxian Stealth Cowl, Very Pointy Crown, Boris\'s Helm, Boris\'s Helm (askew), The Crown of Ed the Undying, Team Avarice Cap]);
 
 	if(my_class() == $class[Vampyre])
 	{
@@ -614,7 +618,7 @@ void equipBaselineWeapon()
 	switch(my_class())
 	{
 	case $class[Seal Clubber]:
-		poss = $items[Seal-Clubbing Club, Gnollish Flyswatter, Club of Corruption, Remaindered Axe, Skeleton Bone, Corrupt Club of Corruption, Flaming Crutch, Homoerotic Frat-Paddle, Kneecapping Stick, Corrupt Club of Corrupt Corruption, Spiked Femur, Severed Flipper, Gnawed-Up Dog Bone, Mannequin Leg, Infernal Toilet Brush, Hilarious Comedy Prop, Giant Foam Finger, Red Hot Poker, Maxwell\'s Silver Hammer, Elegant Nightstick, Curmudgel, Giant Foam Finger, Oversized Pipe, Ghast Iron Cleaver, Frozen Seal Spine, Stainless Steel Shillelagh, Porcelain Police Baton, Bass Clarinet, Fish Hatchet, Lead Pipe, Meat Tenderizer Is Murder, Dented Scepter];
+		poss = $items[Seal-Clubbing Club, Gnollish Flyswatter, Club of Corruption, Remaindered Axe, Skeleton Bone, Corrupt Club of Corruption, Flaming Crutch, Orcish Frat-Paddle, Kneecapping Stick, Corrupt Club of Corrupt Corruption, Spiked Femur, Severed Flipper, Gnawed-Up Dog Bone, Mannequin Leg, Infernal Toilet Brush, Hilarious Comedy Prop, Giant Foam Finger, Red Hot Poker, Maxwell\'s Silver Hammer, Elegant Nightstick, Curmudgel, Giant Foam Finger, Oversized Pipe, Ghast Iron Cleaver, Frozen Seal Spine, Stainless Steel Shillelagh, Porcelain Police Baton, Bass Clarinet, Fish Hatchet, Lead Pipe, Meat Tenderizer Is Murder, Dented Scepter];
 		break;
 	case $class[Turtle Tamer]:
 		poss = $items[Turtle Totem, Knob Goblin Tongs, Knob Goblin Scimitar, Skeleton Bone, Corn Holder, Eggbeater, Elegant Nightstick, Law-Abiding Citizen Cane, Red-Hot Sausage Fork, Mace of the Tortoise, Oversized Pizza Cutter, Maxwell\'s Silver Hammer, Witty Rapier, Ancient Ice Cream Scoop, Antique Machete, Spectral Axe, Short-Handled Mop, Fiberglass Foil, Ghast Iron Cleaver, Oversized Pipe, Octopus\'s Spade, Rusty Piece Of Rebar, Thor\'s Pliers, Rope, Lead Pipe, Work Is A Four Letter Sword, Bass Clarinet, Fish Hatchet, Garbage Sticker, Dented Scepter];
@@ -645,7 +649,7 @@ void equipBaselineWeapon()
 		poss = $items[Staff of the Standalone Cheese];
 		break;
 	case $class[Cow Puncher]:
-		poss = $items[Seal-Clubbing Club, Gnollish Flyswatter, Club of Corruption, Remaindered Axe, Skeleton Bone, Corrupt Club of Corruption, Flaming Crutch, Homoerotic Frat-Paddle, Kneecapping Stick, Corrupt Club of Corrupt Corruption, Spiked Femur, Severed Flipper, Mannequin Leg, Infernal Toilet Brush, Hilarious Comedy Prop, Giant Foam Finger, Red Hot Poker, Maxwell\'s Silver Hammer, Elegant Nightstick, Oversized Pipe, Ghast Iron Cleaver, Frozen Seal Spine, Stainless Steel Shillelagh, Porcelain Police Baton, Lead Pipe, Meat Tenderizer Is Murder, Dented Scepter];
+		poss = $items[Seal-Clubbing Club, Gnollish Flyswatter, Club of Corruption, Remaindered Axe, Skeleton Bone, Corrupt Club of Corruption, Flaming Crutch, Orcish Frat-Paddle, Kneecapping Stick, Corrupt Club of Corrupt Corruption, Spiked Femur, Severed Flipper, Mannequin Leg, Infernal Toilet Brush, Hilarious Comedy Prop, Giant Foam Finger, Red Hot Poker, Maxwell\'s Silver Hammer, Elegant Nightstick, Oversized Pipe, Ghast Iron Cleaver, Frozen Seal Spine, Stainless Steel Shillelagh, Porcelain Police Baton, Lead Pipe, Meat Tenderizer Is Murder, Dented Scepter];
 		break;
 	case $class[Beanslinger]:
 		poss = $items[Pasta Spoon, Cardboard Wakizashi, Dishrag, Corn Holder, Eggbeater, Oversized Pizza Cutter, Chopsticks, Thor\'s Pliers, Wrench];
@@ -657,7 +661,7 @@ void equipBaselineWeapon()
 		poss = $items[Finger Cymbals, Double-Barreled Sling, Hilarious Comedy Prop, Space Tourist Phaser, Frigid Derringer, Thor\'s Pliers, Bass Clarinet, Frankly Mr. Shank];
 		break;
 	case $class[Vampyre]:
-		poss = $items[Pasta Spoon, Knob Goblin Tongs, Dishrag, Corn Holder, Eggbeater, Cardboard Wakizashi, Elegant Nightstick, Witty Rapier, Astral Mace, Fiberglass Foil, Thor\'s Pliers, Wrench, Fish Hatchet, Bass Clarinet, Hand That Rocks The Ladle];
+		poss = $items[Pasta Spoon, Knob Goblin Tongs, Dishrag, Corn Holder, Eggbeater, Cardboard Wakizashi, Astral Mace, Witty Rapier, Elegant Nightstick, Giant Cactus Quill, The Nuge\'s Favorite Crossbow, Fiberglass Foil, Thor\'s Pliers, Wrench, Fish Hatchet, Bass Clarinet, Hand That Rocks The Ladle];
 		break;
 
 	default:
@@ -870,7 +874,7 @@ void equipBaselineAcc2()
 	boolean[item] poss;
 	if((my_level() >= 13) && (get_property("flyeredML").to_int() >= 10000))
 	{
-		poss = $items[Shiny Ring, Torquoise Ring, Jaunty Feather, Stuffed Shoulder Parrot, Genie\'s Bracers, Silent Nightlight, Time-Twitching Toolbelt, Glow-in-the-dark necklace, Glowing Red Eye, Bonerdagon Necklace, Batskin Belt, Jangly Bracelet, Pirate Fledges, Iron Beta of Industry, Your Cowboy Boots, Sphygmayomanometer, Barrel Hoop Earring, Codpiece, World\'s Best Adventurer Sash];
+		poss = $items[Shiny Ring, Torquoise Ring, Jaunty Feather, Stuffed Shoulder Parrot, Genie\'s Bracers, Silent Nightlight, Time-Twitching Toolbelt, Glow-in-the-dark necklace, Glowing Red Eye, Bonerdagon Necklace, Batskin Belt, Jangly Bracelet, Pirate Fledges, Iron Beta of Industry, Your Cowboy Boots, Sphygmayomanometer, Brutal Brogues, Draftsman\'s Driving Gloves, Nouveau Nosering, Battle Broom, Barrel Hoop Earring, Codpiece, World\'s Best Adventurer Sash];
 	}
 	else
 	{
@@ -880,7 +884,7 @@ void equipBaselineAcc2()
 		}
 		else
 		{
-			poss = $items[Shiny Ring, Torquoise Ring, Jaunty Feather, Vampire Collar, Stuffed Shoulder Parrot, Genie\'s Bracers, Silent Nightlight, imp unity ring, garish pinky ring, batskin belt, Jolly Roger Charrrm Bracelet, Glowing Red Eye, Jangly Bracelet, Pirate Fledges, glow-in-the-dark necklace, Compression Stocking, Wicker Kickers, Iron Beta of Industry, Sphygmayomanometer, perfume-soaked bandana, your cowboy boots, World\'s Best Adventurer Sash, Hand In Glove, barrel hoop earring, Gumshoes, Caveman Dan\'s Favorite Rock, Brutal Brogues, Draftsman\'s Driving Gloves, Nouveau Nosering, Battle Broom];
+			poss = $items[Shiny Ring, Torquoise Ring, Jaunty Feather, Vampire Collar, Stuffed Shoulder Parrot, Genie\'s Bracers, Silent Nightlight, imp unity ring, garish pinky ring, batskin belt, Jolly Roger Charrrm Bracelet, Glowing Red Eye, Sphygmomanometer, Jangly Bracelet, Pirate Fledges, glow-in-the-dark necklace, Compression Stocking, Wicker Kickers, Iron Beta of Industry, Sphygmayomanometer, perfume-soaked bandana, your cowboy boots, World\'s Best Adventurer Sash, Hand In Glove, barrel hoop earring, Gumshoes, Caveman Dan\'s Favorite Rock, Brutal Brogues, Draftsman\'s Driving Gloves, Nouveau Nosering, Battle Broom];
 		}
 	}
 	toEquip = handleSolveThing(poss, $slot[acc2]);
@@ -893,7 +897,17 @@ void equipBaselineAcc2()
 void equipBaselineAcc3()
 {
 	item toEquip = $item[none];
-	item[int] poss = List($items[Jaunty Feather, Garish Pinky Ring, ring of telling skeletons what to do, Glowing Red Eye, Blackberry Galoshes, Meteorthopedic Shoes, grumpy old man charrrm bracelet, Pirate Fledges, Plastic Detective Badge, Bronze Detective Badge, Mr. Accessory Jr., Silver Detective Badge, Gold Detective Badge, Ring Of The Skeleton Lord, Tube Sock, Time-Twitching Toolbelt, Glow-in-the-dark necklace, Xiblaxian Holo-Wrist-Puter, Sphygmayomanometer, LOV Earrings, Badge Of Authority, Codpiece, Mr. Cheeng\'s Spectacles, Numberwang, Barrel Hoop Earring]);
+	item[int] poss = List($items[Jaunty Feather, Garish Pinky Ring, ring of telling skeletons what to do, Glowing Red Eye, Blackberry Galoshes, Meteorthopedic Shoes, grumpy old man charrrm bracelet, Pirate Fledges, Plastic Detective Badge, Bronze Detective Badge, Lil\' Doctor&trade; Bag, Mr. Accessory Jr., Silver Detective Badge, Gold Detective Badge, Ring Of The Skeleton Lord, Tube Sock, Time-Twitching Toolbelt, Glow-in-the-dark necklace, Xiblaxian Holo-Wrist-Puter, Sphygmayomanometer, LOV Earrings, Badge Of Authority, Codpiece, Mr. Cheeng\'s Spectacles, Numberwang, Barrel Hoop Earring]);
+
+	if(my_primestat() == $stat[moxie])
+	{
+		poss = poss.ListInsertAt($item[LOV Earrings], poss.ListFind($item[Badge Of Authority]));
+	}
+
+	if(my_class() == $class[Vampyre])
+	{
+		poss = poss.ListInsert($item[Lil\' Doctor&trade; Bag]);
+	}
 
 	if(my_class() == $class[Gelatinous Noob])
 	{
@@ -1019,6 +1033,16 @@ void equipRollover()
 
 	toEquip = $item[none];
 	poss = List($items[Deadfall Branch, Ancient Calendar, Novelty Monorail Ticket, Mer-kin stopwatch, Astral Statuette, Silver Cow Creamer, Staff Of Kitchen Royalty, Royal Scepter]);
+	if(contains_text(get_property("latteModifier"), "PvP Fights"))
+	{
+		poss = ListInsertAt(poss, $item[Latte Lovers Member\'s Mug], poss.ListFind($item[Ancient Calendar]));
+	}
+
+	if(contains_text(get_property("latteModifier"), "Rollover"))
+	{
+		poss = ListInsertAt(poss, $item[Latte Lovers Member\'s Mug], poss.ListFind($item[Astral Statuette]));
+	}
+
 	switch(my_primestat())
 	{
 	case $stat[Muscle]:
@@ -1172,17 +1196,17 @@ boolean equipAnyBanisherForZone(location loc)
 
 	//We are going to reset latte if it is worth it. Sniffs are nice but I think we want to try to get all 4 banishes rather than put pressure on the lattesniffs.
 
-	if(possessEquipment($item[Kremlin\'s Greatest Briefcase]) && (get_property("_kgbTranquilizerDartUses").to_int() < 3) && !didUseBanisherHere($item[Kremlin\'s Greatest Briefcase], loc))
+	if(possessEquipment($item[Latte Lovers Member\'s Mug]) && !get_property("_latteBanishUsed").to_boolean() && !didUseBanisherHere($item[Latte Lovers Member\'s Mug], loc))
+	{
+		equip($slot[off-hand], $item[Latte Lovers Member\'s Mug]);
+	}
+	else if(possessEquipment($item[Kremlin\'s Greatest Briefcase]) && (get_property("_kgbTranquilizerDartUses").to_int() < 3) && !didUseBanisherHere($item[Kremlin\'s Greatest Briefcase], loc))
 	{
 		equip($slot[acc3], $item[Kremlin\'s Greatest Briefcase]);
 	}
 	else if(possessEquipment($item[Lil\' Doctor&trade; Bag]) && (get_property("_reflexHammerUsed").to_int() < 3) && !didUseBanisherHere($item[Lil\' Doctor&trade; Bag], loc))
 	{
 		equip($slot[acc3], $item[Lil\' Doctor&trade; Bag]);
-	}
-	else if(possessEquipment($item[Latte Lovers Member\'s Mug]) && !get_property("_latteBanishUsed").to_boolean() && !didUseBanisherHere($item[Latte Lovers Member\'s Mug], loc))
-	{
-		equip($slot[off-hand], $item[Latte Lovers Member\'s Mug]);
 	}
 	else if(possessEquipment($item[Latte Lovers Member\'s Mug]) && get_property("_latteBanishUsed").to_boolean() && (get_property("_latteRefillsUsed").to_int() < 3) && !didUseBanisherHere($item[Latte Lovers Member\'s Mug], loc))
 	{
@@ -1192,5 +1216,5 @@ boolean equipAnyBanisherForZone(location loc)
 
 	}
 
-	return false;
+	return true;
 }

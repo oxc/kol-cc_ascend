@@ -280,6 +280,16 @@ boolean LA_cs_communityService()
 		cheeseWarMachine(0, 2, 1, random(3)+1);
 	}
 
+	if(get_property("cc_hccsNoConcludeDay").to_boolean() && get_property("_cc_hccsOneDay").to_boolean())
+	{
+		int nextResolution = cc_csSpecialDayOne();
+		if(nextResolution == 0)
+		{
+			return true;
+		}
+		curQuest = nextResolution;
+	}
+
 	if((curQuest == 11) || (curQuest == 6) || (curQuest == 9) || (curQuest == 7))
 	{
 		print("Beginning early quest actions (" + curQuest + ")", "green");
@@ -2619,6 +2629,7 @@ boolean LA_cs_communityService()
 						}
 						runs = runs - 1;
 					}
+					abort("Check Tater Tot");
 				}
 				else if(have_skill($skill[Meteor Lore]) && (get_property("_macrometeoriteUses").to_int() < 10))
 				{
@@ -3841,6 +3852,19 @@ string cs_combatNormal(int round, string opp, string text)
 		}
 	}
 
+	if(!contains_text(combatState, "vampyriccloake") && (my_location() == $location[Gingerbread Upscale Retail District]) && (equipped_item($slot[back]) == $item[Vampyric Cloake]))
+	{
+		if(have_effect($effect[Wolfish Form]) == 0)
+		{
+			set_property("cc_combatHandler", combatState + "(vampyriccloake)");
+			return "skill " + $skill[Become A Wolf];
+		}
+		if(have_effect($effect[Bat-Adjacent Form]) == 0)
+		{
+			set_property("cc_combatHandler", combatState + "(vampyriccloake)");
+			return "skill " + $skill[Become A Bat];
+		}
+	}
 
 	if((my_familiar() == $familiar[Pair of Stomping Boots]) && ($monsters[Ancient Insane Monk, Ferocious Bugbear, Gelatinous Cube, Knob Goblin Poseur] contains enemy))
 	{
@@ -4976,6 +5000,7 @@ boolean do_cs_quest(int quest)
 		cc_csBurnLibrams();
 	}
 
+	abort("beep");
 	if(((questList contains quest) && (advs >= questList[quest])) || (quest == 30))
 	{
 		string temp = visit_url("council.php");

@@ -349,9 +349,40 @@ string cc_combatHandler(int round, string opp, string text)
 		return cc_combatUse($skill[Apprivoisez La Tortue]);
 	}
 
-	if(cc_combatCanUse($skill[Gulp Latte], true) && (get_property("_latteRefillsUsed").to_int() == 0) && !get_property("_latteDrinkUsed").to_boolean())
+	if(cc_combatCanUse($skill[Gulp Latte], true) && (get_property("_latteRefillsUsed").to_int() == 0) && !get_property("_latteDrinkUsed").to_boolean() && (my_class() != $class[Vampyre]))
 	{
 		return cc_combatUse($skill[Gulp Latte], true);
+	}
+
+	if(cc_combatCanUse($skill[Ensorcel], true) && (get_property("_ensorcelUses").to_int() < 3))
+	{
+		if((my_daycount() == 1) && (my_location() == $location[Lair Of The Ninja Snowmen]))
+		{
+			if($monsters[Ninja Snowman (Chopsticks), Ninja Snowman (Hilt), Ninja Snowman (Hilt/Mask), Ninja Snowman (Mask), Ninja Snowman Janitor, Ninja Snowman Weaponmaster] contains enemy)
+			{
+				return cc_combatUse($skill[Ensorcel], true);
+			}
+		}
+	}
+
+	if(cc_combatCanUse($skill[Ensorcel], true) && (get_property("_ensorcelUses").to_int() == 0))
+	{
+		if((my_daycount() == 2) && (enemy.base_attack > 100) && (enemy.phylum == $phylum[bug]) && !get_property("ensorcelModifiers").contains_text("Item Drop"))
+		{
+			return cc_combatUse($skill[Ensorcel], true);
+		}
+	}
+
+	//TODO: Chest X-Ray preference?
+	if(cc_combatCanUse($skill[Chest X-Ray], true))
+	{
+		if(my_class() == $class[Vampyre])
+		{
+			if(enemy == $monster[Ninja Snowman Assassin])
+			{
+				return cc_combatUse($skill[Chest X-Ray], true);
+			}
+		}
 	}
 
 	#Do not accidentally charge the nanorhino with a non-banisher
@@ -487,7 +518,6 @@ string cc_combatHandler(int round, string opp, string text)
 		}
 	}
 
-
 	if(cc_combatCanUse($skill[Gallapagosian Mating Call], true))
 	{
 		if((enemy == $monster[pygmy shaman]) && (my_location() == $location[The Hidden Apartment Building]) && (have_effect($effect[Thrice-Cursed]) == 0) && (get_property("_gallapagosMonster") != enemy))
@@ -515,6 +545,14 @@ string cc_combatHandler(int round, string opp, string text)
 		}
 	}
 
+	if(cc_combatCanUse($skill[Offer Latte To Opponent], true))
+	{
+		if(($monsters[Blooper] contains enemy) && (my_location() == $location[8-Bit Realm]) && (get_property("_latteMonster") != enemy) && get_property("_latteCopyUsed").to_boolean())
+		{
+			return cc_combatUse($skill[Offer Latte To Opponent], true);
+		}
+	}
+
 	if(cc_combatCanUse($skill[Perceive Soul], true))
 	{
 		if((enemy == $monster[pygmy shaman]) && (my_location() == $location[The Hidden Apartment Building]) && (have_effect($effect[Thrice-Cursed]) == 0) && (get_property("_perceiveSoulMonster") != enemy))
@@ -529,7 +567,7 @@ string cc_combatHandler(int round, string opp, string text)
 		{
 			return cc_combatUse($skill[Perceive Soul], true);
 		}
-		if(($monsters[Animated Ornate Nightstand, Blue Oyster Cultist, cabinet of Dr. Limpieza, Dairy Goat, Dirty Old Lihc, Green Ops Soldier, Monstrous Boiler, Morbid Skull, Possessed Wine Rack, Pygmy Bowler, Pygmy Witch Surgeon, Quiet Healer, Red Butler, Tomb Rat, Waiter Dressed As A Ninja] contains enemy) && (get_property("_perceiveSoulMonster") != enemy))
+		if(($monsters[Animated Ornate Nightstand, Blooper, Blue Oyster Cultist, cabinet of Dr. Limpieza, Dairy Goat, Dirty Old Lihc, Gaunt Ghuol, Green Ops Soldier, Monstrous Boiler, Morbid Skull, Possessed Wine Rack, Pygmy Bowler, Pygmy Witch Surgeon, Quiet Healer, Red Butler, Tomb Rat, Waiter Dressed As A Ninja] contains enemy) && (get_property("_perceiveSoulMonster") != enemy))
 		{
 			return cc_combatUse($skill[Perceive Soul], true);
 		}
@@ -1414,7 +1452,7 @@ string cc_combatHandler(int round, string opp, string text)
 		}
 		break;
 	case $class[Vampyre]:
-			if((my_hp() < my_maxhp()) && cc_combatCanUse($skill[Dark Feast], true) && (enemy.base_hp > 0))
+			if((my_hp() < my_maxhp()) && cc_combatCanUse($skill[Dark Feast], true) && (enemy.base_hp > 0) && (my_location() != $location[The Smut Orc Logging Camp]))
 			{
 				//Current HP is what matters
 				if(enemy.base_hp <= 30)
@@ -1712,7 +1750,9 @@ string findBanisher(int round, string opp, string text)
 		}
 	}
 
-	foreach act in $skills[Baleful Howl, Banishing Shout, Asdon Martin: Spring-Loaded Front Bumper, Talk About Politics, Batter Up!, Thunder Clap, Curse of Vacation, Breathe Out, Snokebomb, KGB Tranquilizer Dart, Beancannon]
+	//We need to move this over to the banish checker.
+
+	foreach act in $skills[Baleful Howl, Banishing Shout, Reflex Hammer, Throw Latte On Opponent, Asdon Martin: Spring-Loaded Front Bumper, Talk About Politics, Batter Up!, Thunder Clap, Curse of Vacation, Breathe Out, Snokebomb, KGB Tranquilizer Dart, Beancannon]
 	{
 		if(!contains_text(get_property("cc_gremlinBanishes"), act) && cc_have_skill(act) && (my_mp() >= mp_cost(act)) && (my_hp() > hp_cost(act)) && (my_thunder() >= thunder_cost(act)) && (get_fuel() >= fuel_cost(act)))
 		{
@@ -1721,6 +1761,14 @@ string findBanisher(int round, string opp, string text)
 				continue;
 			}
 			if((act == $skill[Baleful Howl]) && (get_property("_balefulHowlUses").to_int() >= 10))
+			{
+				continue;
+			}
+			if((act == $skill[Reflex Hammer]) && (get_property("_reflexHammerUsed").to_int() >= 3))
+			{
+				continue;
+			}
+			if((act == $skill[Throw Latte On Opponent]) && get_property("_latteBanishUsed").to_boolean())
 			{
 				continue;
 			}
@@ -1749,6 +1797,13 @@ string findBanisher(int round, string opp, string text)
 				continue;
 			}
 			set_property("cc_gremlinBanishes", get_property("cc_gremlinBanishes") + "(" + act + ")");
+
+			//TODO: Remove this, see if we get matching banishers or something.
+			string banishAction = banisherCombatString(enemy, my_location());
+			print("banisherCombatString decided: " + banishAction, "green");
+			print("Gremlin Handler (to be deprecated) decided: " + act);
+
+
 			return cc_combatUse(act, true);
 		}
 	}
@@ -2953,7 +3008,7 @@ boolean cc_combatCanUse(string state, skill sk, boolean tracked)
 	{
 		return false;
 	}
-	if(hp_cost(sk) > my_hp())
+	if(hp_cost(sk) >= my_hp())
 	{
 		return false;
 	}
@@ -2963,6 +3018,31 @@ boolean cc_combatCanUse(string state, skill sk, boolean tracked)
 	}
 
 
+	if((sk == $skill[Gulp Latte]) && (my_class() == $class[Vampyre]))
+	{
+		return false;
+	}
+	if($skills[Blood Chains, Blood Spike, Chill Of The Tomb] contains sk)
+	{
+		if((have_effect($effect[Wolf Form]) != 0) || (have_effect($effect[Bats Form]) != 0))
+		{
+			return false;
+		}
+	}
+	if($skills[Ensorcel, Perceive Soul, Piercing Gaze] contains sk)
+	{
+		if((have_effect($effect[Wolf Form]) != 0) || (have_effect($effect[Mist Form]) != 0))
+		{
+			return false;
+		}
+	}
+	if($skills[Baleful Howl, Crush, Savage Bite] contains sk)
+	{
+		if((have_effect($effect[Mist Form]) != 0) || (have_effect($effect[Bats Form]) != 0))
+		{
+			return false;
+		}
+	}
 	if((sk == $skill[Shieldbutt]) && !hasShieldEquipped())
 	{
 		return false;

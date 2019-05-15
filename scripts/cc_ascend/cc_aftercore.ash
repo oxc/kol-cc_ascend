@@ -31,6 +31,7 @@ boolean cc_aftercore();
 boolean cc_aftercore(int leave);
 boolean cc_ascendIntoCS();
 boolean cc_ascendIntoCS(class cl);
+boolean cc_ascendIntoTwilight();
 boolean cc_ascendIntoBond();
 boolean cc_doCS();
 boolean cc_customMafiaAddress();
@@ -873,6 +874,52 @@ boolean cc_ascendIntoCS(class cl)
 	return true;
 }
 
+
+boolean cc_ascendIntoTwilight()
+{
+	if(my_inebriety() <= inebriety_limit())
+	{
+		return false;
+	}
+	if(my_adventures() >= 3)
+	{
+		return false;
+	}
+
+	declineTrades();
+
+	string temp = visit_url("ascend.php?pwd=&confirm=on&confirm2=on&action=ascend&submit=Ascend", true);
+	temp = visit_url("afterlife.php?action=pearlygates");
+
+	string permery_text = visit_url("afterlife.php?place=permery");
+	if(!permery_text.contains_text("It looks like you've already got all of the skills from your last life marked permanent."))
+	{
+		abort("perm a skill");
+		return false;
+	}
+
+	temp = visit_url("afterlife.php?action=buydeli&whichitem=5046", true);
+
+	temp = visit_url("afterlife.php?place=armory");
+	temp = visit_url("afterlife.php?action=buyarmory&whichitem=5041", true);
+
+	temp = visit_url("afterlife.php?place=reincarnate");
+	int gender = 1;
+	if(contains_text(temp, "option selected value=2>Female"))
+	{
+		gender = 2;
+	}
+
+	temp = visit_url("afterlife.php?action=ascend&asctype=2&whichclass=1&gender=" + gender + "&whichpath=35&whichsign=8", true);
+
+	int classID = 24;
+	int sign = 8;
+
+	temp = visit_url("afterlife.php?action=ascend&confirmascend=1&asctype=2&whichclass=" + classID + "&gender=" + gender + "&whichpath=35&whichsign=" + sign + "&noskillsok=1", true);
+
+	return true;
+}
+
 boolean cc_aftercore()
 {
 	return cc_cheeseAftercore(0);
@@ -936,13 +983,41 @@ boolean cc_afterSpacegate()
 			set_property("cc_combatDirective", "start;skill curse of weaksauce;item rain-doh black box, time-spinner;item spooky putty sheet, nasty-smelling moss;skill stuffed mortar shell; skill sing along;item rain-doh indigo cup, rain-doh blue balls");
 			ccAdv($location[The Ice Hotel]);
 		}
-		//nurse hat, sea salt scrubs, elemental resistance (tot, astral, elemental sauce, saucegeyser, Space Trip + HOA shield, carol of the hells
-		abort("We need to make sure we can survive the spacegate");
+
+		if(have_effect($effect[Song Of Sauce]) == 0)
+		{
+			equip($slot[hat], $item[Nurse\'s Hat]);
+			equip($slot[shirt], $item[Sea Salt Scrubs]);
+			equip($slot[off-hand], $item[HOA Regulation Book]);
+			equip($slot[pants], $item[Greatest American Pants]);
+			equip($slot[acc3], $item[Space Trip Safety Headphones]);
+			doRest();
+			doRest();
+			doRest();
+			buffMaintain($effect[Astral Shell], 10, 2, 20);
+			buffMaintain($effect[Elemental Saucesphere], 10, 2, 20);
+			buffMaintain($effect[Carol Of The Hells], 10, 2, 20);
+			buffMaintain($effect[Song Of Sauce], 10, 2, 20);
+			use_familiar($familiar[Trick-Or-Treating Tot]);
+			take_storage(1, $item[Li\'l Candy Corn Costume]);
+			equip($slot[familiar], $item[Li\'l Candy Corn Costume]);
+
+			cli_execute("gap structure");
+			cli_execute("gap structure");
+			cli_execute("gap vision");
+			cli_execute("gap speed");
+			cli_execute("gap skill");
+			use(1, $item[Circle Drum]);
+		}
+
+		set_property("cc_combatDirective", "start;skill saucegeyser");
 		if(!ccAdv($location[Through The Spacegate]))
 		{
+			set_property("cc_combatDirective", "");
 			string temp = visit_url("place.php?whichplace=spacegate&action=sg_Terminal");
 			break;
 		}
+		set_property("cc_combatDirective", "");
 		if(have_effect($effect[Beaten Up]) > 0)
 		{
 			print("Got beaten up at the spacegate");
@@ -1113,7 +1188,7 @@ monster cc_specialAftercore(familiar toFam)
 
 		//TODO: Handle Meat Buffs
 		//baseMeat
-		
+
 
 		if((item_amount($item[License To Chill]) > 0) && !get_property("_licenseToChillUsed").to_boolean())
 		{
@@ -1141,7 +1216,6 @@ monster cc_specialAftercore(familiar toFam)
 			abort("Ugh, my MP is still here");
 		}
 
-
 		if((get_property("chateauMonster") == target) && !get_property("_chateauMonsterFought").to_boolean() && chateaumantegna_available())
 		{
 			if(get_property("_badlyRomanticArrows").to_int() == 0)
@@ -1160,15 +1234,18 @@ monster cc_specialAftercore(familiar toFam)
 			if(get_property("_badlyRomanticArrows").to_int() == 0)
 			{
 				use_familiar($familiar[Reanimated Reanimator]);
-				set_property("cc_combatDirective", "start;skill curse of weaksauce;skill digitize; skill wink at; item rain-doh black box, spooky putty sheet; skill stuffed mortar shell; skill sing along;item rain-doh indigo cup, rain-doh blue balls; skill saucestorm; skill saucestorm; skill saucestorm; skill saucestorm; skill saucestorm");
+				set_property("cc_combatDirective", "start;skill digitize; skill wink at; item rain-doh black box, spooky putty sheet; skill stuffed mortar shell; skill sing along;item rain-doh indigo cup, rain-doh blue balls; skill saucestorm; skill saucestorm; skill saucestorm; skill saucestorm; skill saucestorm");
 			}
 			else
 			{
 				set_property("cc_combatDirective", "start;skill curse of weaksauce;skill digitize; item rain-doh black box, spooky putty sheet; skill stuffed mortar shell; skill sing along;item rain-doh indigo cup, rain-doh blue balls; skill saucestorm; skill saucestorm; skill saucestorm; skill saucestorm; skill saucestorm; skill saucestorm");
 			}
 			handleFaxMonster(target, "");
+			if(!get_property("_photocopyUsed").to_boolean())
+			{
+				abort("Ugh, photocopy not used because mafia did not update our clan state and refuses to do so...");
+			}
 		}
-
 		use_familiar(toFam);
 		//On day 1, we can not really plant here but does it matter?
 		ccAdv(1, $location[Barf Mountain]);
@@ -1313,18 +1390,26 @@ boolean cc_cheesePostCS(int leave)
 	}
 
 	take_storage(storage_amount($item[Cold Hi Mein]), $item[Cold Hi Mein]);
-	take_storage(storage_amount($item[Jumping Horseradish]), $item[Jumping Horseradish]);
-	if((fullness_left() >= 15) && (item_amount($item[Cold Hi Mein]) > 0) && (my_level() >= $item[Cold Hi Mein].levelreq))
+	take_storage(storage_amount($item[Hot Hi Mein]), $item[Hot Hi Mein]);
+
+	item mein = $item[Cold Hi Mein];
+	if(item_amount($item[Cold Hi Mein]) < 2)
 	{
-		buffMaintain($effect[Got Milk], 0, 1, 5);
-		ccEat(1, $item[Cold Hi Mein]);
+		mein = $item[Hot Hi Mein];
 	}
-	if((fullness_left() >= 10) && (item_amount($item[Cold Hi Mein]) > 0) && (my_level() >= $item[Cold Hi Mein].levelreq) && (get_property("_timeSpinnerMinutesUsed").to_int() <= 7))
+
+	take_storage(storage_amount($item[Jumping Horseradish]), $item[Jumping Horseradish]);
+	if((fullness_left() >= 15) && (item_amount(mein) > 0) && (my_level() >= mein.levelreq))
 	{
 		buffMaintain($effect[Got Milk], 0, 1, 5);
-		if(!timeSpinnerConsume($item[Cold Hi Mein]))
+		ccEat(1, mein);
+	}
+	if((fullness_left() >= 10) && (item_amount(mein) > 0) && (my_level() >= mein.levelreq) && (get_property("_timeSpinnerMinutesUsed").to_int() <= 7))
+	{
+		buffMaintain($effect[Got Milk], 0, 1, 5);
+		if(!timeSpinnerConsume(mein))
 		{
-			ccEat(1, $item[Cold Hi Mein]);
+			ccEat(1, mein);
 		}
 	}
 	if((fullness_left() > 0) && (item_amount($item[Jumping Horseradish]) > 0) && (my_level() >= $item[Jumping Horseradish].levelreq))
@@ -1633,11 +1718,11 @@ boolean cc_cheesePostCS(int leave)
 		}
 	}
 
-	if((get_property("doctorBagQuestLights").to_int() < 5) && (item_amount($item[Lil\' Doctor&trade; bag]) > 0) && (get_property("doctorBagUpgrades").to_int() < 0))
-	{
-		set_property("choiceAdventure1340", 1);
-		equip($slot[acc3], $item[Lil\' Doctor&trade; bag]);
-	}
+#	if((get_property("doctorBagQuestLights").to_int() < 5) && (item_amount($item[Lil\' Doctor&trade; bag]) > 0) && (get_property("doctorBagUpgrades").to_int() < 0))
+#	{
+#		set_property("choiceAdventure1340", 1);
+#		equip($slot[acc3], $item[Lil\' Doctor&trade; bag]);
+#	}
 
 	set_property("choiceAdventure1106", 3);
 	while((my_adventures() > leave) && (inebriety_left() >= 0))
@@ -1729,6 +1814,13 @@ boolean cc_cheesePostCS(int leave)
 			{
 				handleFamiliar(fam);
 				break;
+			}
+		}
+		if(get_property("cc_familiarChoice") == $familiar[Hobo Monkey])
+		{
+			if(possessEquipment($item[Li\'l Pirate Costume]) || have_equipped($item[Li\'l Pirate Costume]))
+			{
+				//Tot with a Pirate costume?
 			}
 		}
 
@@ -1896,7 +1988,96 @@ boolean cc_cheesePostCS(int leave)
 			}
 		}
 
+/*
+		if(my_adventures() < 200)
+		{
+			if((get_property("_doctorBagQuestsDone").to_int() < 1) && (my_adventures() < 200))
+			{
+				if(get_property("lastEncounter") == "A Pound of Cure")
+				{
+					set_property("_doctorBagQuestsDone", get_property("_doctorBagQuestsDone").to_int() + 1);
+					set_property("lastEncounter", "");
+				}
+				if(get_property("questDoctorBag") == "unstarted")
+				{
+					equip($slot[acc3], $item[Lil\' Doctor&trade; Bag]);
+				}
+				else
+				{
+					equip($slot[acc1], $item[Lil\' Doctor&trade; Bag]);
+					item need = to_item(get_property("doctorBagQuestItem"));
+					location goal = to_location(get_property("doctorBagQuestLocation"));
+					if((need == $item[none]) || (goal == $location[none]))
+					{
+						abort("Doctor quest exists but we have no goal location or item");
+					}
+					buyUpTo(1, need);
+					if(item_amount(need) == 0)
+					{
+						abort("Can not satisfy doctor goal :(");
+					}
+
+					familiar oldFam = my_familiar();
+
+					int runs = (familiar_weight($familiar[Pair of Stomping Boots]) + weight_adjustment()) / 5;
+					runs = runs - get_property("_banderRunaways").to_int();
+					if(runs > 0)
+					{
+						use_familiar($familiar[Pair Of Stomping Boots]);
+						adv1(goal, -1, "runaway; repeat");
+					}
+					else
+					{
+						use_familiar($familiar[Artistic Goth Kid]);
+						if(!get_property("_csaFireStartingDrop").to_boolean())
+						{
+							equip($slot[back], $item[Camp Scout Backpack]);
+						}
+						ccAdv(goal);
+						equip($slot[back], back);
+					}
+
+					if(get_property("lastEncounter") == "A Pound of Cure")
+					{
+						set_property("_doctorBagQuestsDone", get_property("_doctorBagQuestsDone").to_int() + 1);
+						set_property("lastEncounter", "");
+					}
+					use_familiar(oldFam);
+					continue;
+				}
+			}
+
+		}
+*/
 		cc_afterGingercity();
+
+		if(true)
+		{
+			if(equipped_item($slot[back]) != back)
+			{
+				equip($slot[back], back);
+			}
+			if(equipped_item($slot[weapon]) != weapon)
+			{
+				equip($slot[weapon], weapon);
+			}
+			if(equipped_item($slot[off-hand]) != offhand)
+			{
+				equip($slot[off-hand], offhand);
+			}
+			if(equipped_item($slot[acc1]) != acc1)
+			{
+				equip($slot[acc1], acc1);
+			}
+			if(equipped_item($slot[acc2]) != acc2)
+			{
+				equip($slot[acc2], acc2);
+			}
+			if(equipped_item($slot[acc3]) != acc3)
+			{
+				equip($slot[acc3], acc3);
+			}
+		}
 
 		if((my_adventures() > leave) && (get_property("lastDMTDuplication").to_int() < my_ascensions()) && (item_amount($item[Clara\'s Bell]) > 0) && !isOverdueDigitize())
 		{
@@ -1908,7 +2089,7 @@ boolean cc_cheesePostCS(int leave)
 			}
 			if((get_property("lastDMTDuplication").to_int() < my_ascensions()) && (item_amount(toGet) > 0))
 			{
-				if(!get_property("_claraBellUsed").to_boolean())
+				if(!get_property("_claraBellUsed").to_boolean() && (get_property("encountersUntilDMTChoice").to_int() > 0))
 				{
 					use(1, $item[Clara\'s Bell]);
 				}

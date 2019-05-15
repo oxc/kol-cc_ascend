@@ -43,6 +43,17 @@ void handlePreAdventure(location place)
 
 	print("Starting preadventure script...", "green");
 
+	if(possessEquipment($item[Latte Lovers Member\'s Mug]) && !have_equipped($item[Latte Lovers Member\'s Mug]))
+	{
+		if(equipLatteForUnlock(place))
+		{
+			if(!get_property("kingLiberated").to_boolean())
+			{
+//				abort("Equip latte. Beep");
+			}
+		}
+	}
+
 	familiar famChoice = to_familiar(get_property("cc_familiarChoice"));
 	if(cc_my_path() == "Pocket Familiars")
 	{

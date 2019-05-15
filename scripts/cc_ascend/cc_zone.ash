@@ -347,7 +347,7 @@ generic_t zone_combatMod(location loc)
 		}
 		break;
 	case $location[The Haunted Gallery]:
-		if((delay._int == 0) || (!contains_text(get_property("relayCounters"), "Garden Banished")))
+		if(delay._int == 0)
 		{
 			value = -80;
 		}
@@ -393,7 +393,6 @@ generic_t zone_combatMod(location loc)
 		break;
 	case $location[The Copperhead Club]:
 	case $location[A Mob Of Zeppelin Protesters]:
-	case $location[The Red Zeppelin]:
 		value = -70;
 		break;
 
@@ -432,10 +431,16 @@ generic_t zone_combatMod(location loc)
 		value = -85;
 		break;
 	case $location[The Defiled Cranny]:
-		value = -85;
+		if(get_property("cyrptCrannyEvilness").to_int() > 25)
+		{
+			value = -85;
+		}
 		break;
 	case $location[The Defiled Alcove]:
-		value = -85;
+		if(get_property("cyrptAlcoveEvilness").to_int() > 25)
+		{
+			value = -20;
+		}
 		break;
 	case $location[Barrrney\'s Barrr]:
 		if(internalQuestStatus("questM12Pirate") >= 0)

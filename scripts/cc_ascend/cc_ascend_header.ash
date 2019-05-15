@@ -87,6 +87,7 @@ boolean L9_highLandlord();
 boolean L9_aBooPeak();
 boolean L9_twinPeak();
 boolean L9_oilPeak();
+boolean L9_jarOfOil();
 boolean L9_leafletQuest();
 
 boolean L10_plantThatBean();
@@ -103,6 +104,7 @@ boolean L11_hiddenTavernUnlock(boolean force);
 boolean L11_blackMarket();
 boolean L11_forgedDocuments();
 boolean L11_aridDesert();
+boolean L11_gnasir();
 boolean L11_mcmuffinDiary();
 boolean L11_unlockHiddenCity();
 boolean L11_hiddenCityZones();
@@ -555,6 +557,8 @@ boolean elementalPlanes_initializeSettings();				//Defined in cc_ascend/cc_eleme
 boolean elementalPlanes_takeJob(element ele);				//Defined in cc_ascend/cc_elementalPlanes.ash
 int elemental_resist(element goal);							//Defined in cc_ascend/cc_util.ash
 float elemental_resist_value(int resistance);				//Defined in cc_ascend/cc_util.ash
+boolean closet_all();										//Defined in cc_ascend/cc_util.ash
+boolean closet_all(item it);								//Defined in cc_ascend/cc_util.ash
 boolean equipAnyBanisherForZone(location loc);				//Defined in cc_ascend/cc_equipment.ash
 void ensureSealClubs();										//Defined in cc_ascend/cc_equipment.ash
 void equipBaseline();										//Defined in cc_ascend/cc_equipment.ash
@@ -952,6 +956,7 @@ void twilightConsume();										//Defined in cc_ascend/cc_twilight.ash
 boolean[item] twilightFoodConsumables();					//Defined in cc_ascend/cc_twilight.ash
 boolean[item] twilightBoozeConsumables();					//Defined in cc_ascend/cc_twilight.ash
 void twilightPostAdventure();								//Defined in cc_ascend/cc_twilight.ash
+boolean twilightDayDone();									//Defined in cc_ascend/cc_twilight.ash
 
 void digimon_initializeSettings();							//Defined in cc_ascend/cc_digimon.ash
 void digimon_initializeDay(int day);						//Defined in cc_ascend/cc_digimon.ash

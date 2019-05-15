@@ -1645,12 +1645,13 @@ boolean L1_ed_islandFallback()
 		restoreSetting("choiceAdventure1326");
 		return true;
 	}
+
+	location pGoal = $location[none];
 	if(elementalPlanes_access($element[stench]))
 	{
-		ccAdv(1, $location[Pirates of the Garbage Barges]);
-		return true;
+		pGoal = $location[Pirates of the Garbage Barges];
 	}
-	if(elementalPlanes_access($element[cold]))
+	else if(elementalPlanes_access($element[cold]))
 	{
 		if(get_property("_VYKEALoungeRaided").to_boolean())
 		{
@@ -1667,18 +1668,21 @@ boolean L1_ed_islandFallback()
 		{
 			set_property("choiceAdventure1115", 9);
 		}
-		ccAdv(1, $location[VYKEA]);
-		return true;
+		pGoal = $location[VYKEA];
 	}
-	if(elementalPlanes_access($element[hot]))
+	else if(elementalPlanes_access($element[hot]))
 	{
 		//Maybe this is a good choice?
 		set_property("choiceAdventure1094", 5);
-		ccAdv(1, $location[The SMOOCH Army HQ]);
+		pGoal = $location[The SMOOCH Army HQ];
+	}
+
+	if(pGoal != $location[none])
+	{
+		ccAdv(1, pGoal);
 		set_property("choiceAdventure1094", 2);
 		return true;
 	}
-
 
 	if(LX_islandAccess())
 	{
@@ -1698,10 +1702,14 @@ boolean L1_ed_islandFallback()
 			equipBaseline();
 		}
 		buffMaintain($effect[Wisdom Of Thoth], 20, 1, 1);
-		return ccAdv(1, $location[Hippy Camp]);
+		pGoal = $location[Hippy Camp];
 	}
-	set_property("cc_needLegs", true);
-	return ccAdv(1, $location[The Outskirts of Cobb\'s Knob]);
+	else
+	{
+		set_property("cc_needLegs", true);
+		pGoal = $location[The Outskirts of Cobb\'s Knob];
+	}
+	return ccAdv(1, pGoal);
 }
 
 boolean L9_ed_chasmStart()

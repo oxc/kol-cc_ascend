@@ -293,6 +293,10 @@ int doHottub()
 	{
 		return 0;
 	}
+	if(my_class() == $class[Vampyre])
+	{
+		return 0;
+	}
 	if(get_property("_hotTubSoaks").to_int() < 5)
 	{
 		cli_execute("hottub");

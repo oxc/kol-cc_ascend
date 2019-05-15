@@ -1255,6 +1255,7 @@ boolean asdonBuff(effect goal)
 	case $effect[Driving Wastefully]:		effectNum = 2;	break;
 	case $effect[Driving Waterproofly]:		effectNum = 8;	break;
 	}
+	print("Acquiring Ashton Buff: " + goal);
 	string temp = visit_url("campground.php?pwd=&preaction=drive&whichdrive=" + effectNum);
 
 	return true;
@@ -1300,8 +1301,24 @@ boolean asdonAutoFeed(int goal)
 		}
 	}
 
+	boolean[item] fuelList;
+
+	foreach it in $items[A Little Sump\'m Sump\'m, Backwoods Screwdriver, Bag Of GORP, Ballroom Blintz, Bean Burrito, Bilge Wine, Bottle Of Laundry Sherry, Black Forest Ham, Cactus Fruit, CSA Scoutmaster\'s &quot;water&quot;, Dusty Bottle Of Marsala, Dusty Bottle Of Merlot, Dusty Bottle Of Pinot Noir, Enchanted Bean Burrito, Ghuol Guolash, Giant Heirloom Grape Tomato, Gin And Tonic, Haggis-Wrapped Haggis-Stuffed Haggis, Insanely Spicy Bean Burrito, Insanely Spicy Enchanted Bean Burrito, Insanely Spicy Jumping Bean Burrito, Jumping Bean Burrito, Jungle Floor Wax, Loaf of Soda Bread, Margarita, McLeod\'s Hard Haggis-Ade, Mimosette, Mornington Crescent Roll, Open Sauce, Pestopiary, Pink Pony, Roll In The Hay, Salacious Crumbs, Screwdriver, Slap And Tickle, Slip \'N\' Slide, Snifter Of Thoroughly Aged Brandy, Spicy Bean Burrito, Spicy Enchanted Bean Burrito, Spicy Jumping Bean Burrito, Stolen Sushi, Strawberry Daiquiri, Succulent Marrow, Tequila Sunrise, Tequila Sunset, Typical Tavern Swill, Vodka And Tonic, Water Purification Pills, Zmobie]
+	{
+		fuelList[it] = true;
+	}
+
+	//Add extra items based on classes
+	if(my_class() == $class[Vampyre])
+	{
+		foreach it in $items[Afternoon Delight, Black & Tan, Blackfly Chardonnay, Middle Of The Road&trade; Brand Whiskey, Vampire Chowder, Ye Olde Meade]
+		{
+			fuelList[it] = true;
+		}
+	}
+
 	boolean didOnce = false;
-	foreach it in $items[A Little Sump\'m Sump\'m, Backwoods Screwdriver, Bag Of GORP, Ballroom Blintz, Bean Burrito, Bilge Wine,  Bottle Of Laundry Sherry, Black Forest Ham, Cactus Fruit, CSA Scoutmaster\'s &quot;water&quot;, Dusty Bottle Of Marsala, Dusty Bottle Of Merlot, Dusty Bottle Of Pinot Noir, Enchanted Bean Burrito, Giant Heirloom Grape Tomato, Gin And Tonic, Haggis-Wrapped Haggis-Stuffed Haggis, Insanely Spicy Bean Burrito, Insanely Spicy Enchanted Bean Burrito, Insanely Spicy Jumping Bean Burrito, Jumping Bean Burrito, Jungle Floor Wax, Loaf of Soda Bread, Margarita, McLeod\'s Hard Haggis-Ade, Mimosette, Mornington Crescent Roll, Open Sauce, Pestopiary, Pink Pony, Roll In The Hay, Salacious Crumbs, Screwdriver, Slap And Tickle, Slip \'N\' Slide, Snifter Of Thoroughly Aged Brandy, Spicy Bean Burrito, Spicy Enchanted Bean Burrito, Spicy Jumping Bean Burrito, Stolen Sushi, Strawberry Daiquiri, Succulent Marrow, Tequila Sunrise, Tequila Sunset, Typical Tavern Swill, Vodka And Tonic, Water Purification Pills, Zmobie]
+	foreach it in fuelList
 	{
 		if(item_amount(it) > 0)
 		{
@@ -1322,18 +1339,6 @@ boolean asdonAutoFeed(int goal)
 
 	boolean doughAvailable = knoll_available();
 
-	if((get_fuel() < goal) && (my_meat() > 12000) && doughAvailable && isGeneralStoreAvailable())
-	{
-		int want = ((goal + 5) - get_fuel()) / 6;
-		want = min(3 + ((my_meat() - 12000) / 1000), want);
-		if(want > 0)
-		{
-			cli_execute("make " + want + " " + $item[Loaf of Soda Bread]);
-			asdonFeed($item[Loaf of Soda Bread], want);
-			didOnce = true;
-		}
-	}
-
 	if((get_fuel() < goal) && !doughAvailable)
 	{
 		if(item_amount($item[Wad Of Dough]) > 8)
@@ -1350,6 +1355,18 @@ boolean asdonAutoFeed(int goal)
 			buy(1, $item[All-Purpose Flower]);
 			use(1, $item[All-Purpose Flower]);
 			doughAvailable = true;
+		}
+	}
+
+	if((get_fuel() < goal) && (my_meat() > 12000) && doughAvailable && isGeneralStoreAvailable())
+	{
+		int want = ((goal + 5) - get_fuel()) / 6;
+		want = min(3 + ((my_meat() - 12000) / 1000), want);
+		if(want > 0)
+		{
+			cli_execute("make " + want + " " + $item[Loaf of Soda Bread]);
+			asdonFeed($item[Loaf of Soda Bread], want);
+			didOnce = true;
 		}
 	}
 

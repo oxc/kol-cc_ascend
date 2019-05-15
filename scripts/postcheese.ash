@@ -69,14 +69,13 @@ void handlePostAdventure()
 	{
 		//The initial handler is unaware that something comes after this (or this is not reset after resolution, damned if I know).
 
-		//Force mafia to update the results of last_choice() to the choice the follows.
+		//Force mafia to update the results of last_choice() to the choice that follows.
 		string temp = visit_url("main.php");
 
 		print("Choice follows that was not prehandled: " + last_choice());
 		//Is There A Doctor In The House?
 		if(last_choice() == 1340)
 		{
-			//Is there a penalty to accepting the quest and ignoring it?
 			string temp = visit_url("choice.php?whichchoice=1340&option=1");
 		}
 	}

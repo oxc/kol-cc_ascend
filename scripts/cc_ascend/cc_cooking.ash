@@ -559,6 +559,11 @@ boolean canEat(item toEat)
 		return false;
 	}
 
+	if((toEat == $item[Magical Sausage]) && (get_property("_sausagesEaten").to_int() >= 23))
+	{
+		return false;
+	}
+
 	return true;
 }
 
