@@ -1130,7 +1130,7 @@ lovePotion_t lovePotionBuffs()
 		retval.valid = false;
 		return retval;
 	}
-	if(item_amount($item[Love Potion #XYZ]) == 0)
+	if(item_amount($item[Love Potion #0]) == 0)
 	{
 		retval.valid = false;
 		return retval;

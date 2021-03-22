@@ -217,7 +217,7 @@ void initializeSettings()
 	set_property("choiceAdventure1003", 0);
 	beehiveConsider();
 
-	if(item_amount($item[Love Potion #XYZ]) == 0)
+	if(item_amount($item[Love Potion #0]) == 0)
 	{
 		set_property("lovePotion", "");
 	}

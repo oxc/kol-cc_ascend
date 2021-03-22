@@ -4960,7 +4960,7 @@ boolean do_cs_quest(int quest)
 		advs += 3;
 	}
 
-	if(have_skill($skill[Love Mixology]) && ((my_mp() >= mp_cost($skill[Love Mixology])) || (item_amount($item[Love Potion #XYZ]) > 0)))
+	if(have_skill($skill[Love Mixology]) && ((my_mp() >= mp_cost($skill[Love Mixology])) || (item_amount($item[Love Potion #0]) > 0)))
 	{
 		lovePotion_t lovePotion = lovePotionBuffs();
 		if((have_effect($effect[Tainted Love Potion]) == 0) && (my_mp() > mp_cost($skill[Love Mixology])) && !lovePotion.valid)
@@ -4968,7 +4968,7 @@ boolean do_cs_quest(int quest)
 			use_skill(1, $skill[Love Mixology]);
 		}
 
-		if((questList[quest] >= 20) && (item_amount($item[Love Potion #XYZ]) > 0))
+		if((questList[quest] >= 20) && (item_amount($item[Love Potion #0]) > 0))
 		{
 			lovePotion_t lovePotion = lovePotionBuffs();
 			boolean wastePotion = false;
@@ -4990,7 +4990,7 @@ boolean do_cs_quest(int quest)
 			}
 			if(wastePotion)
 			{
-				use(1, $item[Love Potion #XYZ]);
+				use(1, $item[Love Potion #0]);
 			}
 		}
 	}
