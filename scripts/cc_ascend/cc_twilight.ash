@@ -402,7 +402,7 @@ void twilight_initializeDay(int day)
 		pullXWhenHaveY($item[Shield Of The Skeleton Lord], 1, 0);
 		pullXWhenHaveY($item[Dallas Dynasty Falcon Crest shield], 1, 0);
 #		pullXWhenHaveY($item[Spice Melange], 1, 0);
-		if(have_skill($skill[Torso Awaregness]))
+		if(have_skill($skill[Torso Awareness]))
 		{
 			pullXWhenHaveY($item[Sea Salt Scrubs], 1, 0);
 		}
@@ -635,7 +635,7 @@ boolean LM_twilight()
 
 	//Use Free Hate for +30ML for Oil Peak (pull Shield of the Skeleton Lord too?) Let this carry over into the Fulminate?
 
-	if(zone_isAvailable($location[Thugnderdome]) && !have_skill($skill[Torso Awaregness]) && (my_meat() > 7500))
+	if(zone_isAvailable($location[Thugnderdome]) && !have_skill($skill[Torso Awareness]) && (my_meat() > 7500))
 	{
 		string temp = visit_url("gnomes.php?place=skills");
 		temp = visit_url("gnomes.php?action=trainskill&pwd&whichskill=12");
@@ -647,7 +647,7 @@ boolean LM_twilight()
 		buyUpTo(1, $item[Red Zeppelin Ticket]);
 	}
 
-	if((have_skill($skill[Torso Awaregness])) && (my_daycount() == 1) && (my_level() >= 8) && (item_amount($item[Genie Bottle]) > 0))
+	if((have_skill($skill[Torso Awareness])) && (my_daycount() == 1) && (my_level() >= 8) && (item_amount($item[Genie Bottle]) > 0))
 	{
 		int wishes = get_property("_genieWishesUsed").to_int();
 		if(wishes < 3)

@@ -330,7 +330,7 @@ boolean loveTunnelAcquire(boolean enforcer, stat statItem, boolean engineer, int
 	case $stat[Moxie]:			statValue = 3;		break;
 	}
 
-	if(!have_skill($skill[Torso Awaregness]) && !have_skill($skill[Best Dressed]) && (statValue == 1))
+	if(!have_skill($skill[Torso Awareness]) && !have_skill($skill[Best Dressed]) && (statValue == 1))
 	{
 		if(possessEquipment($item[Protonic Accelerator Pack]))
 		{

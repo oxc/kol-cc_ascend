@@ -1,6 +1,6 @@
 script "cc_ascend.ash";
 notify StuBorn;
-since r19210;
+since r20653;
 /***
 	svn checkout https://github.com/oxc/kolmafia-cc_ascend/trunk
 	Killing is wrong, and bad. There should be a new, stronger word for killing like badwrong or badong. YES, killing is badong. From this moment, I will stand for the opposite of killing, gnodab.
@@ -10358,7 +10358,7 @@ boolean LX_craftAcquireItems()
 		run_choice(1);
 	}
 
-	if(knoll_available() && (have_skill($skill[Torso Awaregness]) || have_skill($skill[Best Dressed])) && (item_amount($item[Demon Skin]) > 0) && !possessEquipment($item[Demonskin Jacket]))
+	if(knoll_available() && (have_skill($skill[Torso Awareness]) || have_skill($skill[Best Dressed])) && (item_amount($item[Demon Skin]) > 0) && !possessEquipment($item[Demonskin Jacket]))
 	{
 		//Demonskin Jacket, requires an adventure, knoll available doesn\'t matter here...
 	}
