@@ -1460,7 +1460,7 @@ boolean LA_cs_communityService()
 			if(estimate_cs_questCost(curQuest) > 1)		buffMaintain($effect[Experimental Effect G-9], 0, 1, 1);
 			if(estimate_cs_questCost(curQuest) > 1)		buffMaintain($effect[Purity of Spirit], 0, 1, 1);
 			if(estimate_cs_questCost(curQuest) > 1)		buffMaintain($effect[Human-Human Hybrid], 0, 1, 1);
-			if(estimate_cs_questCost(curQuest) > 1)		buffMaintain($effect[Gr8tness], 0, 1, 1);
+			if(estimate_cs_questCost(curQuest) > 1)		buffMaintain($effect[Gr8ness], 0, 1, 1);
 			if(estimate_cs_questCost(curQuest) > 1)		buffMaintain($effect[Nigh-Invincible], 0, 1, 1);
 			if(estimate_cs_questCost(curQuest) > 1)		buffMaintain($effect[Pill Power], 0, 1, 1);
 			if(estimate_cs_questCost(curQuest) > 1)		buffMaintain($effect[Phorcefullness], 0, 1, 1);
@@ -1661,7 +1661,7 @@ boolean LA_cs_communityService()
 			buffMaintain($effect[Berry Statistical], 0, 1, 1);
 
 			if(estimate_cs_questCost(curQuest) > 1)		buffMaintain($effect[Experimental Effect G-9], 0, 1, 1);
-			if(estimate_cs_questCost(curQuest) > 1)		buffMaintain($effect[Gr8tness], 0, 1, 1);
+			if(estimate_cs_questCost(curQuest) > 1)		buffMaintain($effect[Gr8ness], 0, 1, 1);
 			if(estimate_cs_questCost(curQuest) > 1)		buffMaintain($effect[Pill Power], 0, 1, 1);
 
 			int grapeCost = 1;
@@ -1737,7 +1737,7 @@ boolean LA_cs_communityService()
 			buffMaintain($effect[Pill Power], 0, 1, 1);
 			buffMaintain($effect[Glittering Eyelashes], 0, 1, 1);
 			buffMaintain($effect[Liquidy Smoky], 0, 1, 1);
-			buffMaintain($effect[Gr8tness], 0, 1, 1);
+			buffMaintain($effect[Gr8ness], 0, 1, 1);
 			buffMaintain($effect[OMG WTF], 0, 1, 1);
 			buffMaintain($effect[Purple Reign], 0, 1, 50);
 			buffMaintain($effect[Purple Reign], 0, 1, 50);
@@ -1842,7 +1842,7 @@ boolean LA_cs_communityService()
 			buffMaintain($effect[Notably Lovely], 0, 1, 1);
 			buffMaintain($effect[Pill Power], 0, 1, 1);
 			buffMaintain($effect[Butt-Rock Hair], 0, 1, 1);
-			buffMaintain($effect[Gr8tness], 0, 1, 1);
+			buffMaintain($effect[Gr8ness], 0, 1, 1);
 			buffMaintain($effect[Liquidy Smoky], 0, 1, 1);
 			buffMaintain($effect[Barbecue Saucy], 0, 1, 1);
 			buffMaintain($effect[Cinnamon Challenger], 0, 1, 50);
@@ -2772,7 +2772,7 @@ boolean LA_cs_communityService()
 		{
 			if(canYellowRay())
 			{
-//				if(is_unrestricted($item[Deluxe Fax Machine]) && (item_amount($item[Potion of Temporary Gr8tness]) == 0) && ($classes[Pastamancer, Sauceror] contains my_class()))
+//				if(is_unrestricted($item[Deluxe Fax Machine]) && (item_amount($item[Potion of Temporary Gr8ness]) == 0) && ($classes[Pastamancer, Sauceror] contains my_class()))
 //				{
 //					if(handleFaxMonster($monster[Sk8 gnome], "cs_combatYR"))
 //					{
@@ -3523,9 +3523,9 @@ void cs_make_stuff(int curQuest)
 				buffMaintain($effect[Inigo\'s Incantation of Inspiration], 100, 3, 25);
 			}
 
-			if((item_amount($item[gr8ps]) > 0) && (item_amount($item[Potion of Temporary Gr8tness]) == 0) && (npc_price($item[Delectable Catalyst]) < my_meat()) && ($classes[Sauceror, Pastamancer] contains my_class()) && (freeCrafts() > 0) && have_skill($skill[The Way of Sauce]))
+			if((item_amount($item[gr8ps]) > 0) && (item_amount($item[Potion of Temporary Gr8ness]) == 0) && (npc_price($item[Delectable Catalyst]) < my_meat()) && ($classes[Sauceror, Pastamancer] contains my_class()) && (freeCrafts() > 0) && have_skill($skill[The Way of Sauce]))
 			{
-				cli_execute("make " + $item[Potion of Temporary Gr8tness]);
+				cli_execute("make " + $item[Potion of Temporary Gr8ness]);
 			}
 			if((item_amount($item[grapefruit]) > 0) && (item_amount($item[Ointment of the Occult]) == 0) && (freeCrafts() > 0))
 			{
@@ -4729,7 +4729,7 @@ boolean cs_giant_growth()
 
 boolean cc_csHandleGrapes()
 {
-	if(item_amount($item[Potion of Temporary Gr8tness]) > 0)
+	if(item_amount($item[Potion of Temporary Gr8ness]) > 0)
 	{
 		return false;
 	}
@@ -4742,16 +4742,16 @@ boolean cc_csHandleGrapes()
 		useCocoon();
 		handleFaxMonster($monster[Sk8 gnome], "cs_combatYR");
 	}
-	if((item_amount($item[Gr8ps]) > 0) && (item_amount($item[Potion of Temporary Gr8tness]) == 0) && (have_effect($effect[Gr8tness]) == 0) && (npc_price($item[Delectable Catalyst]) < my_meat()) && (freeCrafts() > 0) && (item_amount($item[Scrumptious Reagent]) > 0) && have_skill($skill[Advanced Saucecrafting]) && ($classes[Pastamancer, Sauceror] contains my_class()) && have_skill($skill[The Way of Sauce]) && (cc_get_campground() contains $item[Dramatic&trade; Range]))
+	if((item_amount($item[Gr8ps]) > 0) && (item_amount($item[Potion of Temporary Gr8ness]) == 0) && (have_effect($effect[Gr8ness]) == 0) && (npc_price($item[Delectable Catalyst]) < my_meat()) && (freeCrafts() > 0) && (item_amount($item[Scrumptious Reagent]) > 0) && have_skill($skill[Advanced Saucecrafting]) && ($classes[Pastamancer, Sauceror] contains my_class()) && have_skill($skill[The Way of Sauce]) && (cc_get_campground() contains $item[Dramatic&trade; Range]))
 	{
 		if(!have_skills($skills[Expert Corner-Cutter, Rapid Prototyping]) && have_skill($skill[Inigo\'s Incantation of Inspiration]))
 		{
 			shrugAT($effect[Inigo\'s Incantation of Inspiration]);
 			buffMaintain($effect[Inigo\'s Incantation of Inspiration], 100, 1, 5);
 		}
-		cli_execute("make " + $item[Potion of Temporary Gr8tness]);
+		cli_execute("make " + $item[Potion of Temporary Gr8ness]);
 	}
-	return (item_amount($item[Potion of Temporary Gr8tness]) > 0);
+	return (item_amount($item[Potion of Temporary Gr8ness]) > 0);
 }
 
 int estimate_cs_questCost(int quest)
