@@ -358,7 +358,7 @@ string cc_combatHandler(int round, string opp, string text)
 	{
 		if((my_daycount() == 1) && (my_location() == $location[Lair Of The Ninja Snowmen]))
 		{
-			if($monsters[Ninja Snowman (Chopsticks), Ninja Snowman (Hilt), Ninja Snowman (Hilt/Mask), Ninja Snowman (Mask), Ninja Snowman Janitor, Ninja Snowman Weaponmaster] contains enemy)
+			if($monsters[Ninja Snowman (Chopsticks), Ninja Snowman (Hilt), Ninja Snowman (Mask), Ninja Snowman Janitor, Ninja Snowman Weaponmaster] contains enemy)
 			{
 				return cc_combatUse($skill[Ensorcel], true);
 			}
