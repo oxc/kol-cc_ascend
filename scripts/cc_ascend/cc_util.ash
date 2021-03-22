@@ -1644,7 +1644,7 @@ string banisherCombatString(monster enemy, location loc)
 
 	// Is it a special banish? (cocktail napkin?)
 
-	if($monsters[Animated Mahogany Nightstand, Animated Possessions, Animated Rustic Nightstand, Banshee Librarian, Bookbat, Bubblemint Twins, Bullet Bill, Burly Sidekick, Chatty Pirate, Clingy Pirate (Female), Clingy Pirate (Male), Coaltergeist, Crusty Pirate, Doughbat, Drunk Goat, Drunk Pygmy, Evil Olive, Flock Of Stab-Bats, Knob Goblin Harem Guard, Knob Goblin Madam, Mad Wino, Mismatched Twins, Natural Spider, Plaid Ghost, Possessed Laundry Press, Procrastination Giant, Protagonist, Pygmy Headhunter, Pygmy Janitor, Pygmy Orderlies, Pygmy Witch Lawyer, Pygmy Witch Nurse, Red Herring, Red Snapper, Sabre-Toothed Goat, Senile Lihc, Slick Lihc, Skeletal Sommelier, Snow Queen, Steam Elemental, Taco Cat, Tan Gnat, Tomb Asp, Tomb Servant, Wardr&ouml;b Nightstand, Warehouse Janitor, Upgraded Ram] excludes enemy)
+	if(!($monsters[Animated Mahogany Nightstand, Animated Possessions, Animated Rustic Nightstand, Banshee Librarian, Bookbat, Bubblemint Twins, Bullet Bill, Burly Sidekick, Chatty Pirate, Clingy Pirate (Female), Clingy Pirate (Male), Coaltergeist, Crusty Pirate, Doughbat, Drunk Goat, Drunk Pygmy, Evil Olive, Flock Of Stab-Bats, Knob Goblin Harem Guard, Knob Goblin Madam, Mad Wino, Mismatched Twins, Natural Spider, Plaid Ghost, Possessed Laundry Press, Procrastination Giant, Protagonist, Pygmy Headhunter, Pygmy Janitor, Pygmy Orderlies, Pygmy Witch Lawyer, Pygmy Witch Nurse, Red Herring, Red Snapper, Sabre-Toothed Goat, Senile Lihc, Slick Lihc, Skeletal Sommelier, Snow Queen, Steam Elemental, Taco Cat, Tan Gnat, Tomb Asp, Tomb Servant, Wardr&ouml;b Nightstand, Warehouse Janitor, Upgraded Ram] contains enemy))
 	{
 		return "";
 	}
@@ -1710,18 +1710,18 @@ string banisherCombatString(monster enemy, location loc)
 #		return "skill " + $skill[Creepy Grin];
 #	}
 
-	if(cc_have_skill($skill[Thunder Clap]) && (my_thunder() >= thunder_cost($skill[Thunder Clap])) && (used excludes "thunder clap"))
+	if(cc_have_skill($skill[Thunder Clap]) && (my_thunder() >= thunder_cost($skill[Thunder Clap])) && (!(used contains "thunder clap")))
 	{
 		return "skill " + $skill[Thunder Clap];
 	}
-	if(cc_have_skill($skill[Asdon Martin: Spring-Loaded Front Bumper]) && (get_fuel() >= fuel_cost($skill[Asdon Martin: Spring-Loaded Front Bumper])) && (used excludes "Spring-Loaded Front Bumper"))
+	if(cc_have_skill($skill[Asdon Martin: Spring-Loaded Front Bumper]) && (get_fuel() >= fuel_cost($skill[Asdon Martin: Spring-Loaded Front Bumper])) && (!(used contains "Spring-Loaded Front Bumper")))
 	{
 		if(!contains_text(get_property("banishedMonsters"), "Spring-Loaded Front Bumper"))
 		{
 			return "skill " + $skill[Asdon Martin: Spring-Loaded Front Bumper];
 		}
 	}
-	if(cc_have_skill($skill[Curse Of Vacation]) && (my_mp() > mp_cost($skill[Curse Of Vacation])) && (used excludes "curse of vacation"))
+	if(cc_have_skill($skill[Curse Of Vacation]) && (my_mp() > mp_cost($skill[Curse Of Vacation])) && (!(used contains "curse of vacation")))
 	{
 		return "skill " + $skill[Curse Of Vacation];
 	}
@@ -1730,35 +1730,35 @@ string banisherCombatString(monster enemy, location loc)
 	{
 		return "skill " + $skill[Show Them Your Ring];
 	}
-	if(cc_have_skill($skill[Breathe Out]) && (my_mp() >= mp_cost($skill[Breathe Out])) && (used excludes "breathe out"))
+	if(cc_have_skill($skill[Breathe Out]) && (my_mp() >= mp_cost($skill[Breathe Out])) && (!(used contains "breathe out")))
 	{
 		return "skill " + $skill[Breathe Out];
 	}
-	if(cc_have_skill($skill[Batter Up!]) && (my_fury() >= 5) && (item_type(equipped_item($slot[weapon])) == "club") && (used excludes "batter up!"))
+	if(cc_have_skill($skill[Batter Up!]) && (my_fury() >= 5) && (item_type(equipped_item($slot[weapon])) == "club") && (!(used contains "batter up!")))
 	{
 		return "skill " + $skill[Batter Up!];
 	}
-	if(cc_have_skill($skill[Baleful Howl]) && (my_hp() > hp_cost($skill[Baleful Howl])) && (used excludes to_string($skill[Baleful Howl])) && (get_property("_balefulHowlUses").to_int() < 10))
+	if(cc_have_skill($skill[Baleful Howl]) && (my_hp() > hp_cost($skill[Baleful Howl])) && (!(used contains to_string($skill[Baleful Howl]))) && (get_property("_balefulHowlUses").to_int() < 10))
 	{
 		if((have_effect($effect[Bats Form]) == 0) && (have_effect($effect[Mist Form]) == 0))
 		{
 			return "skill " + $skill[Baleful Howl];
 		}
 	}
-	if(cc_have_skill($skill[Banishing Shout]) && (my_mp() > mp_cost($skill[Banishing Shout])) && (used excludes "banishing shout"))
+	if(cc_have_skill($skill[Banishing Shout]) && (my_mp() > mp_cost($skill[Banishing Shout])) && (!(used contains "banishing shout")))
 	{
 		return "skill " + $skill[Banishing Shout];
 	}
-	if(cc_have_skill($skill[Walk Away From Explosion]) && (my_mp() > mp_cost($skill[Walk Away From Explosion])) && (have_effect($effect[Bored With Explosions]) == 0) && (used excludes "walk away from explosion"))
+	if(cc_have_skill($skill[Walk Away From Explosion]) && (my_mp() > mp_cost($skill[Walk Away From Explosion])) && (have_effect($effect[Bored With Explosions]) == 0) && (!(used contains "walk away from explosion")))
 	{
 		return "skill " + $skill[Walk Away From Explosion];
 	}
 
-	if(cc_have_skill($skill[Talk About Politics]) && (get_property("_pantsgivingBanish").to_int() < 5) && have_equipped($item[Pantsgiving]) && (used excludes "pantsgiving"))
+	if(cc_have_skill($skill[Talk About Politics]) && (get_property("_pantsgivingBanish").to_int() < 5) && have_equipped($item[Pantsgiving]) && (!(used contains "pantsgiving")))
 	{
 		return "skill " + $skill[Talk About Politics];
 	}
-	if(cc_have_skill($skill[KGB Tranquilizer Dart]) && (get_property("_kgbTranquilizerDartUses").to_int() < 3) && (my_mp() >= mp_cost($skill[KGB Tranquilizer Dart])) && (used excludes "KGB tranquilizer dart"))
+	if(cc_have_skill($skill[KGB Tranquilizer Dart]) && (get_property("_kgbTranquilizerDartUses").to_int() < 3) && (my_mp() >= mp_cost($skill[KGB Tranquilizer Dart])) && (!(used contains "KGB tranquilizer dart")))
 	{
 		boolean useIt = true;
 		if((get_property("cc_gremlins") == "finished") && (my_daycount() >= 2) && (get_property("_kgbTranquilizerDartUses").to_int() >= 2))
@@ -1771,7 +1771,7 @@ string banisherCombatString(monster enemy, location loc)
 			return "skill " + $skill[KGB Tranquilizer Dart];
 		}
 	}
-	if(cc_have_skill($skill[Reflex Hammer]) && (get_property("_reflexHammerUsed").to_int() < 3) && (my_mp() >= mp_cost($skill[Reflex Hammer])) && (used excludes "Reflex Hammer"))
+	if(cc_have_skill($skill[Reflex Hammer]) && (get_property("_reflexHammerUsed").to_int() < 3) && (my_mp() >= mp_cost($skill[Reflex Hammer])) && (!(used contains "Reflex Hammer")))
 	{
 		boolean useIt = true;
 		if((get_property("cc_gremlins") == "finished") && (my_daycount() >= 2) && (get_property("_reflexHammerUsed").to_int() >= 2))
@@ -1784,24 +1784,24 @@ string banisherCombatString(monster enemy, location loc)
 			return "skill " + $skill[Reflex Hammer];
 		}
 	}
-	if(cc_have_skill($skill[Snokebomb]) && (get_property("_snokebombUsed").to_int() < 3) && ((my_mp() - 20) >= mp_cost($skill[Snokebomb])) && (used excludes "snokebomb"))
+	if(cc_have_skill($skill[Snokebomb]) && (get_property("_snokebombUsed").to_int() < 3) && ((my_mp() - 20) >= mp_cost($skill[Snokebomb])) && (!(used contains "snokebomb")))
 	{
 		return "skill " + $skill[Snokebomb];
 	}
-	if(cc_have_skill($skill[Beancannon]) && (get_property("_beancannonUses").to_int() < 5) && ((my_mp() - 20) >= mp_cost($skill[Beancannon])) && (used excludes "beancannon"))
+	if(cc_have_skill($skill[Beancannon]) && (get_property("_beancannonUses").to_int() < 5) && ((my_mp() - 20) >= mp_cost($skill[Beancannon])) && (!(used contains "beancannon")))
 	{
 		if($items[Frigid Northern Beans, Heimz Fortified Kidney Beans, Hellfire Spicy Beans, Mixed Garbanzos and Chickpeas, Pork \'n\' Pork \'n\' Pork \'n\' Beans, Shrub\'s Premium Baked Beans, Tesla\'s Electroplated Beans, Trader Olaf\'s Exotic Stinkbeans, World\'s Blackest-Eyed Peas] contains equipped_item($slot[Off-hand]))
 		{
 			return "skill " + $skill[Beancannon];
 		}
 	}
-	if(cc_have_skill($skill[Breathe Out]) && (used excludes "breathe out"))
+	if(cc_have_skill($skill[Breathe Out]) && (!(used contains "breathe out")))
 	{
 		return "skill " + $skill[Breathe Out];
 	}
 
 	//We want to limit usage of these much more than the others.
-	if($monsters[Natural Spider, Tan Gnat, Tomb Servant, Upgraded Ram] excludes enemy)
+	if(!($monsters[Natural Spider, Tan Gnat, Tomb Servant, Upgraded Ram] contains enemy))
 	{
 		return "";
 	}
@@ -1812,15 +1812,15 @@ string banisherCombatString(monster enemy, location loc)
 		keep = 0;
 	}
 
-	if((item_amount($item[Louder Than Bomb]) > keep) && (used excludes "louder than bomb"))
+	if((item_amount($item[Louder Than Bomb]) > keep) && (!(used contains "louder than bomb")))
 	{
 		return "item " + $item[Louder Than Bomb];
 	}
-	if((item_amount($item[Tennis Ball]) > keep) && (used excludes "tennis ball"))
+	if((item_amount($item[Tennis Ball]) > keep) && (!(used contains "tennis ball")))
 	{
 		return "item " + $item[Tennis Ball];
 	}
-	if((item_amount($item[Deathchucks]) > keep) && (used excludes "deathchucks"))
+	if((item_amount($item[Deathchucks]) > keep) && (!(used contains "deathchucks")))
 	{
 		return "item " + $item[Deathchucks];
 	}

@@ -10406,7 +10406,7 @@ boolean LX_craftAcquireItems()
 
 	if(cc_my_path() != "Community Service")
 	{
-		if($locations[The Black Forest, Lair Of The Ninja Snowmen, Sonofa Beach] excludes my_location())
+		if(!($locations[The Black Forest, Lair Of The Ninja Snowmen, Sonofa Beach] contains my_location()))
 		{
 			getHorse("noncombat");
 		}

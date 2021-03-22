@@ -173,7 +173,7 @@ boolean twilight_buySkills(string page)
 	{
 		for(int i=10; i<=38; i++)
 		{
-			if($ints[11, 19, 20, 29] excludes i)
+			if(!($ints[11, 19, 20, 29] contains i))
 			{
 				skillGoal[i] = 0;
 			}
@@ -448,7 +448,7 @@ boolean LM_twilight()
 
 	if(have_effect($effect[Wolf Form]) == 2147483647)
 	{
-		if($locations[The Themthar Hills] excludes my_location())
+		if(!($locations[The Themthar Hills] contains my_location()))
 		{
 			if(get_property("lastVoteMonsterTurn").to_int() != total_turns_played())
 			{
@@ -458,7 +458,7 @@ boolean LM_twilight()
 	}
 	if(have_effect($effect[Mist Form]) == 2147483647)
 	{
-		if($locations[A-Boo Peak, The Haunted Kitchen] excludes my_location())
+		if(!($locations[A-Boo Peak, The Haunted Kitchen] contains my_location()))
 		{
 			if(get_property("lastVoteMonsterTurn").to_int() != total_turns_played())
 			{
@@ -488,7 +488,7 @@ boolean LM_twilight()
 		}
 
 
-		if($locations[The Defiled Alcove, The Defiled Nook, The Feeding Chamber, The Hatching Chamber, The Middle Chamber, The Royal Guard Chamber, The Upper Chamber] excludes my_location())
+		if(!($locations[The Defiled Alcove, The Defiled Nook, The Feeding Chamber, The Hatching Chamber, The Middle Chamber, The Royal Guard Chamber, The Upper Chamber] contains my_location()))
 		{
 			if(get_property("lastVoteMonsterTurn").to_int() != total_turns_played())
 			{
