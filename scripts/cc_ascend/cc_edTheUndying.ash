@@ -1393,65 +1393,6 @@ boolean ed_ccAdv(int num, location loc, string option, boolean skipFirstLife)
 			abort("We went to the Noob Cave for reals... uh oh");
 		}
 
-		string page = visit_url("main.php");
-		if(contains_text(page, "whichchoice value=1023"))
-		{
-			print("Ed has UNDYING once!" , "blue");
-			if(!ed_shopping())
-			{
-				#If this visit_url results in the enemy dying, we don't want to continue
-				visit_url("choice.php?pwd=&whichchoice=1023&option=2", true);
-			}
-			set_property("cc_edCombatStage", 1);
-			print("Ed returning to battle Stage 1", "blue");
-
-			if(get_property("_edDefeats").to_int() == 0)
-			{
-				print("Monster defeated in initialization, aborting attempt.", "red");
-				set_property("cc_edCombatStage", 0);
-				set_property("cc_disableAdventureHandling", false);
-				cli_execute("postcheese.ash");
-				return true;
-			}
-
-			#Catch if we lose the jump after first revival.
-			if(get_property("_edDefeats").to_int() != 2)
-			{
-				status = adv1(loc, 0, option);
-				if(last_monster() == $monster[Crate])
-				{
-					abort("We went to the Noob Cave for reals... uh oh");
-				}
-			}
-
-			page = visit_url("main.php");
-			if(contains_text(page, "whichchoice value=1023"))
-			{
-				print("Ed has UNDYING twice! Time to kick ass!" , "blue");
-				if(!ed_shopping())
-				{
-					#If this visit_url results in the enemy dying, we don't want to continue
-					visit_url("choice.php?pwd=&whichchoice=1023&option=2", true);
-				}
-				set_property("cc_edCombatStage", 2);
-				print("Ed returning to battle Stage 2", "blue");
-
-				if(get_property("_edDefeats").to_int() == 0)
-				{
-					print("Monster defeated in initialization, aborting attempt.", "red");
-					set_property("cc_edCombatStage", 0);
-					set_property("cc_disableAdventureHandling", false);
-					cli_execute("postcheese.ash");
-					return true;
-				}
-
-				status = adv1(loc, 0, option);
-				if(last_monster() == $monster[Crate])
-				{
-					abort("We went to the Noob Cave for reals... uh oh");
-				}
-			}
-		}
 		set_property("cc_edCombatStage", 0);
 		set_property("cc_disableAdventureHandling", false);
 
@@ -1470,6 +1411,41 @@ boolean ed_ccAdv(int num, location loc, string option)
 	return ed_ccAdv(num, loc, option, false);
 }
 
+boolean ed_ccChoiceHandler(int choice, string responseText)
+{
+	if (choice != 1023)
+	{
+		return false;
+	}
+
+	int stage = get_property("_edDefeats").to_int();
+	if (stage == 0)
+	{
+		print("Monster defeated in initialization, aborting attempt.", "red");
+	set_property("cc_edCombatStage", 0);
+		return true;
+	}
+	if (stage <= 2)
+	{
+		if (stage == 1)
+		{
+			print("Ed has UNDYING once!" , "blue");
+		}
+		else if (stage == 2)
+		{
+			print("Ed has UNDYING twice! Time to kick ass!" , "blue");
+		}
+		if(!ed_shopping())
+		{
+			#If this visit_url results in the enemy dying, we don't want to continue
+			run_choice(2, false);
+		}
+		print("Ed returning to battle Stage " + stage, "blue");
+	}
+	set_property("cc_edCombatStage", stage);
+
+	return true;
+}
 
 boolean L1_ed_island()
 {

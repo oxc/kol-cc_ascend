@@ -288,7 +288,15 @@ boolean ccAdvBypass(string url, string option)
 #}
 
 
+boolean ccChoiceHandler(int choice, string responseText)
+{
+	if(cc_my_path() == "Actually Ed the Undying")
+	{
+		return ed_ccChoiceHandler(choice, responseText);
+	}
 
+	return false;
+}
 
 
 boolean preAdvXiblaxian(location loc)

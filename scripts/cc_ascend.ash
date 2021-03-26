@@ -2302,6 +2302,7 @@ boolean doBedtime()
 	restoreSetting("autoSatisfyWithNPCs");
 	restoreSetting("removeMalignantEffects");
 	restoreSetting("kingLiberatedScript");
+	restoreSetting("choiceAdventureScript");
 	restoreSetting("afterAdventureScript");
 	restoreSetting("betweenAdventureScript");
 	restoreSetting("betweenBattleScript");
@@ -14692,6 +14693,7 @@ void cc_begin()
 	backupSetting("trackVoteMonster", false);
 
 	backupSetting("kingLiberatedScript", "scripts/kingcheese.ash");
+	backupSetting("choiceAdventureScript", "scripts/choicecheese.ash");
 	backupSetting("afterAdventureScript", "scripts/postcheese.ash");
 	backupSetting("betweenAdventureScript", "scripts/precheese.ash");
 	backupSetting("betweenBattleScript", "scripts/precheese.ash");

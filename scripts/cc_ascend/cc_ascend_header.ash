@@ -169,6 +169,7 @@ boolean ccAdvBypass(int snarfblat);
 boolean ccAdvBypass(int snarfblat, string option);
 boolean ccAdvBypass(int snarfblat, location loc);
 boolean ccAdvBypass(int snarfblat, location loc, string option);
+boolean ccChoiceHandler(int choice, string responseText);
 
 //
 //	Secondary adventuring functions
@@ -540,6 +541,7 @@ float edMeatBonus();										//Defined in cc_ascend/cc_edTheUndying.ash
 boolean ed_buySkills();										//Defined in cc_ascend/cc_edTheUndying.ash
 boolean ed_ccAdv(int num, location loc, string option);		//Defined in cc_ascend/cc_edTheUndying.ash
 boolean ed_ccAdv(int num, location loc, string option, boolean skipFirstLife);//Defined in cc_ascend/cc_edTheUndying.ash
+boolean ed_ccChoiceHandler(int choice, string responseText);		//Defined in cc_ascend/cc_edTheUndying.ash
 boolean ed_doResting();										//Defined in cc_ascend/cc_edTheUndying.ash
 boolean ed_eatStuff();										//Defined in cc_ascend/cc_edTheUndying.ash
 boolean ed_handleAdventureServant(int num, location loc, string option);//Defined in cc_ascend/cc_edTheUndying.ash

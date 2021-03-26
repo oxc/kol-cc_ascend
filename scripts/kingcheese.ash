@@ -155,6 +155,7 @@ void handleKingLiberation()
 	if(get_property("cc_clearCombatScripts").to_boolean())
 	{
 		restoreSetting("kingLiberatedScript");
+		restoreSetting("choiceAdventureScript");
 		restoreSetting("afterAdventureScript");
 		restoreSetting("betweenAdventureScript");
 		restoreSetting("betweenBattleScript");
