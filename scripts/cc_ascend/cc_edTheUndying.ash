@@ -1379,7 +1379,6 @@ boolean ed_ccAdv(int num, location loc, string option, boolean skipFirstLife)
 
 		if(!skipFirstLife)
 		{
-			set_property("cc_edCombatStage", 0);
 			print("Starting Ed Battle at " + loc, "blue");
 			status = adv1(loc, 0, option);
 			if(!status && (get_property("lastEncounter") == "Like a Bat Into Hell"))
@@ -1393,7 +1392,6 @@ boolean ed_ccAdv(int num, location loc, string option, boolean skipFirstLife)
 			abort("We went to the Noob Cave for reals... uh oh");
 		}
 
-		set_property("cc_edCombatStage", 0);
 		set_property("cc_disableAdventureHandling", false);
 
 		if(get_property("_edDefeats").to_int() > get_property("edDefeatAbort").to_int())
@@ -1422,7 +1420,6 @@ boolean ed_ccChoiceHandler(int choice, string responseText)
 	if (stage == 0)
 	{
 		print("Monster defeated in initialization, aborting attempt.", "red");
-	set_property("cc_edCombatStage", 0);
 		return true;
 	}
 	if (stage <= 2)
@@ -1442,7 +1439,6 @@ boolean ed_ccChoiceHandler(int choice, string responseText)
 		}
 		print("Ed returning to battle Stage " + stage, "blue");
 	}
-	set_property("cc_edCombatStage", stage);
 
 	return true;
 }

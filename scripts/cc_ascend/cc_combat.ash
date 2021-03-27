@@ -1924,7 +1924,7 @@ string ccsJunkyard(int round, string opp, string text)
 
 	if(!get_property("cc_gremlinMoly").to_boolean() && (my_class() == $class[Ed]))
 	{
-		if((get_property("cc_edCombatStage").to_int() >= 2) || (get_property("cc_edStatus") == "dying"))
+		if((get_property("_edDefeats").to_int() >= 2) || (get_property("cc_edStatus") == "dying"))
 		{
 			string banisher = findBanisher(round, opp, text);
 			if(banisher != "attack with weapon")
@@ -1949,7 +1949,7 @@ string ccsJunkyard(int round, string opp, string text)
 	{
 		if(my_class() == $class[Ed])
 		{
-			if((get_property("cc_edCombatStage").to_int() >= 2) || (get_property("cc_edStatus") == "dying"))
+			if((get_property("_edDefeats").to_int() >= 2) || (get_property("cc_edStatus") == "dying"))
 			{
 				return findBanisher(round, opp, text);
 			}
@@ -2005,15 +2005,10 @@ string cc_edCombatHandler(int round, string opp, string text)
 	{
 		print("cc_combatHandler: " + round, "brown");
 		set_property("cc_combatHandler", "");
-		if(get_property("cc_edCombatStage").to_int() == 0)
+		if(get_property("_edDefeats").to_int() == 0)
 		{
 			set_property("cc_edCombatCount", 1 + get_property("cc_edCombatCount").to_int());
-			set_property("cc_edCombatStage", 1);
 			set_property("cc_edStatus", "UNDYING!");
-		}
-		else
-		{
-			set_property("cc_edCombatStage", 1 + get_property("cc_edCombatStage").to_int());
 		}
 	}
 	else
@@ -2043,10 +2038,9 @@ string cc_edCombatHandler(int round, string opp, string text)
 		}
 	}
 
-	if(get_property("cc_edCombatStage").to_int() == 3)
+	if(get_property("_edDefeats").to_int() > 2)
 	{
 		set_property("cc_edStatus", "dying");
-		set_property("cc_edCombatStage", 0);
 	}
 	set_property("cc_diag_round", round);
 
@@ -2087,7 +2081,7 @@ string cc_edCombatHandler(int round, string opp, string text)
 
 	if(((get_property("edPoints").to_int() <= 4) && (my_daycount() == 1)) || !get_property("lovebugsUnlocked").to_boolean())
 	{
-		if(!ed_needShop() || (get_property("cc_edCombatStage").to_int() > 1))
+		if(!ed_needShop() || (get_property("_edDefeats").to_int() > 1))
 		{
 			set_property("cc_edStatus", "dying");
 		}
@@ -2202,7 +2196,7 @@ string cc_edCombatHandler(int round, string opp, string text)
 		return cc_combatUse($skill[Curse Of Fortune], true);
 	}
 
-	if(cc_combatCanUse($skill[Curse Of Stench], true) && (get_property("stenchCursedMonster") != opp) && (get_property("cc_edCombatStage").to_int() < 3) && !contains_text(edCombatState, $skill[Curse Of Stench]))
+	if(cc_combatCanUse($skill[Curse Of Stench], true) && (get_property("stenchCursedMonster") != opp) && (get_property("_edDefeats").to_int() < 3) && !contains_text(edCombatState, $skill[Curse Of Stench]))
 	{
 		if($monsters[Bob Racecar, Cabinet of Dr. Limpieza, Dairy Goat, Dirty Old Lihc, Government Scientist,  Green Ops Soldier, Possessed Wine Rack, Pygmy Bowler, Pygmy Witch Surgeon, Quiet Healer, Racecar Bob, Writing Desk] contains enemy)
 		{
@@ -2213,7 +2207,7 @@ string cc_edCombatHandler(int round, string opp, string text)
 
 	if(my_location() == $location[The Secret Council Warehouse])
 	{
-		if(!contains_text(edCombatSTate, $skill[Curse Of Stench]) && cc_combatCanUse($skill[Curse Of Stench], true) && (get_property("stenchCursedMonster") != opp) && (get_property("cc_edCombatStage").to_int() < 3))
+		if(!contains_text(edCombatSTate, $skill[Curse Of Stench]) && cc_combatCanUse($skill[Curse Of Stench], true) && (get_property("stenchCursedMonster") != opp) && (get_property("_edDefeats").to_int() < 3))
 		{
 			boolean doStench = false;
 			#	Rememeber, we are looking to see if we have enough of the opposite item here.
@@ -2241,7 +2235,7 @@ string cc_edCombatHandler(int round, string opp, string text)
 
 	if(my_location() == $location[The Smut Orc Logging Camp])
 	{
-		if(!contains_text(edCombatState, $skill[Curse Of Stench]) && cc_combatCanUse($skill[Curse Of Stench], true) && (get_property("stenchCursedMonster") != opp) && (get_property("cc_edCombatStage").to_int() < 3))
+		if(!contains_text(edCombatState, $skill[Curse Of Stench]) && cc_combatCanUse($skill[Curse Of Stench], true) && (get_property("stenchCursedMonster") != opp) && (get_property("_edDefeats").to_int() < 3))
 		{
 			boolean doStench = false;
 			monster stenched = to_monster(get_property("stenchCursedMonster"));
