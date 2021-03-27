@@ -1,8 +1,8 @@
 script "cc_ascend.ash";
-notify cheesecookie;
+notify StuBorn;
 since r19210;
 /***
-	svn checkout https://svn.code.sf.net/p/ccascend/code/cc_ascend
+	svn checkout https://github.com/oxc/kolmafia-cc_ascend/trunk
 	Killing is wrong, and bad. There should be a new, stronger word for killing like badwrong or badong. YES, killing is badong. From this moment, I will stand for the opposite of killing, gnodab.
 
 	cc_ascend_header.ash must be first import
