@@ -15,6 +15,7 @@ since r20653;
 
 import <cc_ascend/cc_ascend_header.ash>
 import <cc_ascend/cc_util.ash>
+import <cc_ascend/cc_decisionLog.ash>
 import <cc_ascend/cc_deprecation.ash>
 import <cc_ascend/cc_combat.ash>
 import <cc_ascend/cc_floristfriar.ash>
@@ -8129,7 +8130,7 @@ boolean L11_getBeehive()
 {
 	if(my_level() < 11)
 	{
-		return false;
+		return logDecision("level < 11", 3);
 	}
 	if(!get_property("cc_getBeehive").to_boolean())
 	{
@@ -8224,7 +8225,7 @@ boolean L10_plantThatBean()
 {
 	if(my_level() < 10)
 	{
-		return false;
+		return logDecision("level < 10", 3);
 	}
 	if(get_property("cc_bean").to_boolean())
 	{
@@ -8264,32 +8265,34 @@ boolean L10_plantThatBean()
 
 boolean L10_holeInTheSkyUnlock()
 {
+	setDecisionScope("L10_holeInTheSkyUnlock");
+
 	if(my_level() < 10)
 	{
-		return false;
+		return logDecision("level < 10", 3);
 	}
 	if(get_property("cc_castleground") != "finished")
 	{
-		return false;
+		return logDecision("cc_castleground not finished", 2);
 	}
 
 	if(!get_property("cc_holeinthesky").to_boolean())
 	{
-		return false;
+		return logDecision("cc_holeinthesky not required", 3);
 	}
 	if(item_amount($item[Steam-Powered Model Rocketship]) > 0)
 	{
 		set_property("cc_holeinthesky", false);
-		return false;
+		return logDecision("already have the rocketship", 2);
 	}
 	if(!doHoleInTheSky())
 	{
-		return false;
+		return logDecision("don't need to do the hole in the sky anyway", 2);
 	}
 
 	if(!can_equip($item[Mohawk Wig]) && possessEquipment($item[Mohawk Wig]))
 	{
-		return false;
+		return logDecision("Can't equip a Mohawk Wig, or don't have one", 1);
 	}
 
 	print("Castle Top Floor - Opening the Hole in the Sky", "blue");
@@ -8319,19 +8322,21 @@ boolean L10_holeInTheSkyUnlock()
 
 boolean L10_topFloor()
 {
+	setDecisionScope("L10_topFloor");
+
 	if(my_level() < 10)
 	{
-		return false;
+		return logDecision("level < 10", 3);
 	}
 
 	if(get_property("cc_castleground") != "finished")
 	{
-		return false;
+		return logDecision("cc_castleground not finished", 2);
 	}
 
 	if(get_property("cc_castletop") != "")
 	{
-		return false;
+		return logDecision("cc_castletop set to " + get_property("cc_castletop"), 2);
 	}
 
 	print("Castle Top Floor", "blue");
@@ -9804,9 +9809,11 @@ boolean L9_leafletQuest()
 
 boolean L8_trapperGround()
 {
+	setDecisionScope("L8_trapperGround");
+
 	if(get_property("cc_trapper") != "start")
 	{
-		return false;
+		return logDecision("cc_trapper != start", 2);
 	}
 
 	#print("Starting Trapper Collection", "blue");
@@ -9905,7 +9912,7 @@ boolean L8_trapperGround()
 			return true;
 		}
 	}
-	return false;
+	return logDecision("Don't know what to do right now.", 2);
 }
 
 boolean LX_guildUnlock()
@@ -9991,9 +9998,11 @@ boolean LX_guildUnlock()
 
 boolean L8_trapperStart()
 {
+	setDecisionScope("L8_trapperStart");
+
 	if((my_level() < 8) || (get_property("cc_trapper") != ""))
 	{
-		return false;
+		return logDecision("level < 8 || cc_trapper != '' (" + get_property("cc_trapper") + ")", 3);
 	}
 	council();
 	print("Let's meet the trapper.", "blue");
@@ -12736,22 +12745,24 @@ boolean L9_chasmStart()
 
 boolean L11_redZeppelin()
 {
+	setDecisionScope("L11_redZeppelin");
+
 	if(!get_property("cc_shenCopperhead").to_boolean())
 	{
-		return false;
+		return logDecision("cc_shenCopperhead == false", 3);
 	}
 
 	if(my_level() < 11)
 	{
-		return false;
+		return logDecision("level < 11", 3);
 	}
 	if(get_property("questL11Shen") != "finished")
 	{
-		return false;
+		return logDecision("questL11Shen != finished", 2);
 	}
 	if(internalQuestStatus("questL11Ron") >= 2)
 	{
-		return false;
+		return logDecision("questL11Ron >= 2", 2);
 	}
 
 	if(internalQuestStatus("questL11Ron") == 0)
@@ -12843,26 +12854,28 @@ boolean L11_redZeppelin()
 
 boolean L11_ronCopperhead()
 {
+	setDecisionScope("L11_ronCopperhead");
+
 	if(!get_property("cc_shenCopperhead").to_boolean())
 	{
-		return false;
+		return logDecision("cc_shenCopperhead == false", 3);
 	}
 
 	if(my_level() < 11)
 	{
-		return false;
+		return logDecision("level < 11", 3);
 	}
 	if(internalQuestStatus("questL11Shen") < 0)
 	{
-		return false;
+		return logDecision("questL11Shen < 0", 2);
 	}
 	if(internalQuestStatus("questL11Ron") < 2)
 	{
-		return false;
+		return logDecision("questL11Ron < 2", 2);
 	}
 	if(get_property("questL11Ron") == "finished")
 	{
-		return false;
+		return logDecision("questL11Ron already finished", 2);
 	}
 
 	if((internalQuestStatus("questL11Ron") == 2) || (internalQuestStatus("questL11Ron") == 3) || (internalQuestStatus("questL11Ron") == 4))
@@ -12885,22 +12898,24 @@ boolean L11_ronCopperhead()
 
 boolean L11_shenCopperhead()
 {
+	setDecisionScope("L11_shenCopperhead");
+
 	if(!get_property("cc_shenCopperhead").to_boolean())
 	{
-		return false;
+		return logDecision("cc_shenCopperhead == false", 3);
 	}
 
 	if(my_level() < 11)
 	{
-		return false;
+		return logDecision("level < 11", 3);
 	}
 	if(internalQuestStatus("questL11Shen") < 0)
 	{
-		return false;
+		return logDecision("questL11Shen < 0", 2);
 	}
 	if(get_property("questL11Shen") == "finished")
 	{
-		return false;
+		return logDecision("questL11Shen already finished", 2);
 	}
 
 	set_property("choiceAdventure1074", 1);
@@ -12962,7 +12977,7 @@ boolean L11_shenCopperhead()
 		}
 		if(!zone_isAvailable(goal))
 		{
-			return false;
+			return logDecision("Zone " + goal + " is not available.", 1);
 		}
 		if(($location[The Castle in the Clouds in the Sky (Top Floor)] == goal) && (get_property("cc_castletop") == ""))
 		{
@@ -13384,9 +13399,11 @@ boolean L5_haremOutfit()
 
 boolean L8_trapperGroar()
 {
+	setDecisionScope("L8_trapperGroar");
+
 	if(get_property("cc_trapper") == "finished")
 	{
-		return false;
+		return logDecision("cc_trapper already finished", 3);
 	}
 
 	boolean canGroar = false;
@@ -13514,13 +13531,15 @@ boolean L8_trapperGroar()
 
 boolean L8_trapperExtreme()
 {
+	setDecisionScope("L8_trapperExtreme");
+
 	if(get_property("currentExtremity").to_int() >= 3)
 	{
-		return false;
+		return logDecision("currentExtremity not high enough: " + get_property("currentExtremity"), 1);
 	}
 	if(internalQuestStatus("questL08Trapper") >= 3)
 	{
-		return false;
+		return logDecision("questL08Trapper already too far: " + get_property("questL08Trapper"), 1);
 	}
 	if(get_property("_sourceTerminalDigitizeMonster") == $monster[Ninja Snowman Assassin])
 	{

@@ -48,3 +48,4 @@
 48	cc_slowSteelOrgan	boolean	ANY	When true, don't immediately go for the Steel Organ (assuming we want a steel organ).
 49	cc_saveSausage	boolean	ANY	When true, in HCCS, do not eat the Sausage Without A Cause (may cause you to eat nothing on day 2).
 50	cc_edDefeatAbort	integer	ANY	The number of times Ed can die before the script aborts (should be at least 2).
+51	cc_printDecisionLog	integer	ANY	The level of decision logs to print (0 = none)

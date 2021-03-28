@@ -880,6 +880,10 @@ familiar[int] cc_itemFamiliarList();						//Defined in cc_ascend/cc_util.ash
 string cc_meatFamiliarMaximizerString();					//Defined in cc_ascend/cc_util.ash
 string cc_itemFamiliarMaximizerString();					//Defined in cc_ascend/cc_util.ash
 
+void setDecisionScope(string scope);						//Defined in cc_ascend/cc_decisionLog.ash
+boolean logDecision(boolean decision, string reason);		//Defined in cc_ascend/cc_decisionLog.ash
+boolean logDecision(string reason, int level);				//Defined in cc_ascend/cc_decisionLog.ash
+boolean logDecision(boolean decision, string reason, int level);	//Defined in cc_ascend/cc_decisionLog.ash
 
 //From Zlib Stuff
 record kmailObject {
