@@ -4072,6 +4072,10 @@ int whitePixelCount()
 	return count + extra;
 }
 
+boolean doHoleInTheSky()
+{
+	return needStarKey() || ($location[The Hole in the Sky] == cc_shenCopperheadGoal());
+}
 
 boolean careAboutDrops(monster mon)
 {

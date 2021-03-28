@@ -842,6 +842,7 @@ boolean use_barrels();										//Defined in cc_ascend/cc_util.ash
 boolean needStarKey();										//Defined in cc_ascend/cc_util.ash
 boolean needDigitalKey();									//Defined in cc_ascend/cc_util.ash
 int whitePixelCount();										//Defined in cc_ascend/cc_util.ash
+boolean doHoleInTheSky();									//Defined in cc_ascend/cc_util.ash
 boolean careAboutDrops(monster mon);						//Defined in cc_ascend/cc_util.ash
 boolean volcano_bunkerJob();								//Defined in cc_ascend/cc_elementalPlanes.ash
 boolean volcano_lavaDogs();									//Defined in cc_ascend/cc_elementalPlanes.ash

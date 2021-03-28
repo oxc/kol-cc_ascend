@@ -5088,9 +5088,7 @@ boolean L12_lastDitchFlyer()
 	}
 
 	print("Not enough flyer ML but we are ready for the war... uh oh", "blue");
-	boolean doHoleInTheSky = needStarKey();
-
-	if(doHoleInTheSky)
+	if(doHoleInTheSky())
 	{
 		if(item_amount($item[Steam-Powered Model Rocketship]) == 0)
 		{
@@ -8284,9 +8282,8 @@ boolean L10_holeInTheSkyUnlock()
 		set_property("cc_holeinthesky", false);
 		return false;
 	}
-	if(!needStarKey())
+	if(!doHoleInTheSky())
 	{
-		set_property("cc_holeinthesky", false);
 		return false;
 	}
 
@@ -12961,6 +12958,10 @@ boolean L11_shenCopperhead()
 //		{
 //			abort("Vampyre " + goal + " handler");
 //		}
+		if($location[The Hole in the Sky] == goal)
+		{
+			set_property("cc_holeinthesky", "true");
+		}
 		if(!zone_isAvailable(goal))
 		{
 			return false;
