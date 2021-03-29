@@ -2619,15 +2619,21 @@ string cc_edCombatHandler(int round, string opp, string text)
 			return cc_combatUse($skill[Curse of Fortune], true);
 		}
 
+		item stall = $item[none];
 		if(cc_combatCanUse($item[Dictionary]))
 		{
-#			string macro = "item dictionary; repeat";
-#			visit_url("fight.php?action=macro&macrotext=" + url_encode(macro), true, true);
-			return cc_combatUse($item[Dictionary]);
+			stall = $item[Dictionary];
 		}
-		if(cc_combatCanUse($item[Seal Tooth]))
+		else if(cc_combatCanUse($item[Seal Tooth]))
 		{
-			return cc_combatUse($item[Seal Tooth]);
+			stall = $item[Seal Tooth];
+		}
+
+		if (stall != $item[none])
+		{
+			string macro = "use " + stall.name + "; repeat";
+			set_property("cc_combatHandler", get_property("cc_combatHandler") + "(stall-macro)");
+			return "\"" + macro + "\"";
 		}
 
 		return cc_combatUse($skill[Mild Curse]);
