@@ -6391,8 +6391,8 @@ boolean LX_spookyravenSecond()
 		}
 		if(item_amount($item[Lady Spookyraven\'s Dancing Shoes]) == 0)
 		{
- 			set_property("louvreGoal", "7");
- 			set_property("louvreDesiredGoal", "7");
+			set_property("louvreGoal", "7");
+			set_property("louvreDesiredGoal", "7");
 			print("Spookyraven: Gallery", "blue");
 
 			cc_sourceTerminalEducate($skill[Extract], $skill[Portscan]);
@@ -8914,7 +8914,7 @@ boolean LX_dolphinKingMap()
 {
 	if(item_amount($item[Dolphin King\'s Map]) > 0)
 	{
-		if(possessEquipment($item[Snorkel]) || ((my_meat() >= npc_price($item[Snorkel])) && isGeneralStoreAvailable())) 
+		if(possessEquipment($item[Snorkel]) || ((my_meat() >= npc_price($item[Snorkel])) && isGeneralStoreAvailable()))
 		{
 			buyUpTo(1, $item[Snorkel]);
 			item oldHat = equipped_item($slot[hat]);
@@ -12619,7 +12619,7 @@ boolean L9_chasmBuild()
 
 		ccAdv(1, $location[The Smut Orc Logging Camp]);
 
- 		if(item_amount($item[Smut Orc Keepsake Box]) > 0)
+		if(item_amount($item[Smut Orc Keepsake Box]) > 0)
 		{
 			if(cc_my_path() != "G-Lover")
 			{
