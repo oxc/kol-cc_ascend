@@ -9876,6 +9876,7 @@ boolean L8_trapperGround()
 	}
 	else if((my_level() >= 12) && in_hardcore())
 	{
+		while(acquireHermitItem($item[Ten-Leaf Clover]));
 		int numCloversKeep = 0;
 		if(get_property("cc_wandOfNagamar").to_boolean())
 		{
