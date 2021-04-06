@@ -2641,9 +2641,15 @@ string cc_edCombatHandler(int round, string opp, string text)
 
 	if(cc_combatCanUse($skill[Roar of the Lion]) && (my_location() == $location[The Secret Government Laboratory]))
 	{
-		if(cc_combatCanUse($skill[Storm Of The Scarab]) && (my_buffedstat($stat[Mysticality]) >= 60))
+		if(cc_combatCanUse($skill[Storm Of The Scarab]))
 		{
-			return cc_combatUse($skill[Storm Of The Scarab]);
+			int myst = my_buffedstat($stat[Mysticality]);
+			float scarabDamage = ((0.1*myst + numeric_modifier("Spell Damage")) * (100+numeric_modifier("Spell Damage Percent"))/100 * 5);
+			float roarDamage = ((1.5*myst + numeric_modifier("Spell Damage")) * (100+numeric_modifier("Spell Damage Percent"))/100);
+			if (scarabDamage > roarDamage || scarabDamage > monster_hp())
+			{
+				return cc_combatUse($skill[Storm Of The Scarab]);
+			}
 		}
 		return cc_combatUse($skill[Roar Of The Lion]);
 	}
