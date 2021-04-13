@@ -12698,7 +12698,6 @@ boolean L9_chasmBuild()
 			if((my_buffedstat($stat[Moxie]) >= 725) && (elemental_resist($element[sleaze]) >= 8))
 			{
 				print("Smut power! " + my_buffedstat($stat[moxie]) + ", " + elemental_resist($element[sleaze]));
-				backupSetting("choiceAdventure1345", 3);
 			}
 			else
 			{
@@ -12706,12 +12705,10 @@ boolean L9_chasmBuild()
 				{
 					abort("No Blech House option is available");
 				}
-				backupSetting("choiceAdventure1345", 3);
 			}
 		}
 
 		ccAdv(1, $location[The Smut Orc Logging Camp]);
-		restoreSetting("choiceAdventure1345");
 		visit_url("place.php?whichplace=orc_chasm&action=bridge"+(to_int(get_property("chasmBridgeProgress"))));
 		return true;
 	}

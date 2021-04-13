@@ -292,7 +292,21 @@ boolean ccChoiceHandler(int choice, string responseText)
 {
 	if(cc_my_path() == "Actually Ed the Undying")
 	{
-		return ed_ccChoiceHandler(choice, responseText);
+		if (ed_ccChoiceHandler(choice, responseText))
+		{
+			return true;
+		}
+	}
+
+	# Blech House
+	if (choice == 1345)
+	{
+		int mus = floor(square_root((my_buffedstat($stat[Muscle])+numeric_modifier("Weapon Damage"))/15*(1+numeric_modifier("Weapon Damage Percent")/100)));
+		int mys = floor(square_root((my_buffedstat($stat[Mysticality])+numeric_modifier("Spell Damage"))/15*(1+numeric_modifier("Spell Damage Percent")/100)));
+		int mox = floor(square_root(my_buffedstat($stat[Moxie])/30*(1+numeric_modifier("Sleaze Resistance")*0.69)));
+		int choice = (mys > mus ? mox > mys ? 3 : 2 : mox > mus ? 3 : 1);
+		run_choice(choice, false);
+		return true;
 	}
 
 	return false;
