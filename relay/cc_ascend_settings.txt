@@ -47,3 +47,4 @@
 47	cc_hideAdultery	boolean	ANY	When true, automatically deletes Zatara Consults from Kmails during end of day cleanup.
 48	cc_slowSteelOrgan	boolean	ANY	When true, don't immediately go for the Steel Organ (assuming we want a steel organ).
 49	cc_saveSausage	boolean	ANY	When true, in HCCS, do not eat the Sausage Without A Cause (may cause you to eat nothing on day 2).
+50	cc_edDefeatAbort	integer	ANY	The number of times Ed can die before the script aborts (should be at least 2).

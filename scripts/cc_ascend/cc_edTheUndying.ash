@@ -52,6 +52,22 @@ void ed_initializeSettings()
 		set_property("choiceAdventure1023", "");
 		set_property("desertExploration", 100);
 		set_property("nsTowerDoorKeysUsed", "Boris's key,Jarlsberg's key,Sneaky Pete's key,Richard's star key,skeleton key,digital key");
+		if (get_property("edDefeatAbort").to_int() < 4)
+		{
+			print_html("<font color=\"olive\">Use <i>cc_edDefeatAbort</i> for regular limit, and <i>edDefeatAbort</i> as hard limit</font>");
+			if (get_property("cc_edDefeatAbort") == "")
+			{
+				string edDefeatAbort = get_property("edDefeatAbort");
+				print("Setting cc_edDefeatAbort to " + edDefeatAbort, "olive");
+				set_property("cc_edDefeatAbort", edDefeatAbort);
+			}
+			else
+			{
+				print("cc_edDefeatAbort is already set to " + get_property("cc_edDefeatAbort"), "olive");
+			}
+			print("Setting edDefeatAbort to 4", "olive");
+			set_property("edDefeatAbort", 4);
+		}
 	}
 }
 
@@ -1411,31 +1427,34 @@ boolean ed_ccAdv(int num, location loc, string option)
 
 boolean ed_ccChoiceHandler(int choice, string responseText)
 {
+	# Like Bat Into Hell
 	if (choice == 1023)
 	{
 		int stage = get_property("_edDefeats").to_int();
 		if (stage == 0)
 		{
-			print("Monster defeated in initialization, aborting attempt.", "red");
-			return true;
+			print("How did we get here without being defeated?", "red");
+			return false;
 		}
-		if (stage <= 2)
+		if (stage == 1)
 		{
-			if (stage == 1)
-			{
-				print("Ed has UNDYING once!" , "blue");
-			}
-			else if (stage == 2)
-			{
-				print("Ed has UNDYING twice! Time to kick ass!" , "blue");
-			}
-			if(!ed_shopping())
-			{
-				#If this visit_url results in the enemy dying, we don't want to continue
-				run_choice(2, false);
-			}
-			print("Ed returning to battle Stage " + stage, "blue");
+			print("Ed has UNDYING once!" , "blue");
 		}
+		else if (stage == 2)
+		{
+			print("Ed has UNDYING twice! Time to kick ass!" , "blue");
+		}
+		else if (stage >= get_property("cc_edDefeatAbort").to_int())
+		{
+			abort("Hit Ed defeat threshold - Manual control requested for choice #" + choice);
+			return false;
+		}
+
+		if(!ed_shopping())
+		{
+			run_choice(2, false);
+		}
+		print("Ed returning to battle Stage " + stage, "blue");
 
 		return true;
 	}
