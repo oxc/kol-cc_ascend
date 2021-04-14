@@ -1411,36 +1411,36 @@ boolean ed_ccAdv(int num, location loc, string option)
 
 boolean ed_ccChoiceHandler(int choice, string responseText)
 {
-	if (choice != 1023)
+	if (choice == 1023)
 	{
-		return false;
-	}
+		int stage = get_property("_edDefeats").to_int();
+		if (stage == 0)
+		{
+			print("Monster defeated in initialization, aborting attempt.", "red");
+			return true;
+		}
+		if (stage <= 2)
+		{
+			if (stage == 1)
+			{
+				print("Ed has UNDYING once!" , "blue");
+			}
+			else if (stage == 2)
+			{
+				print("Ed has UNDYING twice! Time to kick ass!" , "blue");
+			}
+			if(!ed_shopping())
+			{
+				#If this visit_url results in the enemy dying, we don't want to continue
+				run_choice(2, false);
+			}
+			print("Ed returning to battle Stage " + stage, "blue");
+		}
 
-	int stage = get_property("_edDefeats").to_int();
-	if (stage == 0)
-	{
-		print("Monster defeated in initialization, aborting attempt.", "red");
 		return true;
 	}
-	if (stage <= 2)
-	{
-		if (stage == 1)
-		{
-			print("Ed has UNDYING once!" , "blue");
-		}
-		else if (stage == 2)
-		{
-			print("Ed has UNDYING twice! Time to kick ass!" , "blue");
-		}
-		if(!ed_shopping())
-		{
-			#If this visit_url results in the enemy dying, we don't want to continue
-			run_choice(2, false);
-		}
-		print("Ed returning to battle Stage " + stage, "blue");
-	}
 
-	return true;
+	return false;
 }
 
 boolean L1_ed_island()
