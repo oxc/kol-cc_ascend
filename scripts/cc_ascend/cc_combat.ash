@@ -1808,9 +1808,9 @@ string findBanisher(int round, string opp, string text)
 		}
 	}
 
-	if(cc_have_skill($skill[Storm of the Scarab]) && (my_mp() >= mp_cost($skill[Storm of the Scarab])))
+	if(cc_combatCanUse($skill[Storm Of The Scarab]))
 	{
-		return "skill Storm of the Scarab";
+		return cc_combatUse($skill[Storm Of The Scarab]);
 	}
 	return cc_combatHandler(round, opp, text);
 }
@@ -1919,23 +1919,6 @@ string ccsJunkyard(int round, string opp, string text)
 		if(cc_combatCanUse(sk, true))
 		{
 			return cc_combatUse(sk, true);
-		}
-	}
-
-	if(!get_property("cc_gremlinMoly").to_boolean() && (my_class() == $class[Ed]))
-	{
-		if((get_property("_edDefeats").to_int() >= 2) || (get_property("cc_edStatus") == "dying"))
-		{
-			string banisher = findBanisher(round, opp, text);
-			if(banisher != "attack with weapon")
-			{
-				return banisher;
-			}
-			else if(cc_combatCanUse($skill[Storm Of The Scarab]))
-			{
-				return cc_combatUse($skill[Storm Of The Scarab]);
-			}
-			return banisher;
 		}
 	}
 
