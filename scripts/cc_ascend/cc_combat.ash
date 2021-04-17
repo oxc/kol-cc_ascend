@@ -3,6 +3,7 @@ script "cc_combat.ash"
 monster ocrs_helper(string page);
 void awol_helper(string page);
 string ccsJunkyard(int round, string opp, string text);
+string cc_edStall();
 string cc_edCombatHandler(int round, string opp, string text);
 string cc_combatHandler(int round, string opp, string text);
 
@@ -1819,99 +1820,34 @@ string ccsJunkyard(int round, string opp, string text)
 {
 	monster enemy = to_monster(opp);
 
-	if(!($monsters[A.M.C. gremlin, batwinged gremlin, erudite gremlin, spider gremlin, vegetable gremlin] contains enemy))
+	boolean hasTool;
+	if($monsters[batwinged gremlin (tool), erudite gremlin (tool), spider gremlin (tool), vegetable gremlin (tool)] contains enemy)
+	{
+		hasTool = true;
+	}
+	else if($monsters[A.M.C. gremlin, batwinged gremlin, erudite gremlin, spider gremlin, vegetable gremlin] contains enemy)
+	{
+		hasTool = false;
+	}
+	else
 	{
 		return cc_combatHandler(round, opp, text);
 	}
 
-	if(round == 0)
-	{
-		print("ccsJunkyard: " + round, "brown");
-		set_property("cc_gremlinMoly", true);
-		set_property("cc_combatHandler", "");
-	}
-	else
-	{
-		print("cc_Junkyard: " + round, "brown");
-	}
-	string combatState = get_property("cc_combatHandler");
-	string edCombatState = get_property("cc_edCombatHandler");
+	print("ccsJunkyard: " + round, "brown");
 
-	if(my_class() == $class[Ed])
+	if(contains_text(text, "It whips out a hammer") || contains_text(text, "He whips out a crescent") || contains_text(text, "It whips out a pair") || contains_text(text, "It whips out a screwdriver"))
 	{
-		if(contains_text(edCombatState, "gremlinNeedBanish"))
-		{
-			set_property("cc_gremlinMoly", false);
-		}
+		return cc_combatUse($item[Molybdenum Magnet]);
 	}
 
-	if(enemy == $monster[A.M.C. gremlin])
-	{
-		set_property("cc_gremlinMoly", false);
-	}
-
-	if(my_location() == $location[Next To That Barrel With Something Burning In It])
-	{
-		if(enemy == $monster[vegetable gremlin])
-		{
-			set_property("cc_gremlinMoly", false);
-		}
-		else if(contains_text(text, "It does a bombing run over your head"))
-		{
-			set_property("cc_gremlinMoly", false);
-		}
-	}
-	else if(my_location() == $location[Out By That Rusted-Out Car])
-	{
-		if(enemy == $monster[erudite gremlin])
-		{
-			set_property("cc_gremlinMoly", false);
-		}
-		else if(contains_text(text, "It picks a beet off of itself and beats you with it"))
-		{
-			set_property("cc_gremlinMoly", false);
-		}
-	}
-	else if(my_location() == $location[Over Where The Old Tires Are])
-	{
-		if(enemy == $monster[spider gremlin])
-		{
-			set_property("cc_gremlinMoly", false);
-		}
-		else if(contains_text(text, "He uses the random junk around him"))
-		{
-			set_property("cc_gremlinMoly", false);
-		}
-	}
-	else if(my_location() == $location[Near an Abandoned Refrigerator])
-	{
-		if(enemy == $monster[batwinged gremlin])
-		{
-			set_property("cc_gremlinMoly", false);
-		}
-		else if(contains_text(text, "It bites you in the fibula with its mandibles"))
-		{
-			set_property("cc_gremlinMoly", false);
-		}
-	}
-
-	if(!contains_text(edCombatState, "gremlinNeedBanish") && !get_property("cc_gremlinMoly").to_boolean() && (my_class() == $class[Ed]))
-	{
-		set_property("cc_edCombatHandler", "(gremlinNeedBanish)");
-	}
-
-	if(round >= 28)
+	if(round >= 28 && my_class() != $class[Ed])
 	{
 		if(cc_combatCanUse($skill[Lunging Thrust-Smack]))
 		{
 			return cc_combatUse($skill[Lunging Thrust-Smack]);
 		}
 		return "attack with weapon";
-	}
-
-	if(contains_text(text, "It whips out a hammer") || contains_text(text, "He whips out a crescent") || contains_text(text, "It whips out a pair") || contains_text(text, "It whips out a screwdriver"))
-	{
-		return cc_combatUse($item[Molybdenum Magnet]);
 	}
 
 	foreach sk in $skills[Curse Of Weaksauce, Curse Of the Marshmallow, Summon Love Scarabs, Summon Love Gnats, Bad Medicine, Good Medicine]
@@ -1928,38 +1864,16 @@ string ccsJunkyard(int round, string opp, string text)
 		return flyerString;
 	}
 
-	if(!get_property("cc_gremlinMoly").to_boolean())
+	if(!hasTool)
 	{
 		if(my_class() == $class[Ed])
 		{
-			if((get_property("_edDefeats").to_int() >= 2) || (get_property("cc_edStatus") == "dying"))
+			if((get_property("_edDefeats").to_int() <= 2) && (get_property("cc_edStatus") != "dying"))
 			{
-				return findBanisher(round, opp, text);
-			}
-			foreach it in $items[Dictionary, Seal Tooth]
-			{
-				if(cc_combatCanUse(it))
-				{
-					return cc_combatUse(it);
-				}
+				return cc_edStall();
 			}
 		}
-		else
-		{
-			return findBanisher(round, opp, text);
-		}
-	}
-
-	if(!get_property("cc_gremlinMoly").to_boolean())
-	{
-		foreach sk in $skills[Lunging Thrust-Smack, Storm Of The Scarab, Lunge Smack]
-		{
-			if(cc_combatCanUse(sk))
-			{
-				return cc_combatUse(sk);
-			}
-		}
-		return "attack with weapon";
+		return findBanisher(round, opp, text);
 	}
 
 	foreach it in $items[Dictionary, Seal Tooth, Spectre Scepter, Doc Galaktik\'s Pungent Unguent]
@@ -1974,6 +1888,28 @@ string ccsJunkyard(int round, string opp, string text)
 		return cc_combatUse($skill[Toss]);
 	}
 	return "attack with weapon";
+}
+
+string cc_edStall()
+{
+		item stall = $item[none];
+		if(cc_combatCanUse($item[Dictionary]))
+		{
+			stall = $item[Dictionary];
+		}
+		else if(cc_combatCanUse($item[Seal Tooth]))
+		{
+			stall = $item[Seal Tooth];
+		}
+
+		if (stall != $item[none])
+		{
+			string macro = "use " + stall.name + "; repeat";
+			set_property("cc_combatHandler", get_property("cc_combatHandler") + "(stall-macro)");
+			return "\"" + macro + "\"";
+		}
+
+		return cc_combatUse($skill[Mild Curse]);
 }
 
 string cc_edCombatHandler(int round, string opp, string text)
@@ -2602,24 +2538,7 @@ string cc_edCombatHandler(int round, string opp, string text)
 			return cc_combatUse($skill[Curse of Fortune], true);
 		}
 
-		item stall = $item[none];
-		if(cc_combatCanUse($item[Dictionary]))
-		{
-			stall = $item[Dictionary];
-		}
-		else if(cc_combatCanUse($item[Seal Tooth]))
-		{
-			stall = $item[Seal Tooth];
-		}
-
-		if (stall != $item[none])
-		{
-			string macro = "use " + stall.name + "; repeat";
-			set_property("cc_combatHandler", get_property("cc_combatHandler") + "(stall-macro)");
-			return "\"" + macro + "\"";
-		}
-
-		return cc_combatUse($skill[Mild Curse]);
+		return cc_edStall();
 	}
 
 	if(cc_combatCanUse($skill[Roar of the Lion]) && (my_location() == $location[The Secret Government Laboratory]))
