@@ -54,7 +54,7 @@ void ed_initializeSettings()
 		set_property("nsTowerDoorKeysUsed", "Boris's key,Jarlsberg's key,Sneaky Pete's key,Richard's star key,skeleton key,digital key");
 		if (get_property("edDefeatAbort").to_int() < 4)
 		{
-			print_html("<font color=\"olive\">Use <i>cc_edDefeatAbort</i> for regular limit, and <i>edDefeatAbort</i> as hard limit</font>");
+			print_html("<font color=\"olive\">Use <i>cc_edDefeatAbort</i> for regular limit, and <i>edDefeatAbort</i> as hard limit against gremlins etc.</font>");
 			if (get_property("cc_edDefeatAbort") == "")
 			{
 				string edDefeatAbort = get_property("edDefeatAbort");
@@ -1443,6 +1443,10 @@ boolean ed_ccChoiceHandler(int choice, string responseText)
 		else if (stage == 2)
 		{
 			print("Ed has UNDYING twice! Time to kick ass!" , "blue");
+		}
+		else if (last_monster().name.ends_with(" gremlin (tool)"))
+		{
+			print("Holy Moly, where is this stupid tool. Let's pay some Ka.", "magenta");
 		}
 		else if (stage >= get_property("cc_edDefeatAbort").to_int())
 		{
